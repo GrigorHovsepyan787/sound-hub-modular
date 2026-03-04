@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<script data-purpose="mobile-nav-toggle">
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    // Simplified mobile toggle placeholder logic
+    menuToggle.addEventListener('click', () => {
+        alert('Mobile menu navigation triggered.');
+    });
+</script>
+<!-- END: Scripts -->
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-t border-white/5 px-4 py-3">
+    <div class="max-w-[1800px] mx-auto grid grid-cols-3 items-center">
+        <!-- Player Left: Track Info -->
+        <div class="flex items-center gap-4">
+            <img alt="Current Track" class="w-14 h-14 rounded-md shadow-lg"
+                 src="#"/>
+            <div class="overflow-hidden">
+                <h4 class="text-sm font-bold truncate" th:text="${currentAudio.getTitle()}"></h4>
+                <p class="text-xs text-gray-400 truncate" th:if="${currentAudio.getArtist} == null" th:text="${currentAudio.getBand()}"></p>
+                <p class="text-xs text-gray-400 truncate" th:if="${currentAudio.getBand} == null" th:text="${currentAudio.getArtist()}"></p>
+            </div>
+            <button class="text-gray-400 hover:text-white transition-colors">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+        </div>
+        <!-- Player Center: Controls -->
+        <div class="flex flex-col items-center gap-2">
+            <div class="flex items-center gap-6 text-gray-400">
+                <button class="hover:text-brand-accent transition-colors text-xs"><i class="fa-solid fa-shuffle"></i>
+                </button>
+                <button class="hover:text-white transition-colors"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-play ml-0.5"></i>
+                </button>
+                <button class="hover:text-white transition-colors"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="hover:text-brand-accent transition-colors text-xs"><i class="fa-solid fa-repeat"></i>
+                </button>
+            </div>
+            <div class="w-full max-w-md flex items-center gap-2">
+                <span class="text-[10px] text-gray-500 w-8 text-right" th:text="${currentAudio.getDuration}"></span>
+                <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden relative group">
+                    <div class="absolute inset-y-0 left-0 bg-brand-accent group-hover:bg-brand-secondary transition-colors"
+                         style="width: 35%"></div>
+                </div>
+                <span class="text-[10px] text-gray-500 w-8"></span>
+            </div>
+        </div>
+        <!-- Player Right: Volume & Utilities -->
+        <div class="flex items-center justify-end gap-4">
+            <button class="text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-list-ul text-sm"></i>
+            </button>
+            <button class="text-gray-400 hover:text-white transition-colors"><i
+                    class="fa-solid fa-computer-speaker text-sm"></i></button>
+            <div class="flex items-center gap-2 group">
+                <i class="fa-solid fa-volume-high text-gray-400 text-sm"></i>
+                <div class="w-24 h-1 bg-white/10 rounded-full overflow-hidden relative">
+                    <div class="absolute inset-y-0 left-0 bg-white group-hover:bg-brand-accent transition-colors"
+                         style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
