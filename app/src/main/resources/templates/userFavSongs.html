@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .filled-icon {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex flex-col w-full">
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 md:px-10 lg:px-20 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-2 text-primary">
+                    <span class="material-symbols-outlined text-3xl">database</span>
+                    <h2 class="text-slate-900 dark:text-white text-xl font-bold tracking-tight">SoundHub</h2>
+                </div>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+                    <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Artists</a>
+                    <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Groups</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex relative items-center">
+                    <span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+                    <input class="w-48 lg:w-64 pl-10 pr-4 py-2 rounded-full border-none bg-slate-100 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-primary outline-none" placeholder="Search tracks..." type="text"/>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/20">
+                        Welcome User
+                    </button>
+                    <button class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-xl">language</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-slate-300 dark:bg-slate-700 border-2 border-primary overflow-hidden" data-alt="User profile avatar portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCehkokqhWsaKAkRvLzbwxRe5wYCTq0-bRyMKDoweUa6In61krYaWy1Leu-6Hc1-9d8UPLrylQqOJWUzEvju3JuSFifL20ztBYUQMB0Mm3gGyfzbtxpPrFZhsi4MXX9dWLKbe6SIB0e4S5_4sUIll02YNY_PfKK1HNwLz46OP3KMr7oOckMiB61tZ2I5YJHo2pGR2D87qteMtBsMLEvLQFy7CislBgC8aSE97kegYrvi_TGgya7INMV8MkKLY-cNDKKZ4uyqysf5tE'); background-size: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto w-full px-4 md:px-10 lg:px-20 py-10">
+        <!-- Page Title -->
+        <div class="mb-10">
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Favorite Songs</h1>
+            <p class="text-slate-500 dark:text-slate-400">Your personal collection of most played and liked tracks.</p>
+        </div>
+        <!-- Filters Section -->
+        <div class="flex flex-wrap items-center gap-4 mb-8">
+            <div class="relative group">
+                <button class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-transparent hover:border-primary/30">
+                    <span>Sort: A-Z</span>
+                    <span class="material-symbols-outlined text-sm">expand_more</span>
+                </button>
+            </div>
+            <div class="relative group">
+                <button class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-transparent hover:border-primary/30">
+                    <span>Genre: All</span>
+                    <span class="material-symbols-outlined text-sm">expand_more</span>
+                </button>
+            </div>
+            <button class="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-sm font-bold border border-primary/20 hover:bg-primary/20 dark:hover:bg-primary/30 transition-all">
+                <span class="material-symbols-outlined text-sm filled-icon">trending_up</span>
+                <span>Most Popular</span>
+            </button>
+            <button class="ml-auto text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-medium transition-colors">
+                Clear all filters
+            </button>
+        </div>
+        <!-- Tracks Table -->
+        <div class="w-full overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 shadow-sm">
+            <table class="w-full text-left border-collapse min-w-[800px]">
+                <thead>
+                <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-12">#</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Track</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Genre</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Popularity</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Duration</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-16 text-center"></th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <!-- Row 1 -->
+                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="px-6 py-4 text-sm text-slate-400">1</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-primary/20 overflow-hidden flex-shrink-0" data-alt="Abstract musical album cover art" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqRchqKhcWGtRNaK0QQSHn0DBzBF6X4YlFGSqxz68PlubxC1KFYntO_go4CUHH-JgQXL06Z7NTDMT-UcG_8cjcyOvotxeaieq59iuFCCfLSnIPLbQvDkkZAm5hnKCtoSz3-ynwlT8dRn89jusdKyLf81ZMk_bQemcsKHzW54dpNPZTr2Kx6QZaOL40nVAGd4AYcEko5d8GHdw81FCxAO4y-BhOLPSxw9_Q6BWYOLMsYqd_Ezj0GMNRZm1XlU1iblgyjiahmHwbrec'); background-size: cover;"></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-900 dark:text-white">Blinding Lights</span>
+                                <span class="text-xs text-slate-500">The Weeknd</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide">Pop</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-sm">
+                            <span class="material-symbols-outlined text-base">play_arrow</span>
+                            <span>1.2B Plays</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500">3:20</td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-primary hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined filled-icon">favorite</span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="px-6 py-4 text-sm text-slate-400">2</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-primary/20 overflow-hidden flex-shrink-0" data-alt="Classic rock album cover aesthetic" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy6Kb11l5XMPm0Ygr0w6S0WVQRZ-JU6ndtqOy6KZNYpMoCaC7ucHvCOyjCjnLyQ4crC-iEtPgq8wwhJMI79ZdB2sMMJKC8VJadJ3t-zWy6kojvcmHTcDTcGfBwrxz5ibaQC2NmYUBWlCfpsiTmL_0hLgZ3bIdtr5Zz0SInvrm6I6nzeKxPKEarXmaKZq4p6g3x0Ju6HfdQHuivPiOjFT66fseszYFDd3sXUWJaoLe4Q2kDVrGtF5McVBf50s68yD7i2qwv-8Ykusg'); background-size: cover;"></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-900 dark:text-white">Bohemian Rhapsody</span>
+                                <span class="text-xs text-slate-500">Queen</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wide">Rock</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-sm">
+                            <span class="material-symbols-outlined text-base">play_arrow</span>
+                            <span>980M Plays</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500">5:55</td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-primary hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined filled-icon">favorite</span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 3 -->
+                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="px-6 py-4 text-sm text-slate-400">3</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-primary/20 overflow-hidden flex-shrink-0" data-alt="Modern pop neon album cover" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDD0_L6KMlmoTuVvAXBjcykxefmdTztCjgpfvruLc1SJR_9zufoo-BjP9YAm6CqvzSlMb4WvpWBq8Z8QO8afrHIF6WqUVQ5O0a6B2cza8oZ5JKnj2caMiAyqfFcMiWBBd4ozXHVYQBoVpluy4GJ8LBHEoEGVj-kaZgMEJLQn-TpBvXflGC1lSLBIHdKoiNjSKJYfRI-OwppIwljCeLNLpV3HDwtaZYu738KZcQVswJfwtjO4xJUm1_zBJcjWLNIaeDY-MOo9NE-oFM'); background-size: cover;"></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-900 dark:text-white">Levitating</span>
+                                <span class="text-xs text-slate-500">Dua Lipa</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide">Pop</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-sm">
+                            <span class="material-symbols-outlined text-base">play_arrow</span>
+                            <span>850M Plays</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500">3:23</td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-primary hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined filled-icon">favorite</span>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Row 4 -->
+                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="px-6 py-4 text-sm text-slate-400">4</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-primary/20 overflow-hidden flex-shrink-0" data-alt="Acoustic guitar album cover design" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBatb8TIuRbDNJyF-MHBPYSl5k123zpXHbnboMb0Hyvh9Hd6o2qZa1AeU18vK_3vrD5f8XYdbT22bkMPi5T1Ju3d5iF10MgF_vTXnyqMz0BiRDXpwv_kFVywogDLrcu8foPIOY2A31eFf8PFz76PAVf1oHMqXmENVThoVMMd-KW_ked0xa_AbHKGIvNXepbPxgaLugFAY5m0QoBbg9hoNt0O7Ww9imTybL2kOQACWSYPR-wkdMORtF0Vc0bJpIm64zsKP8HrYCEwU4'); background-size: cover;"></div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-bold text-slate-900 dark:text-white">Stay</span>
+                                <span class="text-xs text-slate-500">The Kid LAROI</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide">Pop</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-1.5 text-slate-500 text-sm">
+                            <span class="material-symbols-outlined text-base">play_arrow</span>
+                            <span>1.1B Plays</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500">2:21</td>
+                    <td class="px-6 py-4 text-center">
+                        <button class="text-primary hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined filled-icon">favorite</span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark py-12 px-4 md:px-10 lg:px-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
+                <div class="flex items-center gap-2 text-primary opacity-80">
+                    <span class="material-symbols-outlined text-2xl">database</span>
+                    <h2 class="text-slate-900 dark:text-white text-lg font-bold">SoundHub</h2>
+                </div>
+                <div class="flex gap-10">
+                    <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Facebook</a>
+                    <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Twitter</a>
+                    <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">Instagram</a>
+                    <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">YouTube</a>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-8 gap-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">© 2024 SoundHub Inc. All rights reserved.</p>
+                <div class="flex gap-6 text-xs text-slate-400">
+                    <a class="hover:text-primary" href="#">Privacy Policy</a>
+                    <a class="hover:text-primary" href="#">Terms of Service</a>
+                    <a class="hover:text-primary" href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+</body></html>

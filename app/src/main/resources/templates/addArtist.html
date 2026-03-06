@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Add New Artist to SoundHub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-slate-800 px-10 py-3">
+                    <div class="flex items-center gap-8">
+                        <div class="flex items-center gap-4">
+                            <div class="size-6 text-primary">
+                                <span class="material-symbols-outlined" style="font-size: 24px;">graphic_eq</span>
+                            </div>
+                            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">SoundHub</h2>
+                        </div>
+                        <label class="flex flex-col min-w-40 !h-10 max-w-64">
+                            <div class="flex w-full flex-1 items-stretch rounded h-full bg-slate-100 dark:bg-slate-800">
+                                <div class="text-slate-500 flex border-none items-center justify-center pl-4 rounded-l border-r-0">
+                                    <span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+                                </div>
+                                <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search" value=""/>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="flex flex-1 justify-end gap-8">
+                        <nav class="flex items-center gap-9">
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <a class="text-primary text-sm font-medium leading-normal" href="#">Artists</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Albums</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Tracks</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Settings</a>
+                        </nav>
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-700" data-alt="User profile avatar image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBkeHSnCP-rOj9KD6aNzL5wRegdOzyZXtK728073bbOq7lg-Tu1UFeB1foq7ptoXP_X_8A9I246zJERm8uidMBZ2I4O734VYFerwkDq9FbxcX7w1gX0a76Li38yRKnLKtIUH7A1GZgCt3I-n1jETFpYEFF-9ZN7o3ZpVIsalAT0VvHV5IqTzMuh4neu6qa1WI861OdceFt7GQXV96GF7Kyuln2NsS6uVgzyd8K2tB54lVH2Fbw77xPKV6ytKr4GLPHWmCIIlVzYBLk");'></div>
+                    </div>
+                </header>
+                <main class="flex flex-col flex-1 p-10 gap-8">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="tracking-tight text-3xl font-bold leading-tight">Add New Artist</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Fill in the details to add a new artist to the platform.</p>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <div class="flex w-full gap-6">
+                            <div class="w-1/3 flex flex-col gap-2">
+                                <p class="text-sm font-medium leading-normal">Profile Picture</p>
+                                <div class="w-full aspect-square rounded border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                    <span class="material-symbols-outlined text-4xl text-slate-400 mb-2">cloud_upload</span>
+                                    <span class="text-sm font-medium text-slate-600 dark:text-slate-300">Click to upload</span>
+                                    <span class="text-xs text-slate-500 mt-1">or drag and drop</span>
+                                </div>
+                            </div>
+                            <div class="w-2/3 flex flex-col gap-4">
+                                <div class="flex gap-4">
+                                    <label class="flex flex-col flex-1">
+                                        <p class="text-sm font-medium leading-normal pb-2">First Name</p>
+                                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 h-12 placeholder:text-slate-500 px-4 text-sm font-normal leading-normal" placeholder="Enter first name" value=""/>
+                                    </label>
+                                    <label class="flex flex-col flex-1">
+                                        <p class="text-sm font-medium leading-normal pb-2">Last Name</p>
+                                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 h-12 placeholder:text-slate-500 px-4 text-sm font-normal leading-normal" placeholder="Enter last name" value=""/>
+                                    </label>
+                                </div>
+                                <div class="flex gap-4">
+                                    <label class="flex flex-col flex-1">
+                                        <p class="text-sm font-medium leading-normal pb-2">Nickname / Stage Name</p>
+                                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 h-12 placeholder:text-slate-500 px-4 text-sm font-normal leading-normal" placeholder="Enter nickname" value=""/>
+                                    </label>
+                                    <label class="flex flex-col flex-1">
+                                        <p class="text-sm font-medium leading-normal pb-2">Birth Year</p>
+                                        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 h-12 placeholder:text-slate-500 px-4 text-sm font-normal leading-normal" placeholder="YYYY" value=""/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="flex flex-col w-full">
+                            <p class="text-sm font-medium leading-normal pb-2">Biography</p>
+                            <textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-auto rounded text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 min-h-[120px] placeholder:text-slate-500 p-4 text-sm font-normal leading-normal" placeholder="Write the artist's biography here..."></textarea>
+                        </label>
+                        <div class="flex flex-col w-full gap-2">
+                            <p class="text-sm font-medium leading-normal">Select Groups/Bands</p>
+                            <div class="relative w-full rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col">
+                                <div class="flex items-center px-4 py-3 border-b border-slate-300 dark:border-slate-700">
+                                    <span class="material-symbols-outlined text-slate-500 mr-2 text-sm">search</span>
+                                    <input class="w-full bg-transparent border-none focus:outline-none focus:ring-0 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-500" placeholder="Search groups..."/>
+                                </div>
+                                <div class="flex flex-col max-h-48 overflow-y-auto p-2 gap-1">
+                                    <label class="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer">
+                                        <input class="form-checkbox rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent h-4 w-4" type="checkbox"/>
+                                        <span class="text-sm">The Soundwaves</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer">
+                                        <input class="form-checkbox rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent h-4 w-4" type="checkbox"/>
+                                        <span class="text-sm">Electric Echo</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded cursor-pointer">
+                                        <input class="form-checkbox rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600 bg-transparent h-4 w-4" type="checkbox"/>
+                                        <span class="text-sm">Midnight Riders</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-4 mt-6 pt-6 border-t border-slate-300 dark:border-slate-800">
+                        <button class="px-6 py-2.5 rounded font-medium text-sm text-slate-700 dark:text-slate-300 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">Cancel</button>
+                        <button class="px-6 py-2.5 rounded font-medium text-sm text-white bg-primary hover:bg-primary/90 transition-colors">Save Artist</button>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</div>
+</body></html>

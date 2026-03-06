@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SoundHub Moderator Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1978e5",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111821",
+            "surface-dark": "#1e293b",
+            "border-dark": "#334155"
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+  <div class="layout-container flex h-full grow flex-col">
+    <div class="px-40 flex flex-1 justify-center py-5">
+      <div class="layout-content-container flex flex-col max-w-[1200px] flex-1 w-full">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-border-dark px-10 py-4 bg-white dark:bg-surface-dark rounded-xl mb-6 shadow-sm">
+          <div class="flex items-center gap-4">
+            <div class="size-6 text-primary">
+              <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_6_535)">
+                  <path clip-rule="evenodd" d="M47.2426 24L24 47.2426L0.757355 24L24 0.757355L47.2426 24ZM12.2426 21H35.7574L24 9.24264L12.2426 21Z" fill="currentColor" fill-rule="evenodd"></path>
+                </g>
+                <defs>
+                  <clippath id="clip0_6_535"><rect fill="white" height="48" width="48"></rect></clippath>
+                </defs>
+              </svg>
+            </div>
+            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">SoundHub Moderator</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <nav class="flex items-center gap-9">
+              <a class="text-primary text-sm font-semibold leading-normal" href="#">Dashboard</a>
+              <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#artists">Artists</a>
+              <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#groups">Groups</a>
+              <a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#albums">Albums</a>
+            </nav>
+            <div class="flex items-center gap-4">
+              <button class="flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors text-sm font-bold leading-normal">
+                <span class="truncate">Logout</span>
+              </button>
+              <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Moderator profile picture placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC_olkWJOQWG0OT2DzSIwD3A6p8p7n0oWd3mS0GtfscqSJKIOqVU7OsiYyPwwxAG2dhuJVRP064uuHCyKmnticbUVWq0YHw2cxQqZkDsSDV_Vmj4PkHOrBrU_O7jPkcNODlEtsyB5Bw3-zsgKlq651lPDYZ0pNw_liQVaizhuMtB83osO0ot7YVSJi-nvbYgFQEDKXI6WsmkBXPucgTTsn84UGpdffmW71380x6TwWde__RPECmlsxx45hU2jpQq4td0OwLlyrfWYM");'></div>
+            </div>
+          </div>
+        </header>
+        <div class="flex flex-wrap justify-between gap-3 p-4 mb-4">
+          <h1 class="text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Moderator Dashboard</h1>
+        </div>
+        <div class="flex justify-stretch mb-10">
+          <div class="flex flex-1 gap-4 flex-wrap px-4 py-3 justify-start">
+            <button class="flex cursor-pointer items-center justify-center gap-2 rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 transition-colors text-white text-base font-bold leading-normal shadow-sm">
+              <span class="material-symbols-outlined text-xl">person_add</span>
+              <span class="truncate">Add Artist</span>
+            </button>
+            <button class="flex cursor-pointer items-center justify-center gap-2 rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 transition-colors text-white text-base font-bold leading-normal shadow-sm">
+              <span class="material-symbols-outlined text-xl">group_add</span>
+              <span class="truncate">Add Group</span>
+            </button>
+            <button class="flex cursor-pointer items-center justify-center gap-2 rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 transition-colors text-white text-base font-bold leading-normal shadow-sm">
+              <span class="material-symbols-outlined text-xl">library_music</span>
+              <span class="truncate">Add Album</span>
+            </button>
+          </div>
+        </div>
+        <!-- Artists Section -->
+        <section class="mb-12 bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark" id="artists">
+          <h2 class="text-[22px] font-bold leading-tight tracking-[-0.015em] pb-4 border-b border-slate-200 dark:border-border-dark mb-4">Artists Management</h2>
+          <div class="mb-6">
+            <label class="flex flex-col w-full max-w-md h-12">
+              <div class="flex w-full flex-1 items-stretch rounded-xl h-full border border-slate-300 dark:border-border-dark bg-slate-50 dark:bg-slate-800/50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary overflow-hidden">
+                <div class="text-slate-400 flex items-center justify-center pl-4 pr-2">
+                  <span class="material-symbols-outlined text-xl">search</span>
+                </div>
+                <input class="w-full flex-1 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400 px-2 text-base font-normal leading-normal" placeholder="Search Artists by ID, Name or Nickname" value=""/>
+              </div>
+            </label>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+              <tr class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-border-dark">
+                <th class="py-3 px-4 font-medium">Photo</th>
+                <th class="py-3 px-4 font-medium">ID</th>
+                <th class="py-3 px-4 font-medium">Full Name</th>
+                <th class="py-3 px-4 font-medium">Nickname</th>
+                <th class="py-3 px-4 font-medium text-right">Actions</th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-border-dark/50">
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                <td class="py-3 px-4">
+                  <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-200 dark:bg-slate-700" data-alt="Artist John Doe profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDp1OS4ezqiUqbSL32OE40RsTfPonVueWrRYbY4GAuWxYoTayP5Axrsk-QzzUb6B0HPEyLqT5xNUzVEFlwgondy9xSgOWgOk-pHljOYtxk8TxcG4xDMaW2MUbdKe2fqfi2HBEPFDx3O2jlPsQ_WT0vb3tebFqpjx5dRJzwHHPe6qNr2cdkGnXt7zBWn9PszIA5NJyRxdzgSIrFNi2muDs6vVOqput9hP-yc8MLTbFahCsKyNAmOlLqcYXa9IEFIrGOFhoO3lY-QDgM");'></div>
+                </td>
+                <td class="py-3 px-4 text-sm font-mono text-slate-600 dark:text-slate-300">ART-9012</td>
+                <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-100">John Doe</td>
+                <td class="py-3 px-4 text-slate-600 dark:text-slate-300">J-Dizzle</td>
+                <td class="py-3 px-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[20px]">edit</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                <td class="py-3 px-4">
+                  <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 bg-slate-200 dark:bg-slate-700" data-alt="Artist Jane Smith profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDbQdC7T1Fwn7aUTRyil6OCaMTTL2fIhVmG5gJrAS9G6tR2m5K7G-SALKrp0HDhSpO8fjKGFpIsZ6KxGaVe38qqmJdsxDfYv-kDTPZdgiMtiQXfDAOuMXPU97aKEwN764uKSSOgyWrE2ow25Lepkt7Dj6uEPFUdUIrL9B1jJC6Gbkg9m0Twh5HHgGIHvt3R3n7VVi2GlnbqgTHfXEUr-_tlT2NxUSHIQVDDr3stqznJ-WM-OpaIehmgyTwF28rDpxVveD95-UkDTmM");'></div>
+                </td>
+                <td class="py-3 px-4 text-sm font-mono text-slate-600 dark:text-slate-300">ART-9013</td>
+                <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-100">Jane Smith</td>
+                <td class="py-3 px-4 text-slate-600 dark:text-slate-300">Janey</td>
+                <td class="py-3 px-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[20px]">edit</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Groups Section -->
+        <section class="mb-12 bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark" id="groups">
+          <h2 class="text-[22px] font-bold leading-tight tracking-[-0.015em] pb-4 border-b border-slate-200 dark:border-border-dark mb-4">Groups Management</h2>
+          <div class="mb-6">
+            <label class="flex flex-col w-full max-w-md h-12">
+              <div class="flex w-full flex-1 items-stretch rounded-xl h-full border border-slate-300 dark:border-border-dark bg-slate-50 dark:bg-slate-800/50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary overflow-hidden">
+                <div class="text-slate-400 flex items-center justify-center pl-4 pr-2">
+                  <span class="material-symbols-outlined text-xl">search</span>
+                </div>
+                <input class="w-full flex-1 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400 px-2 text-base font-normal leading-normal" placeholder="Search Groups by ID or Name" value=""/>
+              </div>
+            </label>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+              <tr class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-border-dark">
+                <th class="py-3 px-4 font-medium">Photo</th>
+                <th class="py-3 px-4 font-medium">ID</th>
+                <th class="py-3 px-4 font-medium">Group Name</th>
+                <th class="py-3 px-4 font-medium text-right">Actions</th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-border-dark/50">
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                <td class="py-3 px-4">
+                  <div class="bg-center bg-no-repeat aspect-video bg-cover rounded-lg w-16 h-10 bg-slate-200 dark:bg-slate-700" data-alt="The Rockers group photo placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMrWDD0Ba2NH0Cb64d-Qh2M-smFNU43XHIjszeZhmLq5oZXK0y3Z4xyo_OPIXklelknnzm13q8HKPazF9MR_reDEapXkUjSuPpUs0O--WJDviIxOem4g-xBxX4g180AQxHgutHwSc87EEjCU4CMwyD7p5D0h48NYqQxC3zl-o4j1tEa12P3AJlJAApxX5bMP3T-kSpyLzNY4o_uBExOUehkOb2CB42oDdHLh8x8kYkHa2IEu0C-33iMLda0IbUh9xMY7tjU90BdZQ");'></div>
+                </td>
+                <td class="py-3 px-4 text-sm font-mono text-slate-600 dark:text-slate-300">GRP-4561</td>
+                <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-100">The Rockers</td>
+                <td class="py-3 px-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[20px]">edit</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <!-- Albums Section -->
+        <section class="mb-12 bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-slate-200 dark:border-border-dark" id="albums">
+          <h2 class="text-[22px] font-bold leading-tight tracking-[-0.015em] pb-4 border-b border-slate-200 dark:border-border-dark mb-4">Albums Management</h2>
+          <div class="mb-6">
+            <label class="flex flex-col w-full max-w-md h-12">
+              <div class="flex w-full flex-1 items-stretch rounded-xl h-full border border-slate-300 dark:border-border-dark bg-slate-50 dark:bg-slate-800/50 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary overflow-hidden">
+                <div class="text-slate-400 flex items-center justify-center pl-4 pr-2">
+                  <span class="material-symbols-outlined text-xl">search</span>
+                </div>
+                <input class="w-full flex-1 bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400 px-2 text-base font-normal leading-normal" placeholder="Search Albums by ID or Title" value=""/>
+              </div>
+            </label>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+              <tr class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-border-dark">
+                <th class="py-3 px-4 font-medium">Cover</th>
+                <th class="py-3 px-4 font-medium">ID</th>
+                <th class="py-3 px-4 font-medium">Album Title</th>
+                <th class="py-3 px-4 font-medium text-right">Actions</th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-border-dark/50">
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                <td class="py-3 px-4">
+                  <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md size-12 bg-slate-200 dark:bg-slate-700" data-alt="Midnight Echoes album cover placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAOSAB0gOe8IsiPRwGFbLBKgOqPpoEyAtCjY68Ui24GhFE1CAEfxzqh-c7aKtFcLO7b1LgvlEKgXpM-nv-V89IEdrYT-GTTxC2hikmhEUZphUx5335s4JL8kKmr8zXrlqE2PtpYEfgcYC9T-Q9TRaaQMr8hab-VOV2BMhrrJIR0AjXoMg1irsBHCGMdOEEGsqufZSyjrxD2iLByrHPZjIEuYFNp2PsYPbXj3fL6CAWWrsVabzvymKap-hbDpMVQklsCg26_cACqVtw");'></div>
+                </td>
+                <td class="py-3 px-4 text-sm font-mono text-slate-600 dark:text-slate-300">ALB-1024</td>
+                <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-100">Midnight Echoes</td>
+                <td class="py-3 px-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 transition-colors" title="Edit">
+                      <span class="material-symbols-outlined text-[20px]">edit</span>
+                    </button>
+                    <button class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 transition-colors" title="Delete">
+                      <span class="material-symbols-outlined text-[20px]">delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

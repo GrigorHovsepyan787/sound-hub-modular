@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SoundHub - Playlist View</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1978e5",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111821",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+  <style data-purpose="layout-styles">
+    body {
+      scroll-behavior: smooth;
+    }
+    .glass-header {
+      background: rgba(17, 24, 33, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .glass-player {
+      background: rgba(17, 24, 33, 0.9);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
+<header class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center gap-2" data-purpose="brand-logo">
+        <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+          <span class="material-symbols-outlined text-white text-xl">graphic_eq</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">SoundHub</span>
+      </div>
+      <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
+        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Home</a>
+        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Artists</a>
+        <a class="text-sm font-medium text-white transition-colors border-b-2 border-primary pb-1" href="#">Playlists</a>
+      </nav>
+      <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
+        <div class="flex items-center gap-3 cursor-pointer group">
+          <img alt="User Avatar" class="w-9 h-9 rounded-full border border-white/20 group-hover:border-primary transition-colors object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnpu6a2ahsq2EkwOYPprfZO-W3bBbZczbnztRNzAUKI_70MMnAdvgr38AsdaUoJAZwFBhISeikFq8uMTOGzlO3b6jL4p7cckMeKZ8HnviNUDfBK-g8F2Nat3wL426LDx2wbq6zJ5p2hHr3iIbBm75cl0B8lIXPa7vGweO62qa8h8oq10J5PA3f6BzhpFxryAzaahmlyERB7huBrltOTifdJ1GvjuPQ-7xwzwtjAv2dhSOpLxkboyKunuUkt9os5VYO5qrPhhuU2ak"/>
+          <span class="text-sm font-medium text-gray-200">Welcome, <span class="text-primary font-bold">User</span></span>
+        </div>
+        <div class="relative group">
+          <button class="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white transition-colors">
+            <span class="material-symbols-outlined text-base">language</span>
+            English
+            <span class="material-symbols-outlined text-sm">expand_more</span>
+          </button>
+          <div class="absolute right-0 mt-2 w-32 bg-background-dark border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1">
+            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">English</a>
+            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">Русский</a>
+            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">Հայերեն</a>
+          </div>
+        </div>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button class="text-gray-400 hover:text-white focus:outline-none" id="mobile-menu-toggle">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="pt-24 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="flex flex-col md:flex-row items-end gap-6 mb-10" data-purpose="playlist-header">
+    <img alt="Playlist Cover" class="w-48 h-48 md:w-64 md:h-64 object-cover shadow-2xl rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwWlK_EOncblxAFALEqP1IYAqV8jAMWPyM382cODFWCU_-GEYQkn7PVHt_n6nmIe0hC5a0de1m6qIqgJFbLewyg6LF2ejC1Np3mqCt-A_44oGDWOscWQTSJFO7b_05HCDCWlZNC02qpC92sNZCUOuK7gjq4SsdFGwJLShj7KdQ_FAoe3U0G7Y7L5k95ZVtXv8ettCCrx6kafbofWCOZpgj-T1_M6J_mRB1eH3Lchug6HClKwI9sCJ1bQe8KSpqW2KmWJA5xQrVle8"/>
+    <div class="flex-1 w-full text-left">
+      <p class="text-xs md:text-sm text-gray-400 uppercase tracking-widest font-semibold mb-2">Playlist</p>
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4">Cyberpunk Nights</h1>
+      <div class="flex items-center gap-3 text-sm md:text-base text-gray-300 font-medium mb-6">
+        <img alt="Creator Avatar" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDvrNIJ1jKyklz2AE4SLJ8LWUbGcCpGo_zSWi3d03TylEgY90FEsYcsqInKkSV-a5AMdkbCzjImFtdK7XeljPAIxcveqi0_kc4ufwxdP0kDP_qMZSIvYqc6SkjmRn64aASOydZF3q0rLdsvdvzB9hKQy_3Gi6493nzgu7pdcFS5XCUnx-3ulUccR9AzYM8ElcEqwBsZpydzDQACu10PZMDsM2PxxgWYfj2Wdi2C435n9vi-D6bsJcCsbAEVhT81PqrP7h4Q7PR5CM"/>
+        <span class="font-bold text-white hover:underline cursor-pointer">NeonRider</span>
+        <span class="w-1 h-1 bg-gray-500 rounded-full"></span>
+        <span>50 songs, 3 hr 15 min</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-primary/30">
+          <span class="material-symbols-outlined text-3xl">play_arrow</span>
+        </button>
+        <button class="w-12 h-12 rounded-full border border-gray-400 text-gray-300 flex items-center justify-center hover:border-white hover:text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined">shuffle</span>
+        </button>
+        <button class="w-12 h-12 rounded-full border border-gray-400 text-gray-300 flex items-center justify-center hover:border-white hover:text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined">download</span>
+        </button>
+        <button class="w-12 h-12 rounded-full border border-gray-400 text-gray-300 flex items-center justify-center hover:border-white hover:text-white hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </button>
+      </div>
+    </div>
+  </section>
+  <section data-purpose="track-list">
+    <div class="grid grid-cols-[40px_1fr_60px] md:grid-cols-[60px_4fr_3fr_2fr_80px] gap-4 px-4 py-2 border-b border-white/10 text-gray-400 text-xs uppercase tracking-wider font-semibold mb-4">
+      <span class="text-center">#</span>
+      <span>Title</span>
+      <span class="hidden md:block">Album</span>
+      <span class="hidden md:block">Date Added</span>
+      <span class="text-right flex justify-end"><span class="material-symbols-outlined text-sm">schedule</span></span>
+    </div>
+    <div class="space-y-2">
+      <div class="grid grid-cols-[40px_1fr_60px] md:grid-cols-[60px_4fr_3fr_2fr_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
+        <div class="text-center">
+          <span class="text-gray-400 font-medium group-hover:hidden">1</span>
+          <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
+        </div>
+        <div class="flex items-center gap-4 overflow-hidden">
+          <img alt="Track Art" class="w-10 h-10 rounded shadow-md flex-shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPvoWXy3MkZRrVw-iD3ZXoJqHXgNjmyW5wzdd7iS1t1rgkaE0p36-H1ybFlhMjimvc6I0n4y6-QyMhs_ssv0uPWrYmwJhRkTLHxNb5jHqj_-aTfjgmDUy9Q4EIgEb9g5A1kWXsfkpWSMJ9B5HJPIAvEd0MZrQoDN2m7eNFA9-PVboXj-ewBTcwJY14RerSw-XZhesQnqqELlRDG4Vd8O3esUcaVnwvfVxzn3hZWAUeSSUAU-lDOHvGXfgRM94YgpgLdje6eKF2Vdc"/>
+          <div class="truncate">
+            <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Midnight City</span>
+            <span class="text-xs text-gray-400 hover:underline">M83</span>
+          </div>
+        </div>
+        <span class="hidden md:block text-gray-400 text-sm truncate hover:underline">Hurry Up, We're Dreaming</span>
+        <span class="hidden md:block text-gray-400 text-sm truncate">2 weeks ago</span>
+        <div class="text-right flex items-center justify-end gap-2 text-gray-400 text-sm">
+          <button class="hidden group-hover:block hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">favorite_border</span></button>
+          <span>4:03</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-[40px_1fr_60px] md:grid-cols-[60px_4fr_3fr_2fr_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer bg-white/5">
+        <div class="text-center">
+          <span class="text-primary font-medium group-hover:hidden"><span class="material-symbols-outlined text-sm animate-pulse">equalizer</span></span>
+          <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">pause</span></span>
+        </div>
+        <div class="flex items-center gap-4 overflow-hidden">
+          <img alt="Track Art" class="w-10 h-10 rounded shadow-md flex-shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCJqzqqKQoJS1Q_WbV04-ltMUSwsLHkczR0iktSDEZiNahqsN2uhAaZ5GcVu-UVAbOJc7wkZ-Jdb4wpmp3V_WPs4IJ9O-5nwMlF79DFDioSuF5aUORb_j9ChfrLlV6dv9-fXNDrgm-GoV9OO-ApzGUfExo86I0f48_lBhPU8fryeVONYrZyeGWPWJBQhC9gdQKsgo3nAdjQgqRYuhgOJ_z9SuVO-AO_1Qmk6l7o4Syum4OS7iKriYy51hOJvF9M7yL3PONwKHx1K8"/>
+          <div class="truncate">
+            <span class="font-semibold text-primary transition-colors block truncate">Nightcall</span>
+            <span class="text-xs text-gray-400 hover:underline">Kavinsky</span>
+          </div>
+        </div>
+        <span class="hidden md:block text-gray-400 text-sm truncate hover:underline">OutRun</span>
+        <span class="hidden md:block text-gray-400 text-sm truncate">1 month ago</span>
+        <div class="text-right flex items-center justify-end gap-2 text-gray-400 text-sm">
+          <button class="hover:text-white transition-colors text-primary"><span class="material-symbols-outlined text-sm">favorite</span></button>
+          <span>4:19</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-[40px_1fr_60px] md:grid-cols-[60px_4fr_3fr_2fr_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
+        <div class="text-center">
+          <span class="text-gray-400 font-medium group-hover:hidden">3</span>
+          <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
+        </div>
+        <div class="flex items-center gap-4 overflow-hidden">
+          <img alt="Track Art" class="w-10 h-10 rounded shadow-md flex-shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtVyhCFPx5RjFbXUpDU3vvhjBh9DXYwbHUlsfiPIZ__q8QKfTvj_Klpiv3Z2ui9iNChyNiW18ry-XwQlbH-kJbRN0bklxFO7atvDxgd_JkHCz8oSkWWwsAC7QaqIBWEmq4u_d_11dhfPO8G6gQ3AqK3evpRPOFi2sJtg0H9cIO0CDbLAI3aiYHV2VgYhmXXNmbIfI_Ddq7RZSxmOMpg0p5hO-EeXc2q7aJ2FwA819rpEtpzBSZT4YQDogFrcY_fRiNc-OsBFbLjOY"/>
+          <div class="truncate">
+            <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Resonance</span>
+            <span class="text-xs text-gray-400 hover:underline">HOME</span>
+          </div>
+        </div>
+        <span class="hidden md:block text-gray-400 text-sm truncate hover:underline">Odyssey</span>
+        <span class="hidden md:block text-gray-400 text-sm truncate">3 weeks ago</span>
+        <div class="text-right flex items-center justify-end gap-2 text-gray-400 text-sm">
+          <button class="hidden group-hover:block hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">favorite_border</span></button>
+          <span>3:32</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-[40px_1fr_60px] md:grid-cols-[60px_4fr_3fr_2fr_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
+        <div class="text-center">
+          <span class="text-gray-400 font-medium group-hover:hidden">4</span>
+          <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
+        </div>
+        <div class="flex items-center gap-4 overflow-hidden">
+          <img alt="Track Art" class="w-10 h-10 rounded shadow-md flex-shrink-0 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkA3WnSQKPs2hLVgpSGz7d6Ar07RiIQyuxzmhgAZK8uvdj9YGeNmx1ynmJJxkIhfGD602ZW-v2M7mFDKDd0HJayuyLPZldhtponNttghzWRFaCFr873wSgz80gCcAaA35KG_-4nyZ-XkSYqvjv8psg2s_b4Yrv0YCsn4lipfK8_LRV4KfeI4tpvoXsJNUgo2b--WjoTx9gLPiAnUL2hgDV8eneiUvhdrDHUBde1eqMou7oMdueAg1EAXLIOgZa9L0BYaAr6JC9yuc"/>
+          <div class="truncate">
+            <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Tech Noir</span>
+            <span class="text-xs text-gray-400 hover:underline">Gunship</span>
+          </div>
+        </div>
+        <span class="hidden md:block text-gray-400 text-sm truncate hover:underline">Gunship</span>
+        <span class="hidden md:block text-gray-400 text-sm truncate">2 months ago</span>
+        <div class="text-right flex items-center justify-end gap-2 text-gray-400 text-sm">
+          <button class="hidden group-hover:block hover:text-white transition-colors"><span class="material-symbols-outlined text-sm">favorite_border</span></button>
+          <span>4:57</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="fixed bottom-0 left-0 right-0 z-50 glass-player px-4 py-3">
+  <div class="max-w-[1800px] mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-4 w-1/3">
+      <div class="flex items-center gap-4">
+        <img alt="Current Track" class="w-14 h-14 rounded-md shadow-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAlgDmQg2UDWxYbWaoXXKICiJp4kfPTxJQxs16cv1Kc2EJ5fTvy0k9mDUvpJe2MbYfO1ZE25D5O0JVB3XqVNRA1E8WYTQSvs9c5N-ytesHvJ3n_6RP9D6K4kN-PL3xqK4ckenbXMVP8Fc9Toix4ufLpg3OC9n2eoVECRHM5cmsjY9Z10AxUxRiaNVdSLUJlrar1Ts5IFEiP2tMWGkBf8qTXB7n3KOcxcQV8tqB8gElqz1kt8e4NWeNtE3mjuUBIOi-xCPmQl5g42o"/>
+        <div class="overflow-hidden">
+          <h4 class="text-sm font-bold truncate text-white">Nightcall</h4>
+          <p class="text-xs text-gray-400 truncate hover:underline cursor-pointer">Kavinsky</p>
+        </div>
+      </div>
+      <button class="text-primary hover:text-white transition-colors hidden sm:block">
+        <span class="material-symbols-outlined">favorite</span>
+      </button>
+    </div>
+    <div class="flex flex-col items-center gap-2 flex-1 max-w-2xl px-4">
+      <div class="flex items-center gap-6 text-gray-400">
+        <button class="hover:text-primary transition-colors text-sm"><span class="material-symbols-outlined">shuffle</span></button>
+        <button class="hover:text-white transition-colors"><span class="material-symbols-outlined">skip_previous</span></button>
+        <button class="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full hover:scale-105 transition-transform">
+          <span class="material-symbols-outlined text-xl">pause</span>
+        </button>
+        <button class="hover:text-white transition-colors"><span class="material-symbols-outlined">skip_next</span></button>
+        <button class="hover:text-primary transition-colors text-sm"><span class="material-symbols-outlined">repeat</span></button>
+      </div>
+      <div class="w-full flex items-center gap-3">
+        <span class="text-[10px] text-gray-400 w-8 text-right">2:15</span>
+        <div class="flex-1 h-1 bg-white/20 rounded-full overflow-hidden relative group cursor-pointer">
+          <div class="absolute inset-y-0 left-0 bg-primary group-hover:bg-primary/80 transition-colors" style="width: 52%"></div>
+        </div>
+        <span class="text-[10px] text-gray-400 w-8">4:19</span>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center justify-end gap-4 text-gray-400 w-1/3">
+      <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[20px]">queue_music</span></button>
+      <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[20px]">devices</span></button>
+      <div class="flex items-center gap-2 group cursor-pointer w-24">
+        <span class="material-symbols-outlined text-[20px]">volume_up</span>
+        <div class="flex-1 h-1 bg-white/20 rounded-full overflow-hidden relative">
+          <div class="absolute inset-y-0 left-0 bg-white group-hover:bg-primary transition-colors" style="width: 70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script data-purpose="mobile-nav-toggle">
+  const menuToggle = document.getElementById('mobile-menu-toggle');
+  if(menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      alert('Mobile menu navigation triggered.');
+    });
+  }
+</script>
+
+</body></html>
