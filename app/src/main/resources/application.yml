@@ -1,0 +1,20 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:db/master.xml
+  application:
+    name: sound-hub-modular
+  datasource:
+    url: jdbc:mysql://localhost:3306/sound-hub
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:rootroot}
+  jpa:
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  profiles:
+    active:
+
+server:
+  port: 8080
