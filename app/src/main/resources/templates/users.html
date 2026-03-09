@@ -36,7 +36,6 @@
   </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
-<!-- Top Navigation Bar -->
 <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-surface-dark px-10 py-4">
   <div class="flex items-center gap-8">
     <div class="flex items-center gap-4 text-primary">
@@ -67,14 +66,11 @@
     </div>
   </div>
 </header>
-<!-- Main Content -->
 <main class="flex-1 flex flex-col w-full max-w-[1200px] mx-auto px-6 py-8">
-  <!-- Page Header -->
   <div class="flex flex-col gap-4 mb-8">
     <h1 class="text-3xl font-bold leading-tight tracking-[-0.015em]">User Management</h1>
     <p class="text-text-muted text-sm">Manage user accounts, roles, and permissions across the SoundHub platform.</p>
   </div>
-  <!-- Toolbar (Search & Filters) -->
   <div class="flex justify-between items-center gap-4 mb-6 bg-surface-dark p-4 rounded-xl border border-border-dark">
     <div class="flex-1 max-w-md">
       <label class="flex flex-col h-10 w-full">
@@ -101,7 +97,6 @@
       </button>
     </div>
   </div>
-  <!-- Data Table -->
   <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
     <table class="w-full text-left border-collapse">
       <thead>
@@ -114,7 +109,6 @@
       </tr>
       </thead>
       <tbody class="divide-y divide-border-dark">
-      <!-- Row 1 -->
       <tr class="hover:bg-background-dark/30 transition-colors group">
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
@@ -142,7 +136,6 @@
           </button>
         </td>
       </tr>
-      <!-- Row 2 -->
       <tr class="hover:bg-background-dark/30 transition-colors group">
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
@@ -170,7 +163,6 @@
           </button>
         </td>
       </tr>
-      <!-- Row 3 -->
       <tr class="hover:bg-background-dark/30 transition-colors group">
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
@@ -199,7 +191,6 @@
           </button>
         </td>
       </tr>
-      <!-- Row 4 -->
       <tr class="hover:bg-background-dark/30 transition-colors group">
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
@@ -227,7 +218,6 @@
           </button>
         </td>
       </tr>
-      <!-- Row 5 -->
       <tr class="hover:bg-background-dark/30 transition-colors group">
         <td class="px-6 py-4">
           <div class="flex items-center gap-3">
@@ -257,7 +247,6 @@
       </tr>
       </tbody>
     </table>
-    <!-- Pagination Footer -->
     <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-surface-dark">
       <div class="text-sm text-text-muted">
         Showing <span class="font-medium text-slate-100">1</span> to <span class="font-medium text-slate-100">5</span> of <span class="font-medium text-slate-100">1,234</span> results
@@ -269,7 +258,6 @@
     </div>
   </div>
 </main>
-<!-- Footer -->
 <footer class="mt-auto border-t border-border-dark bg-surface-dark py-6 px-10">
   <div class="max-w-[1200px] mx-auto flex justify-between items-center text-sm text-text-muted">
     <p>© 2024 SoundHub Inc. Admin Portal.</p>
