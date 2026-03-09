@@ -56,7 +56,6 @@
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
-<!-- Sticky Header -->
 <header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -87,16 +86,13 @@
     </div>
 </header>
 <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
-    <!-- Hero Section -->
     <div class="mb-10">
         <h2 class="text-4xl font-black text-slate-900 dark:text-white mb-2">Songs</h2>
         <p class="text-slate-500 dark:text-slate-400 max-w-2xl">Discover your next favorite track. Explore our vast
             library of millions of songs across every genre imaginable.</p>
     </div>
-    <!-- Filter Bar -->
     <div class="flex flex-col lg:flex-row gap-4 mb-8 items-start lg:items-center justify-between">
         <div class="flex flex-wrap items-center gap-3">
-            <!-- Sort Dropdown -->
             <div class="relative group">
                 <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:border-primary transition-all">
                     <span class="material-symbols-outlined text-slate-400">sort_by_alpha</span>
@@ -104,7 +100,6 @@
                     <span class="material-symbols-outlined text-slate-400">expand_more</span>
                 </button>
             </div>
-            <!-- Genre Dropdown -->
             <div class="relative group">
                 <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:border-primary transition-all">
                     <span class="material-symbols-outlined text-slate-400">category</span>
@@ -112,7 +107,6 @@
                     <span class="material-symbols-outlined text-slate-400">expand_more</span>
                 </button>
             </div>
-            <!-- Popularity Toggle -->
             <button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
                 <span class="material-symbols-outlined">trending_up</span>
                 Most Played
@@ -123,7 +117,6 @@
             <span>Showing 248,102 tracks</span>
         </div>
     </div>
-    <!-- Songs List Table View -->
     <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-24">
         <div class="overflow-x-auto custom-scrollbar">
             <table class="w-full text-left border-collapse">
@@ -146,7 +139,6 @@
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                <!-- Row 1 -->
                 <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
                     <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">1</td>
                     <td class="py-4 px-6">
@@ -182,7 +174,6 @@
                         </button>
                     </td>
                 </tr>
-                <!-- Row 2 -->
                 <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
                     <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">2</td>
                     <td class="py-4 px-6">
@@ -218,7 +209,6 @@
                         </button>
                     </td>
                 </tr>
-                <!-- Row 3 -->
                 <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
                     <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">3</td>
                     <td class="py-4 px-6">
@@ -254,7 +244,6 @@
                         </button>
                     </td>
                 </tr>
-                <!-- Row 4 -->
                 <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
                     <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">4</td>
                     <td class="py-4 px-6">
@@ -290,7 +279,6 @@
                         </button>
                     </td>
                 </tr>
-                <!-- Row 5 -->
                 <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
                     <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">5</td>
                     <td class="py-4 px-6">
@@ -329,7 +317,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- Pagination -->
         <div class="px-6 py-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30">
             <button class="text-sm font-medium text-slate-500 hover:text-primary flex items-center gap-1">
                 <span class="material-symbols-outlined text-sm">chevron_left</span> Previous
@@ -347,7 +334,6 @@
         </div>
     </div>
 </main>
-<!-- Minimalist Footer -->
 <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 bg-background-light dark:bg-background-dark py-8 mt-auto">
     <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -371,6 +357,5 @@
         </div>
     </div>
 </footer>
-<!-- Floating Music Player -->
 </body>
 </html>
