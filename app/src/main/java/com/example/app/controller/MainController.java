@@ -1,11 +1,11 @@
-package org.example.app.controller;
+package com.example.app.controller;
 
 
 import com.example.model.User;
 import com.example.model.UserType;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.example.app.service.security.SpringUser;
+import com.example.app.service.security.SpringUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

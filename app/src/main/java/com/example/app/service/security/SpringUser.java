@@ -1,4 +1,4 @@
-package org.example.app.service.security;
+package com.example.app.service.security;
 
 import com.example.model.User;
 import lombok.Getter;

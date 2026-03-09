@@ -33,11 +33,12 @@
 
 
             <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
+                <!--/*@thymesVar id="currentUser" type="com.example.model.User"*/-->
                 <th:block th:if="${currentUser} != null">
                     <div class="flex items-center gap-3 cursor-pointer group">
-                        <img th:if="${currentUser.getPictureName() != null && !currentUser.getPictureName().equals('')}"
+                        <img th:if="${currentUser.picName != null && !currentUser.getPictureName().equals('')}"
                              th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
-                        <img th:if="${currentUsers.getPictureName() == null || currentUser.getPictureName().equals('')}"
+                        <img th:if="${currentUser.picName() == null || currentUser.getPictureName().equals('')}"
                              th:src="@{/images/img.png}" alt="User picture">
                         <span class="text-sm font-medium">Welcome, <span class="text-brand-accent" th:text="${currentUser.getName()}"></span></span>
                     </div>

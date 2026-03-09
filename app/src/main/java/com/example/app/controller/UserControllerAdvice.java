@@ -1,15 +1,16 @@
-package org.example.app.controller;
+package com.example.app.controller;
 
 import com.example.model.User;
-import org.example.app.service.security.SpringUser;
+import com.example.app.service.security.SpringUser;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 @ControllerAdvice
 public class UserControllerAdvice {
-    @ModelAttribute("user")
+    @ModelAttribute("currentUser")
     public User getUser(@AuthenticationPrincipal SpringUser springUser) {
+        System.out.println("Advice method called");
         if(springUser == null) {
             return null;
         }
