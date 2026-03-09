@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>SoundHub - Album Directory</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1978e5",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111821",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    body {
+      scroll-behavior: smooth;
+    }
+    .glass-header {
+      background: rgba(17, 24, 33, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
+<header class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center gap-2" data-purpose="brand-logo">
+        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+          <i class="fa-solid fa-waveform text-white"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">SoundHub</span>
+      </div>
+      <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
+        <a class="text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors" href="#">Home</a>
+        <a class="text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors" href="#">Artists</a>
+        <a class="text-sm font-medium text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors" href="#">Groups</a>
+        <a class="text-sm font-medium text-primary transition-colors" href="#">Albums</a>
+      </nav>
+      <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
+        <div class="flex items-center gap-3 cursor-pointer group">
+          <img alt="User Avatar" class="w-9 h-9 rounded-full border border-gray-200 dark:border-white/20 group-hover:border-primary transition-colors object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7CeUoRhIC5O7ko8H2odLjoqP2p7CSDp0Q6Ca2RYrq-WMRr6KOM0f3muSLoMo2KbSOXOFuLu4xJUNA76PpatgjFHWG56IlSngr30Eh9TPGio32sIXCGN0zpHemu4ijvDk77Fq_xEsfUE9DzUSUPQQfkQWG5ygcQ81lCg5tHUvfDBeckuQgumLQ9_lgpXXr5pvL1XZO_njejExIA9HO5wgvTTFDX9OvntCtc9ijz7li9K1U8up2PKtNJCxckaPuqCCs2MRq1N1pSYs"/>
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Welcome, <span class="text-primary">User</span></span>
+        </div>
+        <div class="relative group">
+          <button class="flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">
+            <i class="fa-solid fa-globe text-xs"></i>
+            English
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+          </button>
+          <div class="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1">
+            <a class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5" href="#">English</a>
+            <a class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5" href="#">Русский</a>
+            <a class="block px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5" href="#">Հայերեն</a>
+          </div>
+        </div>
+      </div>
+      <div class="md:hidden flex items-center">
+        <button class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline-none" id="mobile-menu-toggle">
+          <i class="fa-solid fa-bars-staggered text-xl"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="pt-24 pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Albums Directory</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">Explore the latest and greatest releases.</p>
+      </div>
+      <div class="relative group w-max">
+        <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-primary dark:hover:border-primary transition-colors">
+          <i class="fa-solid fa-arrow-down-short-wide"></i>
+          Sort: Recent
+          <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+        </button>
+        <div class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1 z-10">
+          <a class="flex items-center justify-between px-4 py-2 text-sm text-primary bg-primary/5 hover:bg-primary/10" href="#">
+            Recent
+            <i class="fa-solid fa-check text-xs"></i>
+          </a>
+          <a class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5" href="#">Popular</a>
+          <a class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5" href="#">A - Z</a>
+        </div>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-10">
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB38837wzWV4b1AB4lUAM7EbqWuTTC1vyc8EIa_VeBs8FfGIG4aTm1CB9hK-9Ls280fP8Z4FIcQL_cjK9teYpbc0sMEWChP51QAIzgn7EYeFa1egec_WfM56tA-gg23h5_VitZk1jyRWqwO9WL6HPEukXsLNrqTeja-vuzukR-ukQ6cNiCA_HefwYGVggjH4CgdCOZPdETw9Bidza-m8xJOWGswo3j7T_OPWTh8G1IK5bRWrQenzzBWor-lseNI4P58DJ2MugsXQUA"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">Midnight Echoes</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">Elena Vox</p>
+      </a>
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD66BggGPPRBXhmSHn6J-LMtNKFes6fCfUPCu06TN74bgP59YYNjuy62w9zOHqu_3MRwHf3mIXDRHPeFL1vyw9a-2B6F5qnbHzGDJwQVuBVjOK6VFSn-VyZ_bs_0ImSLNDaLpSsBc5LwCpIRmSfDVfvcs42ZzpyLIwYz7pabuRoB4ZlvXUifKddiwPg2Ch8zOVU6frM_Tb764srN2VAq_xeFBpPdilYPTzSbPXJKM5rrTtI8JN9UMvuSHK3S3vFJSpcsVgdUONsNNc"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">Neon Dreams</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">Marcus Neon</p>
+      </a>
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP4OvgpuGFzCsNtFq1-1_OPINU5h39GjtLaU2dTFdbs-rk14omdxDoGHs11dqud50BolMADWpCzNPv9G-rdfxu34oeePcSBGqWD142DO7Lh-TMv-3RaCOx0P1ppAosVdGLjOAGQ2Fnau7ybyXHeEPa0y4Sfk2J54_e-Nbs5guo9iI3IWUNfdwUkc05D4PeNDYGJckvgsYB7RxDUS0ffW5YfaHDCvtJshKDKkBXosfz3QsVK40wjM0mAnAUtjzmgcYC8Z7SxGdIxXM"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">Blooming Sounds</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">Sarah Bloom</p>
+      </a>
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4a_o5y1CdjJkSuW0yInwD0ojGdMiZl0xulgMK7tULy6xXyLrMAUerdgXDIeAn3RlYaGrfFBYkwWhVoK8wCbFPax3wu-jCarXJejeXffQtEIQ4-au6buEmNSGuxrlGQyXDps3Aq-ijEjp8K2YCjeMuiHfMWlGGychOe8Zb85hbF3OggRQmNv2ftnoVGY6yfY83BfxWaqRuwfWDXdXKTA0Y9OfMap7RR6Ievflx-gctc3jqclppDcaYuH1b0YQkKlPsg5c3FNV5uGo"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">Chill Vibes Vol. 1</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">Chill Beatz</p>
+      </a>
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3nk4iAWcvr_jE0SC6JUt6yEuj1jel9zXl8jW7J9yaOLhoDCoS7GZbxuQmcuK9I5Av7Lgd3H_XGZAj5A_DLrWYYXy_nWJ77i4nlxueUmYYYZ76tFQkMP9-_WABfsvMuCfbx7wA33lNJmeB8IbD4JRMRNXDkSwaT1Z3MCjeRMdjYd3nQArwhR99dgpByqPpJdZua02F0UqNn3KKHfZjRBH5aatsUpBjQ21D0N4evq6DaNIEf9q9ygkaFc_eNyGL8V2uPAj6Kl2c5xQ"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">Kinetic Energy</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">DJ Kinetic</p>
+      </a>
+      <a class="flex flex-col group cursor-pointer" href="#">
+        <div class="relative w-full aspect-square mb-4 overflow-hidden rounded-lg shadow-md group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300">
+          <img alt="Album Cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCHvMmDEyRHz_UKHg3FDR28plSf309s1KhiUXElpJnHeTVFKAShZfmP6gwfp-TeDWpIIHA501Wy5m6uU-STm1wW7Y8B6MeraswL-DCkogT8IwAXfLeG2nORGLs2_KvHKlGQDnv2UWv6Ft2O5hWxA4INQ-iVHqYU01arD3Pr-PdotnWzjcMfxkCNdqGcFgUe4LZaszSRUSt-En4mYmBtGIrqDnT2d-pn_u8GpCUNfr5xVE2JN7PNv1sZlC75APXq65S7INBDeuM6e0"/>
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white shadow-lg transform scale-75 group-hover:scale-100 transition-transform duration-300">
+              <i class="fa-solid fa-play ml-1"></i>
+            </div>
+          </div>
+        </div>
+        <h3 class="font-bold text-gray-900 dark:text-white truncate w-full group-hover:text-primary transition-colors">River Flows</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 truncate w-full">Liam Rivers</p>
+      </a>
+    </div>
+  </div>
+</main>
+<footer class="border-t border-gray-200 dark:border-white/5 py-12 pb-32" data-purpose="site-footer">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center">
+          <i class="fa-solid fa-waveform text-xs text-gray-600 dark:text-white"></i>
+        </div>
+        <span class="font-bold text-gray-600 dark:text-gray-400">SoundHub</span>
+      </div>
+      <p class="text-gray-500 text-sm">SoundHub © 2026 All rights reserved</p>
+      <div class="flex space-x-6 text-gray-500" data-purpose="social-links">
+        <a class="hover:text-primary dark:hover:text-white transition-colors" href="#"><i class="fa-brands fa-github text-xl"></i></a>
+        <a class="hover:text-primary dark:hover:text-white transition-colors" href="#"><i class="fa-brands fa-twitter text-xl"></i></a>
+        <a class="hover:text-primary dark:hover:text-white transition-colors" href="#"><i class="fa-brands fa-instagram text-xl"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-black/80 backdrop-blur-xl border-t border-gray-200 dark:border-white/5 px-4 py-3">
+  <div class="max-w-[1800px] mx-auto grid grid-cols-3 items-center">
+    <div class="flex items-center gap-4">
+      <img alt="Current Track" class="w-14 h-14 rounded-md shadow-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo2vqit2sVZyDsH-G6z-b8c2MrDMJ26YL5RnLP772kjRdcIrml05SFHt7mhnQFwW9-0x41c_1faX-WYYwyubcoOZMZqrb-6w1ZIOfHNe3O0btqE4OEGDhkB-AABA1ysyFVGnvBPh3WEBu_9UsFMd7mOaZots4n8ltTtis7I4wU14J3AIODbdpSxusnI_l6uULjM-wNwAFk35EYtVqPeUaSIwYwY5aP-i0VWax9Q7fKGxskMqBanJR-BKFy0LNeZoGxwdt9-R_SJLs"/>
+      <div class="overflow-hidden">
+        <h4 class="text-sm font-bold truncate text-gray-900 dark:text-white">Midnight Echoes</h4>
+        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Elena Vox</p>
+      </div>
+      <button class="text-gray-400 hover:text-primary dark:hover:text-white transition-colors">
+        <i class="fa-regular fa-heart"></i>
+      </button>
+    </div>
+    <div class="flex flex-col items-center gap-2">
+      <div class="flex items-center gap-6 text-gray-500 dark:text-gray-400">
+        <button class="hover:text-primary transition-colors text-xs"><i class="fa-solid fa-shuffle"></i></button>
+        <button class="hover:text-gray-900 dark:hover:text-white transition-colors"><i class="fa-solid fa-backward-step"></i></button>
+        <button class="w-8 h-8 flex items-center justify-center bg-gray-900 dark:bg-white text-white dark:text-black rounded-full hover:scale-105 transition-transform">
+          <i class="fa-solid fa-play ml-0.5"></i>
+        </button>
+        <button class="hover:text-gray-900 dark:hover:text-white transition-colors"><i class="fa-solid fa-forward-step"></i></button>
+        <button class="hover:text-primary transition-colors text-xs"><i class="fa-solid fa-repeat"></i></button>
+      </div>
+      <div class="w-full max-w-md flex items-center gap-2">
+        <span class="text-[10px] text-gray-500 w-8 text-right">1:24</span>
+        <div class="flex-1 h-1 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden relative group">
+          <div class="absolute inset-y-0 left-0 bg-primary group-hover:bg-primary/80 transition-colors" style="width: 35%"></div>
+        </div>
+        <span class="text-[10px] text-gray-500 w-8">3:42</span>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-4">
+      <button class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"><i class="fa-solid fa-list-ul text-sm"></i></button>
+      <button class="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"><i class="fa-solid fa-computer-speaker text-sm"></i></button>
+      <div class="flex items-center gap-2 group">
+        <i class="fa-solid fa-volume-high text-gray-400 text-sm"></i>
+        <div class="w-24 h-1 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden relative">
+          <div class="absolute inset-y-0 left-0 bg-gray-500 dark:bg-white group-hover:bg-primary transition-colors" style="width: 70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                        "surface-dark": "#1c2633",
+                        "accent-dark": "#293545",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-accent-dark px-6 md:px-10 py-3 bg-white dark:bg-background-dark sticky top-0 z-50">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 text-primary">
+                <div class="size-8 flex items-center justify-center bg-primary/10 rounded-full">
+                    <span class="material-symbols-outlined text-primary">database</span>
+                </div>
+                <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">SoundHub</h2>
+            </div>
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+                <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Artists</a>
+                <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Songs</a>
+            </nav>
+        </div>
+        <div class="flex flex-1 justify-end gap-4 md:gap-8 items-center">
+            <label class="hidden lg:flex flex-col min-w-40 h-10 max-w-64">
+                <div class="flex w-full flex-1 items-stretch rounded-full h-full bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-accent-dark overflow-hidden">
+                    <div class="text-slate-400 flex items-center justify-center pl-4">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input class="w-full bg-transparent border-none focus:ring-0 text-sm placeholder:text-slate-400 px-3" placeholder="Search music..." value=""/>
+                </div>
+            </label>
+            <div class="flex items-center gap-3">
+                <button class="flex min-w-[84px] items-center justify-center rounded-full h-10 px-5 bg-primary text-white text-sm font-bold transition-transform hover:scale-105 active:scale-95">
+                    <span class="truncate">Welcome, User</span>
+                </button>
+                <button class="hidden sm:flex items-center justify-center rounded-full h-10 px-4 bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-accent-dark text-slate-700 dark:text-white text-sm font-bold">
+                    <span class="truncate">Language</span>
+                </button>
+                <div class="bg-primary/20 bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="User profile avatar circular thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCL9hMFA0zRcuEh-j6ygvBRTPG9Xn4V0Mgy4CuJVGRfHa7MiirRdnzm6hyBXISb2LbPMAaulJ3FNj0vJmZhbcNiab9E3rssY5XxiWaJDML--dLpvTNCRCLHKfGu-9R9plqlwwSaJ2vp7O7JOWkm83tf25YAR_tr3Alr9WEq8cKSYhIrGWeW-0hKiaHEVSNQsfH4wD91DobkPsQ4nd54u6BhYt9BEJ60K9NEaQnc5ex_wtNOGcOrvE8vgQnrnFwcbg-d8lwGVfoc5wI");'></div>
+            </div>
+        </div>
+    </header>
+    <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12">
+        <section class="flex flex-col items-center text-center mb-16">
+            <div class="relative group">
+                <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
+                <div class="relative bg-surface-dark bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 md:size-48 border-4 border-white dark:border-background-dark shadow-2xl mb-6" data-alt="Large circular high-quality user profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHrtEGiTrJHGcvq9JPLvK7n_3yBVLoNceIThyuud972j_YhJ1yuL7Rv4Wd_nFs3DHBHiOwud9e5-cHF_cNImjVSmCmZT2xJKWcKddPqXhnN7ggACAMTLzNOUOEBmHA06NTQm1zfNJRlccrgKUhXix08w96TGpfbPB6BdxG8YXBU-cvtw8wakGiu0NjJAtmlpZ__tQyXSEYNAFkPN9dqNHqWudrkyEyAa95hc8r6i05RukmPt1oqUzGLu-pEDBlrWBcjUa28jn37zQ");'>
+                </div>
+                <button class="absolute bottom-6 right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
+                    <span class="material-symbols-outlined text-sm">edit</span>
+                </button>
+            </div>
+            <div class="flex flex-col gap-1">
+                <h1 class="text-slate-900 dark:text-white text-3xl md:text-5xl font-extrabold tracking-tight">John Doe</h1>
+                <p class="text-primary text-lg font-medium">@johndoe123</p>
+            </div>
+            <div class="mt-6 flex gap-4">
+                <div class="bg-white dark:bg-surface-dark px-6 py-2 rounded-full border border-slate-200 dark:border-accent-dark">
+                    <span class="text-xs uppercase tracking-widest text-slate-400 font-bold block">Followers</span>
+                    <span class="text-xl font-bold dark:text-white">1,284</span>
+                </div>
+                <div class="bg-white dark:bg-surface-dark px-6 py-2 rounded-full border border-slate-200 dark:border-accent-dark">
+                    <span class="text-xs uppercase tracking-widest text-slate-400 font-bold block">Following</span>
+                    <span class="text-xl font-bold dark:text-white">492</span>
+                </div>
+            </div>
+        </section>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
+                <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
+                <div class="relative z-10">
+                    <div class="size-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-red-500 text-3xl font-fill">favorite</span>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">Favorite Songs</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Access all your liked tracks, top played melodies, and saved gems in one place.</p>
+                </div>
+                <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
+                    <span>View Favorites</span>
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </button>
+            </div>
+            <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
+                <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
+                <div class="relative z-10">
+                    <div class="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-primary text-3xl">library_music</span>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">My Playlists</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Manage and listen to your custom collections, shared albums, and personalized radio stations.</p>
+                </div>
+                <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
+                    <span>Manage Playlists</span>
+                    <span class="material-symbols-outlined">playlist_add</span>
+                </button>
+            </div>
+        </section>
+        <section class="mt-16 bg-primary/5 rounded-xl p-8 border border-primary/20">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <h4 class="text-xl font-bold dark:text-white">Your Weekly Recap is ready</h4>
+                    <p class="text-slate-500 dark:text-slate-400">See how your taste evolved over the last 7 days.</p>
+                </div>
+                <button class="rounded-full bg-white dark:bg-background-dark text-primary border border-primary px-6 py-2 font-bold hover:bg-primary hover:text-white transition-all">
+                    Check Stats
+                </button>
+            </div>
+        </section>
+    </main>
+    <footer class="mt-auto border-t border-slate-200 dark:border-accent-dark py-12 px-6">
+        <div class="max-w-5xl mx-auto flex flex-col items-center gap-8">
+            <div class="flex gap-8">
+                <a class="text-slate-400 hover:text-primary transition-colors flex items-center gap-2" href="#">
+                    <svg class="size-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+                    <span class="font-bold">GitHub</span>
+                </a>
+            </div>
+            <div class="text-center">
+                <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">© 2023 SoundHub. All rights reserved.</p>
+                <div class="flex gap-4 justify-center mt-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    <a class="hover:text-primary" href="#">Privacy</a>
+                    <a class="hover:text-primary" href="#">Terms</a>
+                    <a class="hover:text-primary" href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+</body></html>

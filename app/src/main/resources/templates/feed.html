@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body class="font-sans antialiased">
+<th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+    <section>
+    <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-hero-gradient" data-purpose="hero-banner">
+        <div class="absolute inset-0 z-0 opacity-20">
+        </div>
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500">
+                Your music, <br class="md:hidden"/>your hub.
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                Experience sound in its purest form. Stream millions of tracks, follow your favorite artists, and discover new vibes daily.
+            </p>
+        </div>
+    </section>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+        <section data-purpose="new-solo-artists">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold">New from Solo Artists</h2>
+                    <p class="text-gray-400 text-sm">The latest drops from independent creators.</p>
+                </div>
+                <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">Show all</a>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <div class="album-card group cursor-pointer" data-purpose="album-item">
+                    <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
+                        <img alt="Album Art" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwyaH4d0HU2wLcTPTzk66bKeF2-8OMzAz1VAh3Db73G18q6cELTJQv1MwpxpnYipKVeFHiHACvfAWYT7_CSeO92dhmLwSREE5Nx6kvl630VESwoqCiDQ7aroz7NZt4H84jRTOWuGXcLs4dvrpODKjsQFEf1m87g-d5zFHlkXeiKDd02l9ljXu541PZQTN-wd5c1aaEw1eP_lsrJq3QpifooGScNbJ0pNfJ0Jqd0d3cZ7MTbDZSUhYW3nzqHuCYu4zHy7G56n9e76O"/>
+                        <div class="play-overlay absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-all duration-300 translate-y-4">
+                            <div class="w-12 h-12 bg-brand-secondary rounded-full flex items-center justify-center shadow-lg shadow-brand-secondary/30">
+                                <i class="fa-solid fa-play text-black ml-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-sm truncate">Example title</h3>
+                    <p class="text-xs text-gray-400 mt-1">Example Artist</p>
+                </div>
+            </div>
+        </section>
+        <section data-purpose="new-groups">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold">New from Groups</h2>
+                    <p class="text-gray-400 text-sm">Latest collaborations and band releases.</p>
+                </div>
+                <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">Show all</a>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+                <div class="album-card group cursor-pointer">
+                    <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
+                        <img alt="Group Art" class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKTbqz4-QDTt8urdPRYfTiyRLnwiMnw68R4jDCUlJ2XOc3ePvXNIXoz10QxF6UMfds9tdCrwK-zSqdQDu10cXEGgQgbyFhiqOJzqIYZPg_yz0A-S9n5XKcv3D9p4gPB3liHDmvDb0tnLbkuzSuPdoyJ_56-fe7MJihA_O7Lm1iDcHtlgVW8pCBplxLoEpyIWQ3GUHsdB3DyyIwvCEs3M8YAFj9VO6sxXJEhHfItjJLqnk6-53G1nUFh7PaMTUvl1quw8P923uSJMGv"/>
+                    </div>
+                    <h3 class="font-bold text-sm truncate">Example title</h3>
+                    <p class="text-xs text-gray-400 mt-1">Example band</p>
+                </div>
+            </div>
+        </section>
+        <section data-purpose="popular-list">
+            <h2 class="text-2xl font-bold mb-8">Most Popular Monthly</h2>
+            <div class="bg-brand-surface/50 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+                <div class="grid grid-cols-[40px_1fr_40px_100px_60px] md:grid-cols-[60px_2fr_1fr_100px_80px] gap-4 px-6 py-4 border-b border-white/5 text-gray-500 text-xs uppercase tracking-wider font-bold">
+                    <span class="text-center">#</span>
+                    <span>Title</span>
+                    <span class="hidden md:block">Artist</span>
+                    <span class="text-center">Plays</span>
+                    <span class="text-right"><i class="fa-regular fa-clock"></i></span>
+                </div>
+                <div class="divide-y divide-white/5">
+                    <div class="grid grid-cols-[40px_1fr_40px_100px_60px] md:grid-cols-[60px_2fr_1fr_100px_80px] gap-4 px-6 py-4 items-center hover:bg-white/5 group transition-colors cursor-pointer" data-purpose="track-item">
+                        <span class="text-center text-gray-500 group-hover:hidden">1</span>
+                        <span class="text-center text-brand-secondary hidden group-hover:block"><i class="fa-solid fa-play"></i></span>
+                        <div class="flex items-center gap-4 overflow-hidden">
+                            <img alt="Track thumbnail" class="w-10 h-10 rounded shadow-md flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6PhJS-wKHdQkx4buUr87ZjTKCQEPnRixnl-3msnGkzns0npLxpDGosiccBJEdnTYCY1a-qX5K8IEorPTUO4OaxEEXr4YHsWHOG1B8AiAdsGFU5OkajY2bsqRUDw7ZxeZtUSdqYcgY8i3Ldbm1UGulVun_T7tWDVLkGbySXc4TJhG40bjF5Fpczn5C3qBfVDl63TXKOe_np8yGXNt-UqW21nW2AR3iLCcadmc4MNKyh9D0lpYL8HJH2hJa0arDXBKRd4RHGbvPTA8t"/>
+                            <span class="font-semibold truncate">Example title</span>
+                        </div>
+                        <span class="hidden md:block text-gray-400 truncate">Example Artist</span>
+                        <div class="flex items-center justify-center gap-2 text-gray-400">
+                            <i class="fa-solid fa-headphones text-[10px]"></i>
+                            <span class="text-xs">1.2M</span>
+                        </div>
+                        <span class="text-right text-gray-400 text-sm">3:42</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    </section>
+</th:block>
+
+
+</body></html>

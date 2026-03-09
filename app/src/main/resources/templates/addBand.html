@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Create New Band - SoundHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1978e5",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111821",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden" style="--select-button-svg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(157,170,184)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');">
+  <div class="layout-container flex h-full grow flex-col">
+    <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-10">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-3 text-primary dark:text-primary cursor-pointer">
+          <span class="material-symbols-outlined text-3xl">headphones</span>
+          <h2 class="text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-slate-100">SoundHub</h2>
+        </div>
+        <label class="flex flex-col min-w-40 !h-10 max-w-64 hidden md:flex">
+          <div class="flex w-full flex-1 items-stretch rounded-full h-full bg-slate-100 dark:bg-slate-800 focus-within:ring-2 focus-within:ring-primary transition-shadow">
+            <div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4 rounded-l-full">
+              <span class="material-symbols-outlined text-xl">search</span>
+            </div>
+            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-full text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 text-sm font-medium" placeholder="Search bands, albums..." value=""/>
+          </div>
+        </label>
+      </div>
+      <div class="flex flex-1 justify-end gap-8 items-center">
+        <nav class="hidden lg:flex items-center gap-8">
+          <a class="text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Discover</a>
+          <a class="text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Library</a>
+          <a class="text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary text-sm font-semibold transition-colors" href="#">Premium</a>
+        </nav>
+        <button class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors aspect-square rounded-full size-10 flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-primary">
+          <span class="material-symbols-outlined text-slate-600 dark:text-slate-300">person</span>
+        </button>
+      </div>
+    </header>
+    <main class="px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-10">
+      <div class="layout-content-container flex flex-col w-full max-w-[640px] flex-1">
+        <div class="flex flex-col mb-8 gap-2">
+          <h1 class="text-slate-900 dark:text-slate-100 text-3xl md:text-4xl font-black leading-tight tracking-tight">Create New Band</h1>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Add a new artist to the SoundHub platform.</p>
+        </div>
+        <form class="flex flex-col gap-8">
+          <div class="flex flex-col gap-3">
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-semibold">Band Profile Picture</label>
+            <div class="relative w-full aspect-video md:aspect-[21/9] bg-slate-100 dark:bg-slate-800 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 hover:border-primary dark:hover:border-primary transition-all group overflow-hidden">
+              <div class="flex flex-col items-center justify-center gap-3 p-6 z-10">
+                <div class="p-3 bg-slate-200 dark:bg-slate-700 rounded-full text-slate-600 dark:text-slate-300 group-hover:text-primary dark:group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+                  <span class="material-symbols-outlined text-3xl">cloud_upload</span>
+                </div>
+                <div class="text-center">
+                  <p class="text-slate-900 dark:text-slate-100 text-base font-bold">Click to upload photo</p>
+                  <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+                </div>
+              </div>
+              <input accept="image/*" class="hidden" type="file"/>
+            </div>
+          </div>
+          <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-2">
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-semibold" for="bandName">Band Name</label>
+              <input class="form-input w-full rounded-xl text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-base font-medium transition-colors" id="bandName" placeholder="e.g. The Cosmic Echoes" type="text"/>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-semibold" for="formationYear">Formation Year</label>
+              <div class="relative">
+                <select class="form-select w-full rounded-xl text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 appearance-none placeholder:text-slate-400 dark:placeholder:text-slate-500 text-base font-medium transition-colors cursor-pointer" id="formationYear">
+                  <option disabled="" selected="" value="">Select year</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="older">Before 2020</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                  <span class="material-symbols-outlined">expand_more</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-semibold" for="biography">Biography</label>
+              <textarea class="form-textarea w-full rounded-xl text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-1 focus:ring-primary p-4 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-base font-medium resize-y transition-colors" id="biography" placeholder="Tell us about the band's history, influences, and style..." rows="5"></textarea>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <button class="w-full sm:w-auto px-8 py-3 rounded-full bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1" type="button">
+              Cancel
+            </button>
+            <button class="w-full sm:w-auto px-8 py-3 rounded-full bg-primary hover:bg-primary/90 text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-primary/20 order-1 sm:order-2 ml-auto" type="submit">
+              Create Band
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+</body></html>
