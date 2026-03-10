@@ -1,7 +1,7 @@
 package com.example.app.controller;
 
-import com.example.model.User;
 import com.example.app.service.security.SpringUser;
+import com.example.model.User;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class UserControllerAdvice {
     @ModelAttribute("currentUser")
     public User getUser(@AuthenticationPrincipal SpringUser springUser) {
-        System.out.println("Advice method called");
-        if(springUser == null) {
+        if (springUser == null) {
             return null;
         }
         return springUser.getUser();
