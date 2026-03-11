@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 multipartFile.transferTo(file);
                 user.setPicName(fileName);
             } catch (IOException e) {
-                log.error("Error while saving image for student {}: {}, {}", user. getEmail(), e.getMessage(), e.getStackTrace());
+                log.error("Error while saving image for user {}: {}, {}", user. getEmail(), e.getMessage(), e.getStackTrace());
             }
         }
         userRepository.save(user);
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(Integer id, User newUser) {
-        User user = userRepository.getById(id);
+        User user = userRepository.findById(id).orElseThrow();
         user.setEmail(newUser.getEmail());
         user.setName(newUser.getName());
         user.setRole(newUser.getRole());

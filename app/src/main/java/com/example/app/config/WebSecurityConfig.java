@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http){
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
@@ -24,10 +24,12 @@ public class WebSecurityConfig {
                                         "/loginPage",
                                         "/registerPage",
                                         "/register",
-                                        "/css/**",
+                                        "/static/css/**",
                                         "/js/**",
                                         "/images/**").permitAll()
                                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                                .anyRequest().authenticated()
+                                .requestMatchers("/moderator/**").hasAnyAuthority("MODERATOR")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form ->

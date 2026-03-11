@@ -1,60 +1,106 @@
 <!DOCTYPE html>
 
 <html class="dark" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                        "surface-dark": "#1c2633",
+                        "accent-dark": "#293545",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
 <th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
     <section>
-            <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12">
-                <section class="flex flex-col items-center text-center mb-16">
-                    <div class="relative group">
-                        <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
-                        <img th:if="${currentUser.getPictureName() != null && !currentUser.getPictureName().equals('')}"
-                             th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
-                        <img th:if="${currentUsers.getPictureName() == null || currentUser.getPictureName().equals('')}"
-                             th:src="@{/images/img.png}" alt="User picture">
-                        <button class="absolute bottom-6 right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
-                            <span class="material-symbols-outlined text-sm">edit</span>
-                        </button>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <h1 class="text-slate-900 dark:text-white text-3xl md:text-5xl font-extrabold tracking-tight">
-                            John Doe</h1>
-                        <p class="text-primary text-lg font-medium" th:text="${currentUser.getUsername()}"></p>
-                    </div>
-                </section>
-                <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                    <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
-                        <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div class="relative z-10">
-                            <div class="size-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
-                                <span class="material-symbols-outlined text-red-500 text-3xl font-fill">favorite</span>
-                            </div>
-                            <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">Favorite Songs</h3>
-                            <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Access all your
-                                liked tracks, top played melodies, and saved gems in one place.</p>
+        <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12">
+            <section class="flex flex-col items-center text-center mb-16">
+                <div class="relative group">
+                    <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
+                    <img th:if="${currentUser.picName != null && !currentUser.picName.equals('')}"
+                         th:src="@{/image/get(picName=${currentUser.picName})}" alt="User picture">
+                    <img th:if="${currentUser.getPicName == null || currentUser.getPicName.equals('')}"
+                         th:src="@{/images/img.png}" alt="User picture">
+                    <button class="absolute bottom-6 right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
+                        <span class="material-symbols-outlined text-sm">edit</span>
+                    </button>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <h1 class="text-slate-900 dark:text-white text-3xl md:text-5xl font-extrabold tracking-tight">
+                        John Doe</h1>
+                    <p class="text-primary text-lg font-medium" th:text="${currentUser.getUsername()}"></p>
+                </div>
+            </section>
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
+                    <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
+                    <div class="relative z-10">
+                        <div class="size-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined text-red-500 text-3xl font-fill">favorite</span>
                         </div>
-                        <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
-                            <span>View Favorites</span>
-                            <span class="material-symbols-outlined">arrow_forward</span>
-                        </button>
+                        <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">Favorite Songs</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Access all your
+                            liked tracks, top played melodies, and saved gems in one place.</p>
                     </div>
-                    <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
-                        <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
-                        <div class="relative z-10">
-                            <div class="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                                <span class="material-symbols-outlined text-primary text-3xl">library_music</span>
-                            </div>
-                            <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">My Playlists</h3>
-                            <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Manage and
-                                listen to your custom collections, shared albums, and personalized radio stations.</p>
+                    <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
+                        <span>View Favorites</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
+                </div>
+                <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
+                    <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
+                    <div class="relative z-10">
+                        <div class="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                            <span class="material-symbols-outlined text-primary text-3xl">library_music</span>
                         </div>
-                        <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
-                            <span>Manage Playlists</span>
-                            <span class="material-symbols-outlined">playlist_add</span>
-                        </button>
+                        <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2">My Playlists</h3>
+                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8">Manage and
+                            listen to your custom collections, shared albums, and personalized radio stations.</p>
                     </div>
-                </section>
-            </main>
+                    <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
+                        <span>Manage Playlists</span>
+                        <span class="material-symbols-outlined">playlist_add</span>
+                    </button>
+                </div>
+            </section>
+        </main>
     </section>
 </th:block>
 </body>
