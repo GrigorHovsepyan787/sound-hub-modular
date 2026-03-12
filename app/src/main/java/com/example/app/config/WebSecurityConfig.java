@@ -29,8 +29,6 @@ public class WebSecurityConfig {
                                         "/images/**").permitAll()
                                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated()
-                                .requestMatchers("/moderator/**").hasAnyAuthority("MODERATOR")
-                                .anyRequest().authenticated()
                 )
                 .formLogin(form ->
                         form

@@ -11,20 +11,20 @@
                 <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">SoundHub</span>
             </div>
             <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
-                <a class="text-sm font-medium hover:text-brand-accent transition-colors" href="#">Home</a>
+                <a class="text-sm font-medium hover:text-brand-accent transition-colors" th:href="@{/}" th:text="#{navigation.home}">Home</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
-                   href="#">Artists</a>
+                   href="#" th:text="#{navigation.artists}">Artists</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
-                   href="#">Groups</a>
+                   href="#" th:text="#{navigation.groups}">Groups</a>
             </nav>
             <th:block th:if="${currentUser} == null">
                 <div class="hidden md:flex items-center space-x-4" data-purpose="auth-actions">
-                    <button class="px-5 py-2 text-sm font-medium border border-gray-700 rounded-full hover:bg-white/5 transition-all">
+                    <a th:href="@{/loginPage}" class="px-5 py-2 text-sm font-medium border border-gray-700 rounded-full hover:bg-white/5 transition-all" th:text="#{navigation.login}">
                         Login
-                    </button>
-                    <button class="px-5 py-2 text-sm font-medium bg-brand-accent hover:bg-brand-accentHover text-white rounded-full shadow-lg shadow-brand-accent/20 transition-all">
+                    </a>
+                    <a th:href="@{/registerPage}" class="px-5 py-2 text-sm font-medium bg-brand-accent hover:bg-brand-accentHover text-white rounded-full shadow-lg shadow-brand-accent/20 transition-all" th:text="#{navigation.register}">
                         Register
-                    </button>
+                    </a>
                 </div>
             </th:block>
 
@@ -32,20 +32,20 @@
             <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
                 <th:block th:if="${currentUser} != null">
                     <div class="flex items-center gap-3 cursor-pointer group">
-                        <a href="/user/profile">
+                        <a th:href="@{/user/profile}">
                         <img th:if="${currentUser.picName != null && !currentUser.getPicName().equals('')}"
                              th:src="@{/image/get(picName=${currentUser.picName})}" alt="User picture">
                         <img th:if="${currentUser.picName == null || currentUser.getPicName().equals('')}"
                              th:src="@{/images/img.png}" alt="User picture">
                         </a>
-                        <span class="text-sm font-medium">Welcome, <span class="text-brand-accent" th:text="${currentUser.getName()}"></span></span>
+                        <span class="text-sm font-medium" th:text="#{navigation.welcome}">Welcome, <span class="text-brand-accent" th:text="${currentUser.getName()}"></span></span>
                     </div>
                 </th:block>
 
                 <div class="relative group">
                     <button class="flex items-center gap-1 text-sm font-medium text-gray-400 hover:text-white transition-colors">
                         <i class="fa-solid fa-globe text-xs"></i>
-                        English
+                        <span th:text="#{navigation.language}">English</span>
                         <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </button>
                     <div class="absolute right-0 mt-2 w-32 bg-brand-surface border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1">
