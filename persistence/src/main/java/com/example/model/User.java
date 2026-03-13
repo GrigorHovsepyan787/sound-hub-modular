@@ -6,12 +6,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -28,7 +29,12 @@ public class User {
     private String email;
     private String password;
     private String pictureName;
-    private LocalDate registrationDate;
+    private LocalDateTime registrationDate;
+    @PrePersist
+    public void onPrePersist() {
+        registrationDate = LocalDateTime.now();
+    }
+
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
 }
