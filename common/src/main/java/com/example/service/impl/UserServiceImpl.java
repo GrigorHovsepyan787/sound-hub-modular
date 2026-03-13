@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,11 +37,12 @@ public class UserServiceImpl implements UserService {
             File file = new File(imageDirectoryPath + fileName);
             try {
                 multipartFile.transferTo(file);
-                user.setPicName(fileName);
+                user.setPictureName(fileName);
             } catch (IOException e) {
                 log.error("Error while saving image for user {}: {}, {}", user. getEmail(), e.getMessage(), e.getStackTrace());
             }
         }
+        user.setRegistrationDate(LocalDate.now());
         userRepository.save(user);
     }
 
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow();
         user.setEmail(newUser.getEmail());
         user.setName(newUser.getName());
-        user.setRole(newUser.getRole());
+        user.setUserType(newUser.getUserType());
         user.setPassword(newUser.getPassword());
         user.setSurname(newUser.getSurname());
         user.setUsername(newUser.getUsername());

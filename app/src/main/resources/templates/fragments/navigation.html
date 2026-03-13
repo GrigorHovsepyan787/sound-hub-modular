@@ -33,12 +33,13 @@
                 <th:block th:if="${currentUser} != null">
                     <div class="flex items-center gap-3 cursor-pointer group">
                         <a th:href="@{/user/profile}">
-                        <img th:if="${currentUser.picName != null && !currentUser.getPicName().equals('')}"
-                             th:src="@{/image/get(picName=${currentUser.picName})}" alt="User picture">
-                        <img th:if="${currentUser.picName == null || currentUser.getPicName().equals('')}"
+                        <img width="50px" th:if="${currentUser.pictureName != null && !currentUser.pictureName.equals('')}"
+                             th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
+                        <img width="50px" th:if="${currentUser.pictureName == null || currentUser.pictureName.equals('')}"
                              th:src="@{/images/img.png}" alt="User picture">
                         </a>
-                        <span class="text-sm font-medium" th:text="#{navigation.welcome}">Welcome, <span class="text-brand-accent" th:text="${currentUser.getName()}"></span></span>
+                        <span class="text-sm font-medium" th:text="#{navigation.welcome}">Welcome, </span>
+                        <span class="text-brand-accent" th:text="${currentUser.getName()}"></span>
                     </div>
                 </th:block>
 

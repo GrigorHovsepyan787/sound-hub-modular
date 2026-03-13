@@ -25,7 +25,7 @@ public class AuthController {
     @GetMapping("/successLogin")
     public String successLogin(@AuthenticationPrincipal SpringUser springUser) {
         if (springUser != null
-                && springUser.getUser().getRole() == UserType.ADMIN) {
+                && springUser.getUser().getUserType() == UserType.ADMIN) {
             return "redirect:/admin/home";
         } else {
             return "redirect:/";

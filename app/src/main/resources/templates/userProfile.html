@@ -47,16 +47,17 @@
         }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+<body>
 <th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
-    <section>
+    <section
+            class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
         <main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8 md:py-12">
             <section class="flex flex-col items-center text-center mb-16">
                 <div class="relative group">
                     <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
-                    <img th:if="${currentUser.picName != null && !currentUser.picName.equals('')}"
-                         th:src="@{/image/get(picName=${currentUser.picName})}" alt="User picture">
-                    <img th:if="${currentUser.getPicName == null || currentUser.getPicName.equals('')}"
+                    <img width="250px" th:if="${currentUser.pictureName != null && !currentUser.pictureName.equals('')}"
+                         th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
+                    <img width="250px" th:if="${currentUser.pictureName == null || currentUser.pictureName.equals('')}"
                          th:src="@{/images/img.png}" alt="User picture">
                     <button class="absolute bottom-6 right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
                         <span class="material-symbols-outlined text-sm">edit</span>

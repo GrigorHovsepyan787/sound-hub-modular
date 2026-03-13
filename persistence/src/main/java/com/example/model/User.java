@@ -27,8 +27,8 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String picName;
+    private String pictureName;
     private LocalDate registrationDate;
     @Enumerated(value = EnumType.STRING)
-    private UserType role;
+    private UserType userType;
 }
