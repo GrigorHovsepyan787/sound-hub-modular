@@ -2,29 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
-  <title>Create New Band - SoundHub</title>
+  <title>Edit Band - SoundHub</title>
 </head>
 <body>
 <section>
   <div class="max-w-7xl mx-auto px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-10">
     <div class="layout-content-container flex flex-col w-full max-w-[640px] flex-1">
       <div class="flex flex-col mb-8 gap-2">
-        <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight">Create New Band</h1>
-        <p class="text-gray-400 text-sm font-medium">Add a new band to the SoundHub platform.</p>
+        <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight">Edit Band</h1>
+        <p class="text-gray-400 text-sm font-medium">Update band details on the SoundHub platform.</p>
       </div>
 
-      <form th:action="@{/bands}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
+      <form th:action="@{/bands/edit}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
+
+        <input type="hidden" name="id" th:value="${band.id}"/>
+        <input type="hidden" name="pictureName" th:value="${band.pictureName}"/>
 
         <div class="flex flex-col gap-3">
-          <label for="bandImage" class="text-sm font-semibold">Band Image</label>
+          <label class="text-sm font-semibold">Band Image</label>
           <div id="uploadBox" class="relative w-full aspect-video md:aspect-[21/9] bg-brand-surface rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center cursor-pointer hover:border-brand-accent transition-all group overflow-hidden">
-            <img id="previewImage" class="absolute inset-0 w-full h-full object-cover rounded-xl hidden z-0"/>
+            <img id="previewImage"
+                 th:src="${band.pictureName != null} ? ${band.pictureName} : '#'"
+                 class="absolute inset-0 w-full h-full object-cover rounded-xl z-0"
+                 th:classappend="${band.pictureName == null} ? 'hidden' : ''"
+                 onerror="this.classList.add('hidden'); this.src=''"/>
             <div class="flex flex-col items-center justify-center gap-3 p-6 z-10">
               <div class="p-3 bg-gray-700 rounded-full text-gray-300 group-hover:text-brand-accent group-hover:bg-brand-accent/10 transition-colors">
                 <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
               </div>
               <div class="text-center">
-                <p id="uploadText" class="text-base font-bold">Click to upload photo</p>
+                <p id="uploadText" class="text-base font-bold">Click to change photo</p>
               </div>
             </div>
             <input id="bandImage" name="bandImage" accept="image/*" type="file" class="hidden"/>
@@ -33,14 +40,17 @@
 
         <div class="flex flex-col gap-2">
           <label for="bandName" class="text-sm font-semibold">Band Name</label>
-          <input id="bandName" name="name" placeholder="Band Name" type="text"
+          <input id="bandName" name="name" type="text" th:value="${band.name}"
+                 placeholder="Band Name"
                  class="form-input w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 placeholder:text-gray-500 text-base font-medium transition-colors"/>
         </div>
 
         <div class="flex flex-col gap-2">
           <label for="formationDate" class="text-sm font-semibold">Formation Date</label>
           <div class="relative">
-            <input type="text" id="formationDate" name="createdDate" placeholder="Select date"
+            <input type="text" id="formationDate" name="createdDate"
+                   th:value="${band.createdDate}"
+                   placeholder="Select date"
                    class="w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 text-base font-medium transition-colors cursor-pointer"
                    readonly/>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
@@ -51,20 +61,25 @@
 
         <div class="flex flex-col gap-2">
           <label for="biography" class="text-sm font-semibold">Biography</label>
-          <textarea id="biography" name="bio" rows="5" placeholder="Tell us about the band's history, influences, and style..."
+          <textarea id="biography" name="bio" rows="5" th:text="${band.bio}"
+                    placeholder="Tell us about the band's history, influences, and style..."
                     class="form-textarea w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent p-4 placeholder:text-gray-500 text-base font-medium resize-y transition-colors"></textarea>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/5">
+
           <a th:href="@{/bands}"
              class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-surface hover:bg-white/10 text-gray-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1 text-center">
             Cancel
           </a>
+
           <button type="submit"
                   class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-accent hover:bg-brand-accentHover text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-brand-accent/20 order-1 sm:order-2 ml-auto">
-            Create Band
+            Save Changes
           </button>
+
         </div>
+
       </form>
     </div>
   </div>
@@ -102,23 +117,23 @@
 
       const modal = document.createElement('div');
       modal.innerHTML = `
-    <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center;">
-      <div style="background:#1e1e2e; border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:32px; max-width:400px; width:90%; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.2s ease;">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-          <div style="background:rgba(239,68,68,0.15); border-radius:50%; padding:10px; flex-shrink:0;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center;">
+          <div style="background:#1e1e2e; border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:32px; max-width:400px; width:90%; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.2s ease;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+              <div style="background:rgba(239,68,68,0.15); border-radius:50%; padding:10px; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#fff;">Missing Required Fields</h3>
+            </div>
+            <p id="modalMessage" style="margin:0 0 24px; color:#9ca3af; font-size:0.9rem; line-height:1.6;"></p>
+            <button id="modalClose" style="width:100%; padding:10px; border-radius:50px; background:#6366f1; color:#fff; font-weight:700; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s;">Got it</button>
           </div>
-          <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#fff;">Missing Required Fields</h3>
         </div>
-        <p id="modalMessage" style="margin:0 0 24px; color:#9ca3af; font-size:0.9rem; line-height:1.6;"></p>
-        <button id="modalClose" style="width:100%; padding:10px; border-radius:50px; background:#6366f1; color:#fff; font-weight:700; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s;">Got it</button>
-      </div>
-    </div>
-    <style>
-      @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-      #modalClose:hover { background: #4f46e5; }
-    </style>
-  `;
+        <style>
+          @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+          #modalClose:hover { background: #4f46e5; }
+        </style>
+      `;
       document.body.appendChild(modal);
 
       const overlay = document.getElementById('modalOverlay');
@@ -127,12 +142,10 @@
 
       function showValidationModal(missingFields) {
         const fieldList = missingFields.map(f => `<li><strong style="color:#e5e7eb;">${f}</strong></li>`).join('');
-
         document.getElementById('modalMessage').innerHTML =
                 `Please fill in the following required ${missingFields.length > 1 ? 'fields' : 'field'} before submitting:
-        <ul style="margin-top:5px; padding-left:20px;">${fieldList}</ul>
-        These fields cannot be left empty.`;
-
+          <ul style="margin-top:5px; padding-left:20px;">${fieldList}</ul>
+          These fields cannot be left empty.`;
         overlay.style.display = 'flex';
       }
 
