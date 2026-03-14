@@ -1,12 +1,10 @@
 package com.example.app.service.security;
 
 import com.example.model.User;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.security.core.authority.AuthorityUtils;
 
-import java.util.Objects;
-
-@Getter
+@Data
 public class SpringUser extends org.springframework.security.core.userdetails.User {
 
     private final User user;
@@ -16,18 +14,5 @@ public class SpringUser extends org.springframework.security.core.userdetails.Us
                 user.getPassword(),
                 AuthorityUtils.createAuthorityList(user.getUserType().name()));
         this.user = user;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        SpringUser that = (SpringUser) o;
-        return Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), user);
     }
 }
