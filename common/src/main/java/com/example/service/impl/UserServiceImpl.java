@@ -1,6 +1,7 @@
 package com.example.service.impl;
 
 import com.example.model.User;
+import com.example.model.UserStatus;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +46,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void banUser(Integer id) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setUserStatus(UserStatus.BANNED);
+    }
+
+    @Override
+    public void unbanUser(Integer id) {
+        User user = userRepository.findById(id).orElseThrow();
+        user.setUserStatus(UserStatus.ENABLED);
+    }
+
+    @Override
     public void deleteById(Integer id) {
-        userRepository.deleteById(id);
+        User user  = userRepository.findById(id).orElseThrow();
+        user.setUserStatus(UserStatus.DELETED);
     }
 
     @Override

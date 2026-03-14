@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String surname;
     private String username;
@@ -30,6 +30,7 @@ public class User {
     private String password;
     private String pictureName;
     private LocalDateTime registrationDate;
+
     @PrePersist
     public void onPrePersist() {
         registrationDate = LocalDateTime.now();
@@ -37,4 +38,6 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
+    @Enumerated(value = EnumType.STRING)
+    private UserStatus userStatus;
 }

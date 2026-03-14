@@ -13,6 +13,10 @@ public interface UserService {
 
     void deleteById(Integer id);
 
+    void banUser(Integer id);
+
+    void unbanUser(Integer id);
+
     void update(Integer id, User user);
 
     Optional<User> findByUsername(String username);
