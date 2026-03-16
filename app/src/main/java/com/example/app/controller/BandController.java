@@ -27,36 +27,15 @@ public class BandController {
 
     @GetMapping("/bands")
     public String bands(ModelMap modelMap,
-                        @RequestParam("page") Optional<Integer> page,
-                        @RequestParam("size") Optional<Integer> size,
-                        @RequestParam("sort") Optional<String> sortParam) {
+                        @RequestParam(required = false) Integer page,
+                        @RequestParam(required = false) Integer size,
+                        @RequestParam(required = false) String sort) {
 
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(6);
-
-        String sortValue = sortParam.orElse("id,desc");
-        String[] sortParts = sortValue.split(",");
-
-        String sortField = sortParts[0];
-        Sort.Direction direction = Sort.Direction.DESC;
-        if (sortParts.length > 1) {
-            direction = Sort.Direction.fromString(sortParts[1]);
-        }
-
-        Pageable pageable = PageRequest.of(currentPage - 1, pageSize, Sort.by(direction, sortField));
-
-        Page<Band> bands = bandService.findAll(pageable);
-
-        int totalPages = bands.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .toList();
-            modelMap.addAttribute("pageNumbers", pageNumbers);
-        }
+        Page<Band> bands = bandService.findAll(page, size, sort);
 
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("currentSort", sortValue);
+        modelMap.addAttribute("pageNumbers", bandService.getPageNumbers(bands));
+        modelMap.addAttribute("currentSort", sort == null ? "id,desc" : sort);
 
         return "bands";
     }

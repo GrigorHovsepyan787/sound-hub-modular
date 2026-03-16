@@ -1,20 +1,22 @@
 package com.example.service.impl;
 
-import com.example.properties.S3Properties;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import com.example.model.Band;
+import com.example.properties.S3Properties;
 import com.example.repository.BandRepository;
 import com.example.service.BandService;
+import com.example.storage.StorageService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -22,33 +24,36 @@ import java.io.IOException;
 public class BandServiceImpl implements BandService {
 
     private final BandRepository bandRepository;
-    private final S3Client s3Client;
-    private final S3Properties s3Properties;
+    private final StorageService storageService;
 
     @Override
-    public Page<Band> findAll(Pageable pageable) {
+    public Page<Band> findAll(Integer page, Integer size, String sortParam) {
+
+        int currentPage = page == null ? 1 : page;
+        int pageSize = size == null ? 6 : size;
+
+        String sortValue = sortParam == null ? "id,desc" : sortParam;
+        String[] sortParts = sortValue.split(",");
+
+        String sortField = sortParts[0];
+        Sort.Direction direction = Sort.Direction.DESC;
+
+        if (sortParts.length > 1) {
+            direction = Sort.Direction.fromString(sortParts[1]);
+        }
+
+        Pageable pageable = PageRequest.of(currentPage - 1, pageSize, Sort.by(direction, sortField));
+
         return bandRepository.findAll(pageable);
     }
 
     @Override
     public Band create(Band band, MultipartFile multipartFile) {
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            try {
-                long timestamp = System.currentTimeMillis();
-                String fileName = String.valueOf(timestamp);
-                String key = s3Properties.getFolders().get("band-images") + "/" + fileName;
+            String imageUrl = storageService.upload(multipartFile, "band-images");
 
-                s3Client.putObject(
-                        PutObjectRequest.builder()
-                                .bucket(s3Properties.getBucket())
-                                .key(key)
-                                .build(),
-                        RequestBody.fromBytes(multipartFile.getBytes())
-                );
-                String s3Url = "https://" + s3Properties.getBucket() + ".s3." + s3Properties.getRegion() + ".amazonaws.com/" + key;
-                band.setPictureName(s3Url);
-            } catch (IOException e) {
-                log.error("Error uploading file to S3", e);
+            if (imageUrl != null) {
+                band.setPictureName(imageUrl);
             }
         }
         return bandRepository.save(band);
@@ -62,22 +67,10 @@ public class BandServiceImpl implements BandService {
         existingBand.setBio(editedBand.getBio());
 
         if (bandImage != null && !bandImage.isEmpty()) {
-            try {
-                long timestamp = System.currentTimeMillis();
-                String fileName = String.valueOf(timestamp);
-                String key = s3Properties.getFolders().get("band-images") + "/" + fileName;
+            String imageUrl = storageService.upload(bandImage, "band-images");
 
-                s3Client.putObject(
-                        PutObjectRequest.builder()
-                                .bucket(s3Properties.getBucket())
-                                .key(key)
-                                .build(),
-                        RequestBody.fromBytes(bandImage.getBytes())
-                );
-                String s3Url = "https://" + s3Properties.getBucket() + ".s3." + s3Properties.getRegion() + ".amazonaws.com/" + key;
-                existingBand.setPictureName(s3Url);
-            } catch (IOException e) {
-                log.error("Error uploading file to S3", e);
+            if (imageUrl != null) {
+                existingBand.setPictureName(imageUrl);
             }
         }
         return bandRepository.save(existingBand);
@@ -91,5 +84,19 @@ public class BandServiceImpl implements BandService {
     @Override
     public Band getBandById(Long id) {
         return bandRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Integer> getPageNumbers(Page<Band> bands) {
+
+        int totalPages = bands.getTotalPages();
+
+        if (totalPages == 0) {
+            return List.of();
+        }
+
+        return IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .toList();
     }
 }
