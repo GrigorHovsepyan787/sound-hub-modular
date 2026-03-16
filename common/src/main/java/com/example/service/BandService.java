@@ -11,7 +11,8 @@ public interface BandService {
 
     Band create(Band band, MultipartFile multipartFile);
 
-    Band update(Long id, Band Band);
+    Band update(Band editedBand, MultipartFile bandImage);
+
 
     void delete(Long id);
 

@@ -80,12 +80,9 @@ public class BandController {
     }
 
     @PostMapping("/bands/edit")
-    public String editBand(@ModelAttribute Band editedBand, @RequestParam("bandImage") MultipartFile bandImage) {
-        if (bandImage != null && !bandImage.isEmpty()) {
-            bandService.create(editedBand, bandImage);
-        } else {
-            bandService.update(editedBand.getId(), editedBand);
-        }
+    public String editBand(@ModelAttribute Band editedBand,
+                           @RequestParam("bandImage") MultipartFile bandImage) {
+        bandService.update(editedBand, bandImage);
         return "redirect:/bands";
     }
 

@@ -16,7 +16,6 @@
       <form th:action="@{/bands/edit}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
 
         <input type="hidden" name="id" th:value="${band.id}"/>
-        <input type="hidden" name="pictureName" th:value="${band.pictureName}"/>
 
         <div class="flex flex-col gap-3">
           <label class="text-sm font-semibold">Band Image</label>
@@ -43,20 +42,6 @@
           <input id="bandName" name="name" type="text" th:value="${band.name}"
                  placeholder="Band Name"
                  class="form-input w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 placeholder:text-gray-500 text-base font-medium transition-colors"/>
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label for="formationDate" class="text-sm font-semibold">Formation Date</label>
-          <div class="relative">
-            <input type="text" id="formationDate" name="createdDate"
-                   th:value="${band.createdDate}"
-                   placeholder="Select date"
-                   class="w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 text-base font-medium transition-colors cursor-pointer"
-                   readonly/>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-              <i class="fa-regular fa-calendar"></i>
-            </div>
-          </div>
         </div>
 
         <div class="flex flex-col gap-2">

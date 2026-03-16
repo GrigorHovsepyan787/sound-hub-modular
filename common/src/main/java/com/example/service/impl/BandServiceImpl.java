@@ -54,14 +54,34 @@ public class BandServiceImpl implements BandService {
         return bandRepository.save(band);
     }
 
-    @Override
-    public Band update(Long id, Band updatedBand) {
-        Band existingBand = bandRepository.findById(id).orElse(null);
-        existingBand.setName(updatedBand.getName());
-        existingBand.setBio(updatedBand.getBio());
-        existingBand.setPictureName(updatedBand.getPictureName());
-        existingBand.setCreatedDate(updatedBand.getCreatedDate());
-        return bandRepository.save(existingBand);    }
+
+    public Band update(Band editedBand, MultipartFile bandImage) {
+        Band existingBand = bandRepository.findById(editedBand.getId()).orElseThrow();
+
+        existingBand.setName(editedBand.getName());
+        existingBand.setBio(editedBand.getBio());
+
+        if (bandImage != null && !bandImage.isEmpty()) {
+            try {
+                long timestamp = System.currentTimeMillis();
+                String fileName = String.valueOf(timestamp);
+                String key = s3Properties.getFolders().get("band-images") + "/" + fileName;
+
+                s3Client.putObject(
+                        PutObjectRequest.builder()
+                                .bucket(s3Properties.getBucket())
+                                .key(key)
+                                .build(),
+                        RequestBody.fromBytes(bandImage.getBytes())
+                );
+                String s3Url = "https://" + s3Properties.getBucket() + ".s3." + s3Properties.getRegion() + ".amazonaws.com/" + key;
+                existingBand.setPictureName(s3Url);
+            } catch (IOException e) {
+                log.error("Error uploading file to S3", e);
+            }
+        }
+        return bandRepository.save(existingBand);
+    }
 
     @Override
     public void delete(Long id) {
