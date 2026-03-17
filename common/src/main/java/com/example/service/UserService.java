@@ -2,13 +2,15 @@ package com.example.service;
 
 import com.example.model.User;
 import com.example.model.UserType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    List<User> findAll();
+    Page<User> findAll(Pageable pageable);
 
     void save(User User, MultipartFile multipartfile);
 
@@ -23,4 +25,6 @@ public interface UserService {
     void update(Integer id, User user);
 
     Optional<User> findByUsername(String username);
+
+    Page<User> findAllWithSpecification(Specification<User> spec);
 }
