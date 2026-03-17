@@ -26,7 +26,7 @@ public class Band {
 
     private String bio;
 
-    private String pictureName;
+    private String pictureUrl;
 
     private LocalDate createdDate;
 

@@ -1,7 +1,6 @@
 package com.example.service.impl;
 
 import com.example.model.Band;
-import com.example.properties.S3Properties;
 import com.example.repository.BandRepository;
 import com.example.service.BandService;
 import com.example.storage.StorageService;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -53,7 +51,7 @@ public class BandServiceImpl implements BandService {
             String imageUrl = storageService.upload(multipartFile, "band-images");
 
             if (imageUrl != null) {
-                band.setPictureName(imageUrl);
+                band.setPictureUrl(imageUrl);
             }
         }
         return bandRepository.save(band);
@@ -70,7 +68,7 @@ public class BandServiceImpl implements BandService {
             String imageUrl = storageService.upload(bandImage, "band-images");
 
             if (imageUrl != null) {
-                existingBand.setPictureName(imageUrl);
+                existingBand.setPictureUrl(imageUrl);
             }
         }
         return bandRepository.save(existingBand);

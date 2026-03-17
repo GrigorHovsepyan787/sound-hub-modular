@@ -23,8 +23,8 @@
       </div>
 
       <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-40 w-40 mb-6 ring-4 ring-primary/20 shadow-xl"
-           th:style="${band.pictureName != null}
-             ? 'background-image: url(' + ${band.pictureName} + ');'
+           th:style="${band.pictureUrl != null}
+             ? 'background-image: url(' + ${band.getPictureUrl()} + ');'
              : 'background-color: #1978e5;'">
       </div>
       <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight"

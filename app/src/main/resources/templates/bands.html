@@ -67,7 +67,7 @@
                     <div class="relative w-full aspect-square mb-4">
 
                         <a th:href="@{/bands/preview(id=${band.id})}" class="block w-full h-full">
-                            <img th:src="@{${band.pictureName}}" th:alt="${band.name}"
+                            <img th:src="@{${band.pictureUrl}}" th:alt="${band.name}"
                                  class="w-full h-full object-contain rounded-2xl shadow-lg group-hover:shadow-primary/30 group-hover:ring-4 ring-primary/50 transition-all duration-300"/>
                         </a>
 

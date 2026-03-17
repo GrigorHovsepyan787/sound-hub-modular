@@ -15,7 +15,6 @@ spring:
       max-file-size: 10MB
   profiles:
     active:
-
 aws:
   s3:
     access-key: ${AWS_ACCESS_KEY}
