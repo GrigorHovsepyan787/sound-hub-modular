@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -35,13 +34,14 @@ public class Band {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (!(o instanceof Band)) return false;
         Band band = (Band) o;
-        return Objects.equals(id, band.id) && Objects.equals(name, band.name) && Objects.equals(bio, band.bio) && Objects.equals(pictureUrl, band.pictureUrl) && Objects.equals(createdDate, band.createdDate);
+        return id != null && id.equals(band.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, bio, pictureUrl, createdDate);
+        return getClass().hashCode();
     }
 }
