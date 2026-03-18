@@ -15,6 +15,15 @@ spring:
       max-file-size: 10MB
   profiles:
     active:
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: eu-north-1
+    bucket: soundhub7
+    folders:
+      band-images: band-images
+      user-images: user-images
 
 server:
   port: 8080
