@@ -11,8 +11,6 @@ import org.springframework.data.jpa.repository.Modifying;
 
 public interface BandRepository extends JpaRepository<Band, Long>, JpaSpecificationExecutor<Band> {
 
-    @Transactional
-    @Modifying
     Page<Band> findAll(Specification<Band> spec, Pageable pageable);
 
 }

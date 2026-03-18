@@ -34,8 +34,8 @@ public class S3StorageService implements StorageService {
                             .build(),
                     RequestBody.fromBytes(multipartFile.getBytes())
             );
-
-            return "https://" + s3Properties.getBucket() + ".s3." + s3Properties.getRegion() + ".amazonaws.com/" + key;
+            return String.join("","https://", s3Properties.getBucket(),
+                    ".s3.", s3Properties.getRegion(), ".amazonaws.com/", key);
         } catch (IOException e) {
             log.error("Error uploading file to S3", e);
         }

@@ -4,6 +4,9 @@ import com.example.model.Band;
 import com.example.service.BandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +23,15 @@ public class BandController {
 
     @GetMapping("/bands")
     public String bands(ModelMap modelMap,
-                        @RequestParam(required = false) Integer page,
-                        @RequestParam(required = false) Integer size,
-                        @RequestParam(required = false) String sort) {
+                        @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
+                        Pageable pageable) {
 
-        Page<Band> bands = bandService.findAll(page, size, sort);
+        Page<Band> bands = bandService.findAll(pageable);
 
         modelMap.addAttribute("bands", bands);
         modelMap.addAttribute("pageNumbers", bandService.getPageNumbers(bands));
-        modelMap.addAttribute("currentSort", sort == null ? "id,desc" : sort);
+        modelMap.addAttribute("currentSort",
+                pageable.getSort().isSorted() ? pageable.getSort().toString() : "id,desc");
 
         return "bands";
     }
