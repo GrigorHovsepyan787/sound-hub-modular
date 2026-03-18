@@ -54,10 +54,9 @@
             <span class="truncate">Dashboard</span>
         </a>
         <img width="50px"
-             th:if="${currentUser.pictureName != null && !currentUser.pictureName.equals('')}"
-             th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
-        <img width="50px"
-             th:if="${currentUser.pictureName == null || currentUser.pictureName.equals('')}"
+             th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
+             th:src="${currentUser.pictureUrl}" alt="User picture">
+        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
              th:src="@{/images/img.png}" alt="User picture">
     </div>
 </header>
@@ -109,210 +108,73 @@
                 </th>
             </tr>
             </thead>
-            <tbody class="divide-y divide-border-dark">
+            <tbody class="divide-y divide-border-dark" th:each="user : ${users}">
             <tr class="hover:bg-background-dark/30 transition-colors group">
-                <td class="px-6 py-4 text-text-muted text-sm font-medium">101</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">
-                            JD
-                        </div>
-                        <span class="font-medium text-slate-900 dark:text-slate-100">Jane Doe</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-text-muted text-sm">janedoe</td>
-                <td class="px-6 py-4 text-text-muted text-sm">jane@example.com</td>
-                <td class="px-6 py-4">
-                    <div class="relative inline-block w-32">
-                        <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-                            <option selected="">User</option>
-                            <option>Moderator</option>
-                            <option>Admin</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex justify-end gap-1">
-                        <button class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Ban User">
-                            <span class="material-symbols-outlined text-xl">block</span>
-                        </button>
-                        <button class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Unban User">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </button>
-                        <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Delete User">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="hover:bg-background-dark/30 transition-colors group">
-                <td class="px-6 py-4 text-text-muted text-sm font-medium">102</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">
-                            JS
-                        </div>
-                        <span class="font-medium text-slate-900 dark:text-slate-100">John Smith</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-text-muted text-sm">jsmith123</td>
-                <td class="px-6 py-4 text-text-muted text-sm">john@example.com</td>
-                <td class="px-6 py-4">
-                    <div class="relative inline-block w-32">
-                        <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-                            <option>User</option>
-                            <option selected="">Moderator</option>
-                            <option>Admin</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex justify-end gap-1">
-                        <button class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Ban User">
-                            <span class="material-symbols-outlined text-xl">block</span>
-                        </button>
-                        <button class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Unban User">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </button>
-                        <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Delete User">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="hover:bg-background-dark/30 transition-colors group">
-                <td class="px-6 py-4 text-text-muted text-sm font-medium">103</td>
+                <td class="px-6 py-4 text-text-muted text-sm font-medium" th:text="${user.id}"></td>
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">
-                            AJ
+                            <img width="50px"
+                                 th:if="${user.pictureUrl != null && !user.pictureUrl.equals('')}"
+                                 th:src="${user.pictureUrl}" alt="User picture">
+                            <img width="50px" th:if="${user.pictureUrl == null || user.pictureUrl.equals('')}"
+                                 th:src="@{/images/img.png}" alt="User picture">
                         </div>
-                        <span class="font-medium text-slate-900 dark:text-slate-100">Alice Johnson</span>
-                        <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary uppercase tracking-wider">Current</span>
+                        <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.name}"></span>
+                        <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.surname}"></span>
+                        <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary uppercase tracking-wider"
+                              th:if="${currentUser.id == user.id}">Current</span>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-text-muted text-sm">alicej</td>
-                <td class="px-6 py-4 text-text-muted text-sm">alice@example.com</td>
-                <td class="px-6 py-4">
+                <td class="px-6 py-4 text-text-muted text-sm" th:text="${user.username}"></td>
+                <td class="px-6 py-4 text-text-muted text-sm" th:text="${user.email}"></td>
+                <td class="px-6 py-4" th:if="${currentUser.id != user.id}">
                     <div class="relative inline-block w-32">
-                        <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-                            <option>User</option>
-                            <option>Moderator</option>
-                            <option selected="">Admin</option>
-                        </select>
+                        <form th:action="@{/admin/users/{id}/update-type(id=${user.id})}" method="POST">
+                            <label>
+                                <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer"
+                                        name="userType" onchange="this.form.submit()">
+                                    <option value="USER"
+                                            th:selected="${user.userType.name() == 'USER'}">User
+                                    </option>
+                                    <option value="MODERATOR"
+                                            th:selected="${user.userType.name() == 'MODERATOR'}">Moderator
+                                    </option>
+                                    <option value="ADMIN"
+                                            th:selected="${user.userType.name() == 'ADMIN'}">Admin
+                                    </option>
+                                </select>
+                            </label>
+                        </form>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
                             <span class="material-symbols-outlined text-sm">expand_more</span>
                         </div>
                     </div>
                 </td>
-                <td class="px-6 py-4 text-right">
+                <td class="px-6 py-4 text-right" th:if="${currentUser.id != user.id}">
+                    <span class="px-6 py-4 text-text-muted text-sm" th:text="${user.userStatus.name()}"></span>
                     <div class="flex justify-end gap-1">
-                        <button class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-30 cursor-not-allowed"
-                                disabled="" title="Cannot ban current admin">
-                            <span class="material-symbols-outlined text-xl">block</span>
-                        </button>
-                        <button class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Unban User">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </button>
-                        <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-30 cursor-not-allowed"
-                                disabled="" title="Cannot delete current admin">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="hover:bg-background-dark/30 transition-colors group">
-                <td class="px-6 py-4 text-text-muted text-sm font-medium">104</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">
-                            BW
-                        </div>
-                        <span class="font-medium text-slate-900 dark:text-slate-100">Bob Williams</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-text-muted text-sm">bobw</td>
-                <td class="px-6 py-4 text-text-muted text-sm">bob@example.com</td>
-                <td class="px-6 py-4">
-                    <div class="relative inline-block w-32">
-                        <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-                            <option selected="">User</option>
-                            <option>Moderator</option>
-                            <option>Admin</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex justify-end gap-1">
-                        <button class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Ban User">
-                            <span class="material-symbols-outlined text-xl">block</span>
-                        </button>
-                        <button class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Unban User">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </button>
-                        <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Delete User">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr class="hover:bg-background-dark/30 transition-colors group">
-                <td class="px-6 py-4 text-text-muted text-sm font-medium">105</td>
-                <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold text-sm">
-                            CB
-                        </div>
-                        <span class="font-medium text-slate-900 dark:text-slate-100">Charlie Brown</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-text-muted text-sm">cbrown</td>
-                <td class="px-6 py-4 text-text-muted text-sm">charlie@example.com</td>
-                <td class="px-6 py-4">
-                    <div class="relative inline-block w-32">
-                        <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-                            <option selected="">User</option>
-                            <option>Moderator</option>
-                            <option>Admin</option>
-                        </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-                            <span class="material-symbols-outlined text-sm">expand_more</span>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <div class="flex justify-end gap-1">
-                        <button class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Ban User">
-                            <span class="material-symbols-outlined text-xl">block</span>
-                        </button>
-                        <button class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Unban User">
-                            <span class="material-symbols-outlined text-xl">check_circle</span>
-                        </button>
-                        <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                title="Delete User">
-                            <span class="material-symbols-outlined text-xl">delete</span>
-                        </button>
+                        <form th:action="@{/admin/users/{id}/ban(id=${user.id})}" method="POST">
+                            <button type="submit"
+                                    class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Cannot ban current admin">
+                                <span class="material-symbols-outlined text-xl">block</span>
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/users/{id}/unban(id=${user.id})}" method="POST">
+                            <button type="submit"
+                                    class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Unban User">
+                                <span class="material-symbols-outlined text-xl">check_circle</span>
+                            </button>
+                        </form>
+                        <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="POST">
+                            <button type="submit"
+                                    class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Cannot delete current admin">
+                                <span class="material-symbols-outlined text-xl">delete</span>
+                            </button>
+                        </form>
                     </div>
                 </td>
             </tr>

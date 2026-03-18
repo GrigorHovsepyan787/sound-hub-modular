@@ -14,8 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -67,21 +67,27 @@ public class AdminController {
         return "users";
     }
 
-    @PatchMapping("/admin/users/{id}/ban")
+    @PostMapping("/admin/users/{id}/delete")
+    public String deleteUser(@PathVariable Integer id) {
+        userService.deleteById(id);
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/admin/users/{id}/ban")
     public String banUser(@PathVariable Integer id) {
         userService.banUser(id);
-        return "redirect:/admin/users/";
+        return "redirect:/admin/users";
     }
 
-    @PatchMapping("/admin/users/{id}/unban")
+    @PostMapping("/admin/users/{id}/unban")
     public String unbanUser(@PathVariable Integer id) {
         userService.unbanUser(id);
-        return "redirect:/admin/users/";
+        return "redirect:/admin/users";
     }
 
-    @PatchMapping("/admin/users/{id}/update-type")
+    @PostMapping("/admin/users/{id}/update-type")
     public String makeAdmin(@PathVariable Integer id, @RequestParam("userType") String userType) {
         userService.updateType(id, UserType.valueOf(userType));
-        return "redirect:/admin/users/";
+        return "redirect:/admin/users";
     }
 }

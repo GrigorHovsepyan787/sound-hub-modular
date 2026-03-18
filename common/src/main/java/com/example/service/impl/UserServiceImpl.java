@@ -5,17 +5,15 @@ import com.example.model.UserStatus;
 import com.example.model.UserType;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
+import com.example.storage.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -23,10 +21,8 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    @Value("${sound-hub-modular.upload.image.directory.path}")
-    private String imageDirectoryPath;
-
     private final UserRepository userRepository;
+    private final StorageService storageService;
 
     @Override
     public Page<User> findAll(Pageable pageable) {
@@ -36,15 +32,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user, MultipartFile multipartFile) {
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            String fileName = System.currentTimeMillis() + "_" + multipartFile.getOriginalFilename();
-            File file = new File(imageDirectoryPath + fileName);
-            try {
-                multipartFile.transferTo(file);
-                user.setPictureName(fileName);
-            } catch (IOException e) {
-                log.error("Error while saving image for user {}: {}, {}", user.getEmail(), e.getMessage(), e.getStackTrace());
+            String imageUrl = storageService.upload(multipartFile, "user-images");
+
+            if (imageUrl != null) {
+                user.setPictureUrl(imageUrl);
+                log.info("Image uploaded for user: {}", user.getName());
             }
         }
+        user.setUserStatus(UserStatus.ENABLED);
         userRepository.save(user);
     }
 
@@ -59,18 +54,21 @@ public class UserServiceImpl implements UserService {
     public void banUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow();
         user.setUserStatus(UserStatus.BANNED);
+        userRepository.save(user);
     }
 
     @Override
     public void unbanUser(Integer id) {
         User user = userRepository.findById(id).orElseThrow();
         user.setUserStatus(UserStatus.ENABLED);
+        userRepository.save(user);
     }
 
     @Override
     public void deleteById(Integer id) {
         User user = userRepository.findById(id).orElseThrow();
         user.setUserStatus(UserStatus.DELETED);
+        userRepository.save(user);
     }
 
     @Override

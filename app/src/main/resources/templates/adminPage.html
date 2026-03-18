@@ -44,10 +44,9 @@
                     </div>
                     <div class="flex flex-1 justify-end gap-8">
                         <img width="50px"
-                             th:if="${currentUser.pictureName != null && !currentUser.pictureName.equals('')}"
-                             th:src="@{/image/get(picName=${currentUser.pictureName})}" alt="User picture">
-                        <img width="50px"
-                             th:if="${currentUser.pictureName == null || currentUser.pictureName.equals('')}"
+                             th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
+                             th:src="${currentUser.pictureUrl}" alt="User picture">
+                        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
                              th:src="@{/images/img.png}" alt="User picture">
                     </div>
                 </header>
