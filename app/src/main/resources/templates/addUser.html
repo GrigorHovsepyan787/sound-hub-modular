@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SoundHub - Add user</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body>
+<section
+        class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-background-dark via-[#0f172a] to-background-dark overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <main class="flex flex-1 items-center justify-center p-6 py-12">
+                <div class="layout-content-container flex flex-col w-full max-w-[520px] bg-slate-900/40 border border-slate-800 p-8 rounded-xl shadow-2xl backdrop-blur-sm">
+                    <div class="flex flex-col gap-2 mb-8">
+                        <h1 class="text-slate-100 text-4xl font-black leading-tight tracking-[-0.033em]">Create
+                            User</h1>
+                    </div>
+                    <form class="flex flex-col gap-5" th:action="@{/admin/users/add}" method="POST"
+                          enctype="multipart/form-data">
+                        <div class="avatar-upload">
+                            <div class="avatar-preview">
+                                <label for="pic" class="avatar-edit">
+                                    <span class="material-symbols-outlined">photo_camera</span>
+                                </label>
+                            </div>
+
+                            <input type="file" id="pic" name="pic" accept="image/*">
+                        </div>
+                        <div class="flex flex-wrap md:flex-nowrap gap-4">
+                            <label class="flex flex-col flex-1">
+                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1" th:text="#{register.name}">First Name</span>
+                                <div class="relative group">
+                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">person</span>
+                                    <input name="name"
+                                           class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
+                                           placeholder="name" type="text"/>
+                                </div>
+                            </label>
+                            <label class="flex flex-col flex-1">
+                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1">Surname</span>
+                                <div class="relative group">
+                                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">person</span>
+                                    <input name="surname"
+                                           class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
+                                           placeholder="surname" type="text"/>
+                                </div>
+                            </label>
+                        </div>
+                        <label class="flex flex-col">
+                            <span class="text-slate-200 text-sm font-medium pb-2 ml-1">Username</span>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">alternate_email</span>
+                                <input name="username"
+                                       class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
+                                       placeholder="username" type="text"/>
+                            </div>
+                        </label>
+                        <label class="flex flex-col">
+                            <span class="text-slate-200 text-sm font-medium pb-2 ml-1">Email Address</span>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">mail</span>
+                                <input name="email"
+                                       class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
+                                       placeholder="email@example.com" type="email"/>
+                            </div>
+                        </label>
+                        <label class="flex flex-col">
+                            <span class="text-slate-200 text-sm font-medium pb-2 ml-1">Password</span>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">lock</span>
+                                <input name="password"
+                                       class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-12 placeholder:text-slate-500 transition-all"
+                                       placeholder="••••••••" type="password"/>
+                            </div>
+                        </label>
+                        <label>
+                            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer"
+                                    name="userType">
+                                <option value="USER">User</option>
+                                <option value="MODERATOR">Moderator</option>
+                                <option value="ADMIN">Admin</option>
+                            </select>
+                        </label>
+                        <button class="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-slate-100 font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20"
+                                type="submit">
+                            Add user
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+</body>
+</html>

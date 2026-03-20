@@ -49,6 +49,10 @@
     </div>
     <div class="flex flex-1 justify-end gap-8">
         <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
+           th:href="@{/logout}">
+            <span class="truncate">logout</span>
+        </a>
+        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
            th:href="@{/admin/home}">
             <span class="material-symbols-outlined text-sm">group</span>
             <span class="truncate">Dashboard</span>
@@ -67,30 +71,53 @@
             platform.</p>
     </div>
     <div class="flex justify-between items-center gap-4 mb-6 bg-surface-dark p-4 rounded-xl border border-border-dark">
-        <div class="flex-1 max-w-md">
-            <label class="flex flex-col h-10 w-full">
+        <form th:action="@{/admin/users}" method="get" class="flex-1 flex gap-4">
+            <label class="flex-1 flex flex-col h-10">
                 <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
                     <div class="text-text-muted flex items-center justify-center pl-3">
                         <span class="material-symbols-outlined text-xl">search</span>
                     </div>
                     <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
-                           placeholder="Search users by name, username, or email" value=""/>
+                           placeholder="Search users by name"
+                           name="name"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getName():''}"
+                    />
                 </div>
             </label>
-        </div>
+            <label class="flex-1 flex flex-col h-10">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-3">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
+                           placeholder="Search users by username"
+                           name="username"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getUsername():''}"
+                    />
+                </div>
+            </label>
+            <label class="flex-1 flex flex-col h-10">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-3">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
+                           placeholder="Search users by email"
+                           name="email"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getEmail():''}"
+                    />
+                </div>
+            </label>
+        </form>
         <div class="flex items-center gap-3">
-            <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-background-light dark:bg-background-dark border border-border-dark text-slate-900 dark:text-slate-100 hover:border-primary transition-colors gap-2 text-sm font-medium">
-                <span class="material-symbols-outlined text-lg text-text-muted">tune</span>
-                <span>Advanced Filters</span>
-            </button>
-            <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors gap-2 text-sm font-medium">
-                <span>Filter by Role</span>
-                <span class="material-symbols-outlined text-lg">arrow_drop_down</span>
-            </button>
-            <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors gap-2 text-sm font-medium">
+            <a class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors gap-2 text-sm font-medium"
+               th:href="@{/admin/users/add}">
                 <span class="material-symbols-outlined text-lg">person_add</span>
                 <span>Add User</span>
-            </button>
+            </a>
         </div>
     </div>
     <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
@@ -181,18 +208,19 @@
             </tbody>
         </table>
         <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-surface-dark">
-            <div class="text-sm text-text-muted">
-                Showing <span class="font-medium text-slate-100">1</span> to <span
-                    class="font-medium text-slate-100">5</span> of <span class="font-medium text-slate-100">1,234</span>
-                results
-            </div>
             <div class="flex gap-2">
-                <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled="">Previous
-                </button>
-                <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100">
-                    Next
-                </button>
+                <a th:href="@{/admin/users(page=${users.number})}">
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            th:disabled="${!users.hasPrevious()}">
+                        Previous
+                    </button>
+                </a>
+                <a th:href="@{/admin/users(page=${users.number+2})}">
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            th:disabled="${!users.hasNext()}">
+                        Next
+                    </button>
+                </a>
             </div>
         </div>
     </div>

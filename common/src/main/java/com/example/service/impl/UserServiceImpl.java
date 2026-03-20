@@ -9,6 +9,7 @@ import com.example.storage.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user, MultipartFile multipartFile) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String imageUrl = storageService.upload(multipartFile, "user-images");
+
+            if (imageUrl != null) {
+                user.setPictureUrl(imageUrl);
+                log.info("Image uploaded for user: {}", user.getName());
+            }
+        }
+        user.setUserStatus(UserStatus.ENABLED);
+        user.setUserType(UserType.USER);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void add(User user, MultipartFile multipartFile) {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             String imageUrl = storageService.upload(multipartFile, "user-images");
 
@@ -89,7 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findAllWithSpecification(Specification<User> spec) {
-        return userRepository.findAll(spec, Pageable.unpaged());
+    public Page<User> findAllWithSpecification(Specification<User> spec, PageRequest pageRequest) {
+        return userRepository.findAll(spec, pageRequest);
     }
 }
