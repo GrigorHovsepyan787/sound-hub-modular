@@ -15,9 +15,9 @@ public interface UserService {
 
     void save(User user, MultipartFile multipartFile);
 
-    void updateStatus(Integer id, UserStatus status);
+    void update(Integer id, UserStatus status);
 
-    void updateType(Integer id, UserType userType);
+    void update(Integer id, UserType userType);
 
     Optional<User> findByUsername(String username);
 }

@@ -40,25 +40,25 @@ public class AdminController {
 
     @PostMapping("/admin/users/{id}/delete")
     public String deleteUser(@PathVariable Integer id) {
-        userService.updateStatus(id, UserStatus.DELETED);
+        userService.update(id, UserStatus.DELETED);
         return "redirect:/admin/users";
     }
 
     @PostMapping("/admin/users/{id}/ban")
     public String banUser(@PathVariable Integer id) {
-        userService.updateStatus(id, UserStatus.BANNED);
+        userService.update(id, UserStatus.BANNED);
         return "redirect:/admin/users";
     }
 
     @PostMapping("/admin/users/{id}/unban")
     public String unbanUser(@PathVariable Integer id) {
-        userService.updateStatus(id, UserStatus.ENABLED);
+        userService.update(id, UserStatus.ENABLED);
         return "redirect:/admin/users";
     }
 
     @PostMapping("/admin/users/{id}/update-type")
     public String makeAdmin(@PathVariable Integer id, @RequestParam("userType") String userType) {
-        userService.updateType(id, UserType.valueOf(userType));
+        userService.update(id, UserType.valueOf(userType));
         return "redirect:/admin/users";
     }
 }

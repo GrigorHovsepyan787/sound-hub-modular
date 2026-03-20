@@ -53,14 +53,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateType(Integer id, UserType userType) {
+    public void update(Integer id, UserType userType) {
         User user = userRepository.findById(id).orElseThrow();
         user.setUserType(userType);
         userRepository.save(user);
     }
 
     @Override
-    public void updateStatus(Integer id, UserStatus userStatus) {
+    public void update(Integer id, UserStatus userStatus) {
         User user = userRepository.findById(id).orElseThrow();
         user.setUserStatus(userStatus);
         userRepository.save(user);
