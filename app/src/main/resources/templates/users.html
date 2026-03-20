@@ -112,13 +112,6 @@
                 </div>
             </label>
         </form>
-        <div class="flex items-center gap-3">
-            <a class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors gap-2 text-sm font-medium"
-               th:href="@{/admin/users/add}">
-                <span class="material-symbols-outlined text-lg">person_add</span>
-                <span>Add User</span>
-            </a>
-        </div>
     </div>
     <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
         <table class="w-full text-left border-collapse">
@@ -209,13 +202,23 @@
         </table>
         <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-surface-dark">
             <div class="flex gap-2">
-                <a th:href="@{/admin/users(page=${users.number})}">
+                <a th:href="@{/admin/users(
+                    page=${users.number}-1,
+                    name=${criteria.name},
+                    username=${criteria.username},
+                    email=${criteria.email}
+                    )}">
                     <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                             th:disabled="${!users.hasPrevious()}">
                         Previous
                     </button>
                 </a>
-                <a th:href="@{/admin/users(page=${users.number+2})}">
+                <a th:href="@{/admin/users(
+                    page=${users.number+1},
+                    name=${criteria.name},
+                    username=${criteria.username},
+                    email=${criteria.email}
+                    )}">
                     <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                             th:disabled="${!users.hasNext()}">
                         Next
