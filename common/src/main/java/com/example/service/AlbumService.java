@@ -1,0 +1,12 @@
+package com.example.service;
+
+import com.example.model.Album;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface AlbumService {
+    Page<Album> findAlbumPage(Pageable pageable);
+
+    void save(Album album, MultipartFile multipartFile);
+}
