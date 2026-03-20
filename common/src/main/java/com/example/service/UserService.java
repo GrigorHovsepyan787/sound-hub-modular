@@ -1,19 +1,23 @@
 package com.example.service;
 
+import com.example.dto.UserSearchCriteria;
 import com.example.model.User;
+import com.example.model.UserStatus;
+import com.example.model.UserType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    List<User> findAll();
+    Page<User> findUsersPage(Pageable pageable, UserSearchCriteria criteria);
 
-    void save(User User, MultipartFile multipartfile);
+    void save(User user, MultipartFile multipartFile);
 
-    void deleteById(Integer id);
+    void update(Integer id, UserStatus status);
 
-    void update(Integer id, User user);
+    void update(Integer id, UserType userType);
 
     Optional<User> findByUsername(String username);
 }
