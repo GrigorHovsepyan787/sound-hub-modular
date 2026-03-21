@@ -87,4 +87,12 @@ public class BandServiceImpl implements BandService {
                 .boxed()
                 .toList();
     }
+
+    @Override
+    public Page<Band> getBandsByName(String name, Pageable pageable) {
+        if(name == null || name.isEmpty()) {
+            return bandRepository.findAll(pageable);
+        }
+        return bandRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
 }
