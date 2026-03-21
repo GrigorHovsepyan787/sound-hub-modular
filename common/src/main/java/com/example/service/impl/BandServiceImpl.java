@@ -99,4 +99,12 @@ public class BandServiceImpl implements BandService {
         return bandRepository.findByIdWithArtists(id)
                 .orElseThrow(EntityNotFoundException::new);
     }
+
+    @Override
+    public Page<Band> getBandsByName(String name, Pageable pageable) {
+        if(name == null || name.isEmpty()) {
+            return bandRepository.findAll(pageable);
+        }
+        return bandRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
 }
