@@ -79,7 +79,7 @@
                                         <select name="releaseDate"
                                                 class="form-select flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-sm font-normal leading-normal transition-shadow cursor-pointer">
                                             <option disabled="" selected="" value="">Select year</option>
-                                            <option th:each="year : ${#numbers.sequence(2026, 1970)}" th:value="${year}"
+                                            <option th:each="year : ${#numbers.sequence(2026, 1970)}" th:value="${year + '-01-01T00:00:00'}"
                                                     th:text="${year}"></option>
                                         </select>
                                     </label>

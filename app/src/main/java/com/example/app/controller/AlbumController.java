@@ -24,8 +24,16 @@ public class AlbumController {
     // private final ArtistService artistService;
 
     @GetMapping("/albums")
-    public String albums() {
+    public String albums(ModelMap modelMap,
+                         @PageableDefault(sort = "releaseDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        modelMap.addAttribute("albums", albumService.findAlbumPage(pageable));
         return "albums";
+    }
+
+    @GetMapping("/albums/preview")
+    public String preview(ModelMap modelMap, @RequestParam("id") Long id) {
+        modelMap.addAttribute("album", albumService.findAlbumById(id));
+        return "albumPreview";
     }
 
     @GetMapping("/albums/add")
@@ -42,8 +50,8 @@ public class AlbumController {
     @PostMapping("/albums/add")
     public String addAlbum(@ModelAttribute Album album,
                            @RequestParam("pic") MultipartFile multipartfile,
-                           @RequestParam("bandId") Long bandId,
-                           @RequestParam("artistId") Long artistId) {
+                           @RequestParam(value = "bandId", required = false) Long bandId,
+                           @RequestParam(value = "artistId", required = false) Long artistId) {
         if (artistId == null && bandId == null) {
             return "redirect:/albums";
         }

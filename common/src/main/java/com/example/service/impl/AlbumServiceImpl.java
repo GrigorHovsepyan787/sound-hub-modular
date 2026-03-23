@@ -45,5 +45,10 @@ public class AlbumServiceImpl implements AlbumService {
         }
         albumRepository.save(album);
     }
+
+    @Override
+    public Album findAlbumById(Long id) {
+        return albumRepository.findById(id).orElse(null);
+    }
 }
 
