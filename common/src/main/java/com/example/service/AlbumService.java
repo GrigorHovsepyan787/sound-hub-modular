@@ -9,4 +9,6 @@ public interface AlbumService {
     Page<Album> findAlbumPage(Pageable pageable);
 
     void save(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
+
+    Album findAlbumById(Long id);
 }
