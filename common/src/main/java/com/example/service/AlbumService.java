@@ -11,4 +11,6 @@ public interface AlbumService {
     void save(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 
     Album findAlbumById(Long id);
+
+    void update(Album album, MultipartFile multipartFile);
 }

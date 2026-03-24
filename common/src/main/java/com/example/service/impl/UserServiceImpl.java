@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
             if (imageUrl != null) {
                 user.setPictureUrl(imageUrl);
                 log.info("Image uploaded for user: {}", user.getName());
+            }else{
+                user.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/UserDefault.png");
             }
         }
         user.setUserStatus(UserStatus.ENABLED);

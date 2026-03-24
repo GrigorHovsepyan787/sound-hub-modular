@@ -22,6 +22,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final StorageService storageService;
     private final BandRepository bandRepository;
 //    private final ArtistRepository artistRepository;
+
     @Override
     public Page<Album> findAlbumPage(Pageable pageable) {
         return albumRepository.findAll(pageable);
@@ -35,6 +36,8 @@ public class AlbumServiceImpl implements AlbumService {
             if (imageUrl != null) {
                 album.setPictureUrl(imageUrl);
                 log.info("Image uploaded for album: {}", album.getTitle());
+            }else{
+                album.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png");
             }
         }
         if (bandId != null) {
@@ -49,6 +52,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Album findAlbumById(Long id) {
         return albumRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void update(Album album, MultipartFile multipartFile) {
+
     }
 }
 
