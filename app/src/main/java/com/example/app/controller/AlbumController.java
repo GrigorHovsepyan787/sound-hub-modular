@@ -47,6 +47,17 @@ public class AlbumController {
         return "addAlbum";
     }
 
+    @GetMapping("/albums/update")
+    public String updateAlbum(ModelMap modelMap,
+                              @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                              @RequestParam(value = "bandName", required = false) String bandName,
+                              @RequestParam(value = "artistName", required = false) String artistName)
+        {
+            modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
+            //modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
+            return "editAlbum";
+        }
+
     @PostMapping("/albums/add")
     public String addAlbum(@ModelAttribute Album album,
                            @RequestParam("pic") MultipartFile multipartfile,
@@ -56,6 +67,12 @@ public class AlbumController {
             return "redirect:/albums";
         }
         albumService.save(album, multipartfile, bandId, artistId);
+        return "redirect:/albums";
+    }
+
+    @PostMapping("/albums/update")
+    public String updateAlbum(@ModelAttribute Album album,@RequestParam("pic") MultipartFile multipartFile) {
+        albumService.update(album, multipartFile);
         return "redirect:/albums";
     }
 }

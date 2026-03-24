@@ -1,286 +1,119 @@
 <!DOCTYPE html>
-<html class="dark" lang="en"><head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>SoundHub - Album View</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#1978e5",
-            "background-light": "#f6f7f8",
-            "background-dark": "#111821",
-          },
-          fontFamily: {
-            "display": ["Inter", "sans-serif"]
-          },
-          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
-        },
-      },
-    }
-  </script>
-  <style data-purpose="layout-styles">
-    body {
-      scroll-behavior: smooth;
-    }
-    .glass-header {
-      background: rgba(17, 24, 33, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .glass-player {
-      background: rgba(17, 24, 33, 0.9);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-  </style>
-</head>
-<body class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
-<header class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <div class="flex items-center gap-2" data-purpose="brand-logo">
-        <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
-          <span class="material-symbols-outlined text-white text-xl">graphic_eq</span>
-        </div>
-        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">SoundHub</span>
-      </div>
-      <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
-        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Home</a>
-        <a class="text-sm font-medium text-white transition-colors border-b-2 border-primary pb-1" href="#">Albums</a>
-        <a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Artists</a>
-      </nav>
-      <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
-        <div class="flex items-center gap-3 cursor-pointer group">
-          <img alt="User Avatar" class="w-9 h-9 rounded-full border border-white/20 group-hover:border-primary transition-colors object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdb3Lwnf5n00HN_ek4njLmP2f6Sg-ohbux0oExIZQNl9rThrDKbZMbA37jzhpDDKsYz6FmTVf0zUzCzC4ukJ4uCEledlnbAnHnY5nqWb3IWoNhK7oAMHT4TAZ8HikOU-TkqD3xe4vildeScWd1uac4Vu0nj6JkHm4x2TCOHqBIOcKJITVawyXgYxyGy2DjurxYYyPEb0ArzOCQ7C1LQt7eJGL4yBk4m_p2CkPRnr8VYyaYW5dVfm5RsCpnLLr_cn5DzU3o5hDJ_wo4"/>
-          <span class="text-sm font-medium text-gray-200">Welcome, <span class="text-primary font-bold">User</span></span>
-        </div>
-        <div class="relative group">
-          <button class="flex items-center gap-1 text-sm font-medium text-gray-300 hover:text-white transition-colors">
-            <span class="material-symbols-outlined text-base">language</span>
-            English
-            <span class="material-symbols-outlined text-sm">expand_more</span>
-          </button>
-          <div class="absolute right-0 mt-2 w-32 bg-background-dark border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1">
-            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">English</a>
-            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">Русский</a>
-            <a class="block px-4 py-2 text-xs text-gray-300 hover:bg-white/10 hover:text-white" href="#">Հայերեն</a>
-          </div>
-        </div>
-      </div>
-      <div class="md:hidden flex items-center">
-        <button class="text-gray-400 hover:text-white focus:outline-none" id="mobile-menu-toggle">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</header>
-<main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-  <section class="flex flex-col md:flex-row gap-8 mb-12" data-purpose="album-header">
-    <div class="flex-shrink-0">
-      <img alt="Album Cover" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-xl shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwyaH4d0HU2wLcTPTzk66bKeF2-8OMzAz1VAh3Db73G18q6cELTJQv1MwpxpnYipKVeFHiHACvfAWYT7_CSeO92dhmLwSREE5Nx6kvl630VESwoqCiDQ7aroz7NZt4H84jRTOWuGXcLs4dvrpODKjsQFEf1m87g-d5zFHlkXeiKDd02l9ljXu541PZQTN-wd5c1aaEw1eP_lsrJq3QpifooGScNbJ0pNfJ0Jqd0d3cZ7MTbDZSUhYW3nzqHuCYu4zHy7G56n9e76O"/>
-    </div>
-    <div class="flex flex-col justify-end pb-4">
-      <p class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2">Album</p>
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4">Midnight Echoes</h1>
-      <div class="flex items-center gap-2 text-sm md:text-base text-gray-300 mb-6 font-medium">
-        <img alt="Artist Avatar" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFC5SIU7KkW381LJccIKIDT7JIZ46DXRS_zbPJIVxT5MVJ_fig5n4SugbuLUE2wyOQDauI9wvrJtNOABeU3QE0cAY3F7inJZFQ5hQiuB1iawruQU2nNYcGyzoSIpaELbib1gacoostEyF-C887ifL27TxBg70MbQvreaInnpdd0o6WZ2zLexi_TAmnPmR_cxi624KGrbyRwjpbDw_8u_ja-H_Ci0-aqT7-bvn8BFsfNt0ro55ihIT6iZah2w52FpBZa48RgkFu_UE"/>
-        <a class="text-white hover:text-primary transition-colors font-bold" href="#">Elena Vox</a>
-        <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
-        <span>2023</span>
-        <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
-        <span>12 songs, 45 min 32 sec</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <button class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-primary/30">
-          <span class="material-symbols-outlined text-3xl">play_arrow</span>
-        </button>
-        <button class="w-12 h-12 rounded-full border border-gray-400 text-white flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors">
-          <span class="material-symbols-outlined">favorite_border</span>
-        </button>
-        <button class="w-12 h-12 rounded-full border border-gray-400 text-white flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors">
-          <span class="material-symbols-outlined">more_horiz</span>
-        </button>
-      </div>
-    </div>
-  </section>
-  <div class="space-y-8">
-    <section data-purpose="album-tracks">
-      <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-2 border-b border-white/10 text-gray-400 text-xs uppercase tracking-wider font-semibold mb-2">
-        <span class="text-center">#</span>
-        <span>Title</span>
-        <span class="text-center"></span>
-        <span class="text-right flex justify-end"><span class="material-symbols-outlined text-sm">schedule</span></span>
-      </div>
-      <div class="space-y-1">
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center bg-white/10 text-primary group transition-colors cursor-pointer">
-          <div class="text-center flex justify-center items-center">
-            <span class="material-symbols-outlined text-primary text-xl">equalizer</span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-bold text-primary block truncate">Midnight Echoes</span>
-              <a class="text-xs text-primary/80 hover:underline" href="#">Elena Vox</a>
-            </div>
-          </div>
-          <div class="text-center opacity-100">
-            <button class="text-primary hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px] fill-current">favorite</span>
-            </button>
-          </div>
-          <span class="text-right text-primary text-sm">3:42</span>
-        </div>
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
-          <div class="text-center">
-            <span class="text-gray-400 font-medium group-hover:hidden">2</span>
-            <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Neon Rain</span>
-              <a class="text-xs text-gray-400 hover:underline" href="#">Elena Vox</a>
-            </div>
-          </div>
-          <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="text-gray-400 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-            </button>
-          </div>
-          <span class="text-right text-gray-400 text-sm">4:15</span>
-        </div>
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
-          <div class="text-center">
-            <span class="text-gray-400 font-medium group-hover:hidden">3</span>
-            <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Synthetic Dreams</span>
-              <span class="text-xs text-gray-400"><a class="hover:underline" href="#">Elena Vox</a>, <a class="hover:underline" href="#">Marcus Neon</a></span>
-            </div>
-          </div>
-          <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="text-gray-400 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-            </button>
-          </div>
-          <span class="text-right text-gray-400 text-sm">3:10</span>
-        </div>
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
-          <div class="text-center">
-            <span class="text-gray-400 font-medium group-hover:hidden">4</span>
-            <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Lost in Suburbia</span>
-              <a class="text-xs text-gray-400 hover:underline" href="#">Elena Vox</a>
-            </div>
-          </div>
-          <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="text-gray-400 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-            </button>
-          </div>
-          <span class="text-right text-gray-400 text-sm">2:58</span>
-        </div>
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
-          <div class="text-center">
-            <span class="text-gray-400 font-medium group-hover:hidden">5</span>
-            <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">Faded Memories</span>
-              <a class="text-xs text-gray-400 hover:underline" href="#">Elena Vox</a>
-            </div>
-          </div>
-          <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="text-gray-400 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-            </button>
-          </div>
-          <span class="text-right text-gray-400 text-sm">4:05</span>
-        </div>
-        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center hover:bg-white/5 group transition-colors cursor-pointer">
-          <div class="text-center">
-            <span class="text-gray-400 font-medium group-hover:hidden">6</span>
-            <span class="text-white hidden group-hover:block"><span class="material-symbols-outlined text-sm">play_arrow</span></span>
-          </div>
-          <div class="flex items-center gap-4 overflow-hidden">
-            <div class="truncate">
-              <span class="font-semibold text-white group-hover:text-primary transition-colors block truncate">City Lights</span>
-              <a class="text-xs text-gray-400 hover:underline" href="#">Elena Vox</a>
-            </div>
-          </div>
-          <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button class="text-gray-400 hover:text-white transition-colors">
-              <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-            </button>
-          </div>
-          <span class="text-right text-gray-400 text-sm">3:27</span>
-        </div>
-      </div>
-    </section>
-    <p class="text-sm text-gray-500 px-4">© 2023 SoundHub Records. All rights reserved.</p>
-  </div>
-</main>
-<div class="fixed bottom-0 left-0 right-0 z-50 glass-player px-4 py-3">
-  <div class="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-3 items-center gap-4">
-    <div class="flex items-center gap-4 justify-between md:justify-start">
-      <div class="flex items-center gap-4">
-        <img alt="Current Track" class="w-14 h-14 rounded-md shadow-lg object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwyaH4d0HU2wLcTPTzk66bKeF2-8OMzAz1VAh3Db73G18q6cELTJQv1MwpxpnYipKVeFHiHACvfAWYT7_CSeO92dhmLwSREE5Nx6kvl630VESwoqCiDQ7aroz7NZt4H84jRTOWuGXcLs4dvrpODKjsQFEf1m87g-d5zFHlkXeiKDd02l9ljXu541PZQTN-wd5c1aaEw1eP_lsrJq3QpifooGScNbJ0pNfJ0Jqd0d3cZ7MTbDZSUhYW3nzqHuCYu4zHy7G56n9e76O"/>
-        <div class="overflow-hidden">
-          <h4 class="text-sm font-bold truncate text-white">Midnight Echoes</h4>
-          <p class="text-xs text-gray-400 truncate">Elena Vox</p>
-        </div>
-      </div>
-      <button class="text-primary hover:text-white transition-colors">
-        <span class="material-symbols-outlined fill-current">favorite</span>
-      </button>
-    </div>
-    <div class="flex flex-col items-center gap-2">
-      <div class="flex items-center gap-6 text-gray-400">
-        <button class="hover:text-primary transition-colors text-sm"><span class="material-symbols-outlined">shuffle</span></button>
-        <button class="hover:text-white transition-colors"><span class="material-symbols-outlined">skip_previous</span></button>
-        <button class="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full hover:scale-105 transition-transform">
-          <span class="material-symbols-outlined text-xl">pause</span>
-        </button>
-        <button class="hover:text-white transition-colors"><span class="material-symbols-outlined">skip_next</span></button>
-        <button class="hover:text-primary transition-colors text-sm"><span class="material-symbols-outlined">repeat</span></button>
-      </div>
-      <div class="w-full max-w-md flex items-center gap-3">
-        <span class="text-[10px] text-gray-400 w-8 text-right">1:24</span>
-        <div class="flex-1 h-1 bg-white/20 rounded-full overflow-hidden relative group cursor-pointer">
-          <div class="absolute inset-y-0 left-0 bg-primary group-hover:bg-primary/80 transition-colors" style="width: 35%"></div>
-        </div>
-        <span class="text-[10px] text-gray-400 w-8">3:42</span>
-      </div>
-    </div>
-    <div class="hidden md:flex items-center justify-end gap-4 text-gray-400">
-      <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[20px]">queue_music</span></button>
-      <button class="hover:text-white transition-colors"><span class="material-symbols-outlined text-[20px]">devices</span></button>
-      <div class="flex items-center gap-2 group cursor-pointer">
-        <span class="material-symbols-outlined text-[20px]">volume_up</span>
-        <div class="w-24 h-1 bg-white/20 rounded-full overflow-hidden relative">
-          <div class="absolute inset-y-0 left-0 bg-white group-hover:bg-primary transition-colors" style="width: 70%"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<script data-purpose="mobile-nav-toggle">
-  const menuToggle = document.getElementById('mobile-menu-toggle');
-  if(menuToggle) {
-    menuToggle.addEventListener('click', () => {
-      alert('Mobile menu navigation triggered.');
-    });
-  }
-</script>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SoundHub - Album View</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style data-purpose="layout-styles">
+        body {
+            scroll-behavior: smooth;
+        }
 
-</body></html>
+        .glass-header {
+            background: rgba(17, 24, 33, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-player {
+            background: rgba(17, 24, 33, 0.9);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+<th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+    <section class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
+        <main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-8 mb-12" data-purpose="album-header">
+                <div class="flex-shrink-0">
+                    <img alt="Album Cover" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-xl shadow-2xl"
+                         th:src="${album.pictureUrl}"/>
+                </div>
+                <div class="flex flex-col justify-end pb-4">
+                    <p class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2">Album</p>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4" th:text="${album.title}"></h1>
+                    <div class="flex items-center gap-2 text-sm md:text-base text-gray-300 mb-6 font-medium">
+                        <img alt="Artist Avatar" class="w-8 h-8 rounded-full object-cover"
+                             th:src="${album.artist.pictureUrl}"/>
+                        <a class="text-white hover:text-primary transition-colors font-bold" href="#" th:text="${album.artist?.name}"></a>
+                        <a class="text-white hover:text-primary transition-colors font-bold" th:href="@{/bands/preview(id=${album.band.id})}" th:text="${album.band?.name}"></a>
+                        <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
+                        <span th:text="${album.releaseDate.getYear()}"></span>
+                        <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
+                        <span th:text="${album.songs.size()}">12</span><span> songs</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-white hover:scale-105 transition-transform shadow-lg shadow-primary/30">
+                            <span class="material-symbols-outlined text-3xl">play_arrow</span>
+                        </button>
+                        <button class="w-12 h-12 rounded-full border border-gray-400 text-white flex items-center justify-center hover:border-white hover:bg-white/10 transition-colors">
+                            <span class="material-symbols-outlined">favorite_border</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-8">
+                <div data-purpose="album-tracks">
+                    <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-2 border-b border-white/10 text-gray-400 text-xs uppercase tracking-wider font-semibold mb-2">
+                        <span class="text-center">#</span>
+                        <span>Title</span>
+                        <span class="text-center"></span>
+                        <span class="text-right flex justify-end"><span class="material-symbols-outlined text-sm">schedule</span></span>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="grid grid-cols-[40px_1fr_60px_60px] md:grid-cols-[60px_1fr_60px_80px] gap-4 px-4 py-3 rounded-lg items-center bg-white/10 text-primary group transition-colors cursor-pointer">
+                            <div class="text-center flex justify-center items-center">
+                                <span class="material-symbols-outlined text-primary text-xl">equalizer</span>
+                            </div>
+                            <div class="flex items-center gap-4 overflow-hidden">
+                                <div class="truncate">
+                                    <span class="font-bold text-primary block truncate">Midnight Echoes</span>
+                                    <a class="text-xs text-primary/80 hover:underline" href="#">Elena Vox</a>
+                                </div>
+                            </div>
+                            <div class="text-center opacity-100">
+                                <button class="text-primary hover:text-white transition-colors">
+                                    <span class="material-symbols-outlined text-[20px] fill-current">favorite</span>
+                                </button>
+                            </div>
+                            <span class="text-right text-primary text-sm">3:42</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+</th:block>
+<script data-purpose="mobile-nav-toggle">
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            alert('Mobile menu navigation triggered.');
+        });
+    }
+</script>
+</body>
+</html>
