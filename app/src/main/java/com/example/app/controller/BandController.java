@@ -31,7 +31,11 @@ public class BandController {
         modelMap.addAttribute("bands", bands);
         modelMap.addAttribute("pageNumbers", bandService.getPageNumbers(bands));
         modelMap.addAttribute("currentSort",
-                pageable.getSort().isSorted() ? pageable.getSort().toString() : "id,desc");
+                pageable.getSort().stream()
+                        .findFirst()
+                        .map(order -> order.getProperty() + "," + order.getDirection().name().toLowerCase())
+                        .orElse("id,desc")
+        );
 
         return "bands";
     }
@@ -69,7 +73,7 @@ public class BandController {
 
     @GetMapping("/bands/preview")
     public String bandPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
-        Band band = bandService.getBandById(id);
+        Band band = bandService.getBandByIdForArtists(id);
         modelMap.addAttribute("band", band);
         return "bandPreview";
     }

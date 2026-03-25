@@ -22,6 +22,8 @@ public class BandServiceImpl implements BandService {
 
     private final BandRepository bandRepository;
     private final StorageService storageService;
+    private static final String DEFAULT_BAND_IMAGE =
+            "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/BandDefault.png";
 
     @Override
     public Page<Band> findAll(Pageable pageable) {
@@ -30,21 +32,26 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band create(Band band, MultipartFile multipartFile) {
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            String imageUrl = storageService.upload(multipartFile, "band-images");
+    public List<Band> findAll() {
+        return bandRepository.findAll();
+    }
 
-            if (imageUrl != null) {
-                band.setPictureUrl(imageUrl);
-                log.info("Image uploaded for band: {}", band.getName());
-            }
+    @Override
+    public Band create(Band band, MultipartFile multipartFile) {
+        String imageUrl;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            imageUrl = storageService.upload(multipartFile, "band-images");
+        } else {
+            imageUrl = DEFAULT_BAND_IMAGE;
         }
+        band.setPictureUrl(imageUrl);
+
         return bandRepository.save(band);
     }
 
-
+    @Override
     public Band update(Band editedBand, MultipartFile bandImage) {
-        Band existingBand =bandRepository.findById(editedBand.getId())
+        Band existingBand = bandRepository.findById(editedBand.getId())
                 .orElseThrow(EntityNotFoundException::new);
 
         existingBand.setName(editedBand.getName());
@@ -52,11 +59,8 @@ public class BandServiceImpl implements BandService {
 
         if (bandImage != null && !bandImage.isEmpty()) {
             String imageUrl = storageService.upload(bandImage, "band-images");
-
-            if (imageUrl != null) {
-                existingBand.setPictureUrl(imageUrl);
-                log.info("Image updated for band ID: {}", editedBand.getId());
-            }
+            existingBand.setPictureUrl(imageUrl);
+            log.info("Image updated for band ID: {}", editedBand.getId());
         }
         return bandRepository.save(existingBand);
     }
@@ -70,7 +74,8 @@ public class BandServiceImpl implements BandService {
     @Override
     public Band getBandById(Long id) {
         log.info("Fetching band ID: {}", id);
-        return bandRepository.findById(id).orElse(null);
+        return bandRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -86,5 +91,12 @@ public class BandServiceImpl implements BandService {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
                 .toList();
+    }
+
+    @Override
+    public Band getBandByIdForArtists(Long id) {
+        log.info("Fetching band ID with artists: {}", id);
+        return bandRepository.findByIdWithArtists(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

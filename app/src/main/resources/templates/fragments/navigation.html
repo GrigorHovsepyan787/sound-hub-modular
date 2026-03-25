@@ -13,9 +13,9 @@
             <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
                 <a class="text-sm font-medium hover:text-brand-accent transition-colors" th:href="@{/}" th:text="#{navigation.home}">Home</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
-                   href="#" th:text="#{navigation.artists}">Artists</a>
+                   href="/artists" th:text="#{navigation.artists}">Artists</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
-                   href="#" th:text="#{navigation.groups}">Groups</a>
+                   href="/bands" th:text="#{navigation.groups}">Bands</a>
             </nav>
             <th:block th:if="${currentUser} == null">
                 <div class="hidden md:flex items-center space-x-4" data-purpose="auth-actions">
@@ -27,7 +27,6 @@
                     </a>
                 </div>
             </th:block>
-
 
             <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
                 <th:block th:if="${currentUser} != null">
