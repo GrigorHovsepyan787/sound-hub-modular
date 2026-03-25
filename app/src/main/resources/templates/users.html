@@ -150,7 +150,8 @@
                 <td class="px-6 py-4 text-text-muted text-sm" th:text="${user.email}"></td>
                 <td class="px-6 py-4" th:if="${currentUser.id != user.id}">
                     <div class="relative inline-block w-32">
-                        <form th:action="@{/admin/users/{id}/update-type(id=${user.id})}" method="POST">
+                        <form th:action="@{/admin/users/update}" method="POST">
+                            <input type="hidden" name="id" th:value="${user.id}">
                             <label>
                                 <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer"
                                         name="userType" onchange="this.form.submit()">
@@ -172,30 +173,33 @@
                     </div>
                 </td>
                 <td class="px-6 py-4 text-right" th:if="${currentUser.id != user.id}">
-                    <span class="px-6 py-4 text-text-muted text-sm" th:text="${user.userStatus.name()}"></span>
-                    <div class="flex justify-end gap-1">
-                        <form th:action="@{/admin/users/{id}/ban(id=${user.id})}" method="POST">
+                    <form th:action="@{/admin/users/update}" method="POST">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <span class="px-6 py-4 text-text-muted text-sm" th:text="${user.userStatus.name()}"></span>
+                        <div class="flex justify-end gap-1">
                             <button type="submit"
+                                    name="userStatus"
+                                    value="BANNED"
                                     class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
                                     title="Cannot ban current admin">
                                 <span class="material-symbols-outlined text-xl">block</span>
                             </button>
-                        </form>
-                        <form th:action="@{/admin/users/{id}/unban(id=${user.id})}" method="POST">
                             <button type="submit"
+                                    name="userStatus"
+                                    value="ENABLED"
                                     class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
                                     title="Unban User">
                                 <span class="material-symbols-outlined text-xl">check_circle</span>
                             </button>
-                        </form>
-                        <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="POST">
                             <button type="submit"
+                                    name="userStatus"
+                                    value="DELETED"
                                     class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
                                     title="Cannot delete current admin">
                                 <span class="material-symbols-outlined text-xl">delete</span>
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </td>
             </tr>
             </tbody>

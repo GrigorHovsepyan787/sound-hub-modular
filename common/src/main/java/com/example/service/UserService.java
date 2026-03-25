@@ -2,8 +2,6 @@ package com.example.service;
 
 import com.example.dto.UserSearchCriteria;
 import com.example.model.User;
-import com.example.model.UserStatus;
-import com.example.model.UserType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,9 +13,7 @@ public interface UserService {
 
     void save(User user, MultipartFile multipartFile);
 
-    void update(Integer id, UserStatus status);
-
-    void update(Integer id, UserType userType);
+    void update(User user);
 
     Optional<User> findByUsername(String username);
 }

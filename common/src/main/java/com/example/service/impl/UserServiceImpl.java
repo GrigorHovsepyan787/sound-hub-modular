@@ -53,17 +53,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(Integer id, UserType userType) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setUserType(userType);
-        userRepository.save(user);
-    }
+    public void update(User user) {
+        User existingUser = userRepository
+                .findById(user.getId())
+                .orElseThrow();
 
-    @Override
-    public void update(Integer id, UserStatus userStatus) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setUserStatus(userStatus);
-        userRepository.save(user);
+        if (user.getUserType() != null) {
+            existingUser.setUserType(user.getUserType());
+        }
+
+        if (user.getUserStatus() != null) {
+            existingUser.setUserStatus(user.getUserStatus());
+        }
+
+        userRepository.save(existingUser);
     }
 
     @Override
