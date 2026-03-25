@@ -1,0 +1,47 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="drop-band-fk-column" author="apoghosyan">
+        <dropForeignKeyConstraint
+                baseTableName="artist"
+                constraintName="fk_artist_band"/>
+
+        <dropColumn
+                tableName="artist"
+                columnName="band_id"/>
+    </changeSet>
+
+    <changeSet id="create-artist-band-table" author="apoghosyan">
+        <createTable tableName="artist_band">
+            <column name="artist_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="band_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="artist_band"
+                columnNames="artist_id, band_id"
+                constraintName="pk_artist_band"/>
+
+        <addForeignKeyConstraint
+                baseTableName="artist_band"
+                baseColumnNames="artist_id"
+                referencedTableName="artist"
+                referencedColumnNames="id"
+                constraintName="fk_artist_band_artist"/>
+
+        <addForeignKeyConstraint
+                baseTableName="artist_band"
+                baseColumnNames="band_id"
+                referencedTableName="band"
+                referencedColumnNames="id"
+                constraintName="fk_artist_band_band"/>
+    </changeSet>
+
+</databaseChangeLog>
