@@ -11,6 +11,8 @@ public interface BandService {
 
     Page<Band> findAll(Pageable pageable);
 
+    List<Band> findAll();
+
     Band create(Band band, MultipartFile multipartFile);
 
     Band update(Band editedBand, MultipartFile bandImage);
@@ -20,4 +22,6 @@ public interface BandService {
     Band getBandById(Long id);
 
     List<Integer> getPageNumbers(Page<Band> bands);
+
+    Band getBandByIdForArtists(Long id);
 }

@@ -43,7 +43,7 @@
             <span class="material-symbols-outlined text-primary">Bio</span>
           </h3>
           <div class="text-slate-600 dark:text-slate-400 leading-relaxed space-y-4">
-            <p th:text="${band.bio}">Band biography goes here.</p>
+            <p th:text="${band.bio}">Band biography.</p>
           </div>
         </section>
 
@@ -62,10 +62,31 @@
 
         <section class="bg-slate-200/50 dark:bg-slate-800/30 p-8 rounded-2xl">
           <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">Band Members</span>
+            <i class="fa-solid fa-users text-primary"></i>
+            Band Members
           </h3>
-          <div class="text-slate-500 dark:text-slate-400 text-sm italic">
-            No members listed yet.
+
+          <!-- No members -->
+          <div th:if="${#sets.isEmpty(band.artists)}"
+               class="text-slate-500 dark:text-slate-400 text-sm italic">
+            No members added yet.
+          </div>
+
+          <div th:unless="${#sets.isEmpty(band.artists)}"
+               class="flex flex-col gap-3">
+            <a th:each="artist : ${band.artists}"
+               th:href="@{/artists/preview(id=${artist.id})}"
+               class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors group">
+              <img th:src="@{${artist.pictureUrl}}"
+                   th:alt="${artist.name}"
+                   class="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-transparent group-hover:ring-primary transition-all"/>
+              <div class="flex flex-col">
+            <span class="text-sm font-semibold text-slate-900 dark:text-white"
+                  th:text="${#strings.isEmpty(artist.nickname) ? artist.name + ' ' + artist.surname : artist.nickname}">
+            </span>
+              </div>
+              <i class="fa-solid fa-arrow-right ml-auto text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity text-xs"></i>
+            </a>
           </div>
         </section>
 

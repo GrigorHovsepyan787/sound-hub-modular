@@ -24,6 +24,7 @@ aws:
     folders:
       band-images: band-images
       user-images: user-images
+      artist-images: artist-images
 
 server:
   port: 8080
