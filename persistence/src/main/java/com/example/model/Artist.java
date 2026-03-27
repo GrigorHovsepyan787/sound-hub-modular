@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,11 +51,6 @@ public class Artist {
             inverseJoinColumns = @JoinColumn(name = "band_id")
     )
     private Set<Band> bands;
-
-    /* --- this part must be added after creating `Song` entity
-    @OneToMany(mappedBy = "artist")
-    private List<Song> songs;
-    */
 
     @Override
     public boolean equals(Object o) {
