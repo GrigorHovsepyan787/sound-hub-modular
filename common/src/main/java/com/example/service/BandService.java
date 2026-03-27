@@ -26,4 +26,6 @@ public interface BandService {
     Page<Band> getBandsByName(String name, Pageable pageable);
 
     Band getBandByIdForArtists(Long id);
+
+    Page<Band> getBandsByName(String name, Pageable pageable);
 }

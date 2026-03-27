@@ -16,6 +16,7 @@ public interface BandRepository extends JpaRepository<Band, Long>, JpaSpecificat
     Page<Band> findAll(Specification<Band> spec, Pageable pageable);
 
     Page<Band> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
     @Query("SELECT b FROM Band b LEFT JOIN FETCH b.artists WHERE b.id = :id")
     Optional<Band> findByIdWithArtists(@Param("id") Long id);
 }
