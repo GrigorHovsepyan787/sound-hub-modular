@@ -1,271 +1,236 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>SoundHub Admin User Management</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#1978e5",
-            "background-light": "#f6f7f8",
-            "background-dark": "#111821",
-            "surface-dark": "#1e293b",
-            "border-dark": "#334155",
-            "text-muted": "#94a3b8"
-          },
-          fontFamily: {
-            "display": ["Inter"]
-          },
-          borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
-        },
-      },
-    }
-  </script>
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SoundHub Admin User Management</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+          rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1978e5",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111821",
+                        "surface-dark": "#1e293b",
+                        "border-dark": "#334155",
+                        "text-muted": "#94a3b8"
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark bg-surface-dark px-10 py-4">
-  <div class="flex items-center gap-8">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-4 mb-6">
     <div class="flex items-center gap-4 text-primary">
-      <span class="material-symbols-outlined text-2xl">headphones</span>
-      <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em]">SoundHub Admin</h2>
+        <span class="material-symbols-outlined text-3xl">graphic_eq</span>
+        <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em] flex items-center gap-2">
+            SoundHub
+            <span class="bg-primary/20 text-primary text-xs font-semibold px-2 py-1 rounded-full uppercase tracking-wider">Admin Panel</span>
+        </h2>
     </div>
-    <label class="flex flex-col min-w-40 !h-10 max-w-64">
-      <div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
-        <div class="text-text-muted flex border-none items-center justify-center pl-4 rounded-l-xl border-r-0">
-          <span class="material-symbols-outlined text-xl">search</span>
-        </div>
-        <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent focus:border-none h-full placeholder:text-text-muted px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Quick Search" value=""/>
-      </div>
-    </label>
-  </div>
-  <div class="flex flex-1 justify-end gap-8 items-center">
-    <nav class="flex items-center gap-9">
-      <a class="text-text-muted hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Dashboard</a>
-      <a class="text-primary text-sm font-medium leading-normal" href="#">Users</a>
-      <a class="text-text-muted hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Content</a>
-      <a class="text-text-muted hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Analytics</a>
-    </nav>
-    <div class="flex items-center gap-4">
-      <button class="text-text-muted hover:text-primary transition-colors">
-        <span class="material-symbols-outlined">notifications</span>
-      </button>
-      <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-border-dark" data-alt="Admin User Profile Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDPRGd-5khzzylyS621LQnppxX6JfszCVYqzlhkozAXTtw6_ssrvs_3ECoHe4bnc3XMcdMzlnQwWJuxrE8cgH2OB9ZwYVt-01vD3bwdih_wMTI3C4dcsF_vY285XYWI52qkgl244nYI-8o3CFuOaT90SwozN58z-6y_1AiZ38wkIiQAT_EBfwUTnoQ6UTQZ6iMgpiButCVQmtYqpcfE80v9LsNP8QmRjzljac1gT_zjemMjSTgivBzOeAGHBfewfUZjIdbYg70XQJc");'></div>
+    <div class="flex flex-1 justify-end gap-8">
+        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
+           th:href="@{/logout}">
+            <span class="truncate">logout</span>
+        </a>
+        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
+           th:href="@{/admin/home}">
+            <span class="material-symbols-outlined text-sm">group</span>
+            <span class="truncate">Dashboard</span>
+        </a>
+        <img width="50px"
+             th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
+             th:src="${currentUser.pictureUrl}" alt="User picture">
+        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
+             th:src="@{/images/img.png}" alt="User picture">
     </div>
-  </div>
 </header>
 <main class="flex-1 flex flex-col w-full max-w-[1200px] mx-auto px-6 py-8">
-  <div class="flex flex-col gap-4 mb-8">
-    <h1 class="text-3xl font-bold leading-tight tracking-[-0.015em]">User Management</h1>
-    <p class="text-text-muted text-sm">Manage user accounts, roles, and permissions across the SoundHub platform.</p>
-  </div>
-  <div class="flex justify-between items-center gap-4 mb-6 bg-surface-dark p-4 rounded-xl border border-border-dark">
-    <div class="flex-1 max-w-md">
-      <label class="flex flex-col h-10 w-full">
-        <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
-          <div class="text-text-muted flex items-center justify-center pl-3">
-            <span class="material-symbols-outlined text-xl">search</span>
-          </div>
-          <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0" placeholder="Search users by name, username, or email" value=""/>
+    <div class="flex flex-col gap-4 mb-8">
+        <h1 class="text-3xl font-bold leading-tight tracking-[-0.015em]">User Management</h1>
+        <p class="text-text-muted text-sm">Manage user accounts, roles, and permissions across the SoundHub
+            platform.</p>
+    </div>
+    <div class="flex justify-between items-center gap-4 mb-6 bg-surface-dark p-4 rounded-xl border border-border-dark">
+        <form th:action="@{/admin/users}" method="get" class="flex-1 flex gap-4">
+            <label class="flex-1 flex flex-col h-10">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-3">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
+                           placeholder="Search users by name"
+                           name="name"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getName():''}"
+                    />
+                </div>
+            </label>
+            <label class="flex-1 flex flex-col h-10">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-3">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
+                           placeholder="Search users by username"
+                           name="username"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getUsername():''}"
+                    />
+                </div>
+            </label>
+            <label class="flex-1 flex flex-col h-10">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-background-light dark:bg-background-dark border border-border-dark focus-within:border-primary transition-colors">
+                    <div class="text-text-muted flex items-center justify-center pl-3">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 bg-transparent border-none text-slate-900 dark:text-slate-100 placeholder:text-text-muted px-3 text-sm focus:ring-0"
+                           placeholder="Search users by email"
+                           name="email"
+                           onchange="this.form.submit()"
+                           th:value="${criteria != null ? criteria.getEmail():''}"
+                    />
+                </div>
+            </label>
+        </form>
+    </div>
+    <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="bg-background-dark/50 border-b border-border-dark">
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[5%]">ID</th>
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[25%]">Name</th>
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[20%]">Username
+                </th>
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[25%]">Email</th>
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[20%]">Role</th>
+                <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[10%] text-right">
+                    Actions
+                </th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-border-dark" th:each="user : ${users}">
+            <tr class="hover:bg-background-dark/30 transition-colors group">
+                <td class="px-6 py-4 text-text-muted text-sm font-medium" th:text="${user.id}"></td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">
+                            <img width="50px"
+                                 th:if="${user.pictureUrl != null && !user.pictureUrl.equals('')}"
+                                 th:src="${user.pictureUrl}" alt="User picture">
+                            <img width="50px" th:if="${user.pictureUrl == null || user.pictureUrl.equals('')}"
+                                 th:src="@{/images/img.png}" alt="User picture">
+                        </div>
+                        <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.name}"></span>
+                        <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.surname}"></span>
+                        <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary uppercase tracking-wider"
+                              th:if="${currentUser.id == user.id}">Current</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-text-muted text-sm" th:text="${user.username}"></td>
+                <td class="px-6 py-4 text-text-muted text-sm" th:text="${user.email}"></td>
+                <td class="px-6 py-4" th:if="${currentUser.id != user.id}">
+                    <div class="relative inline-block w-32">
+                        <form th:action="@{/admin/users/update}" method="POST">
+                            <input type="hidden" name="id" th:value="${user.id}">
+                            <label>
+                                <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer"
+                                        name="userType" onchange="this.form.submit()">
+                                    <option value="USER"
+                                            th:selected="${user.userType.name() == 'USER'}">User
+                                    </option>
+                                    <option value="MODERATOR"
+                                            th:selected="${user.userType.name() == 'MODERATOR'}">Moderator
+                                    </option>
+                                    <option value="ADMIN"
+                                            th:selected="${user.userType.name() == 'ADMIN'}">Admin
+                                    </option>
+                                </select>
+                            </label>
+                        </form>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
+                            <span class="material-symbols-outlined text-sm">expand_more</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-right" th:if="${currentUser.id != user.id}">
+                    <form th:action="@{/admin/users/update}" method="POST">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <span class="px-6 py-4 text-text-muted text-sm" th:text="${user.userStatus.name()}"></span>
+                        <div class="flex justify-end gap-1">
+                            <button type="submit"
+                                    name="userStatus"
+                                    value="BANNED"
+                                    class="text-text-muted hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Cannot ban current admin">
+                                <span class="material-symbols-outlined text-xl">block</span>
+                            </button>
+                            <button type="submit"
+                                    name="userStatus"
+                                    value="ENABLED"
+                                    class="text-text-muted hover:text-green-500 transition-colors p-2 rounded-lg hover:bg-green-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Unban User">
+                                <span class="material-symbols-outlined text-xl">check_circle</span>
+                            </button>
+                            <button type="submit"
+                                    name="userStatus"
+                                    value="DELETED"
+                                    class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Cannot delete current admin">
+                                <span class="material-symbols-outlined text-xl">delete</span>
+                            </button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-surface-dark">
+            <div class="flex gap-2">
+                <a th:href="@{/admin/users(
+                    page=${users.number}-1,
+                    name=${criteria.name},
+                    username=${criteria.username},
+                    email=${criteria.email}
+                    )}">
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            th:disabled="${!users.hasPrevious()}">
+                        Previous
+                    </button>
+                </a>
+                <a th:href="@{/admin/users(
+                    page=${users.number+1},
+                    name=${criteria.name},
+                    username=${criteria.username},
+                    email=${criteria.email}
+                    )}">
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                            th:disabled="${!users.hasNext()}">
+                        Next
+                    </button>
+                </a>
+            </div>
         </div>
-      </label>
     </div>
-    <div class="flex items-center gap-3">
-      <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-background-light dark:bg-background-dark border border-border-dark text-slate-900 dark:text-slate-100 hover:border-primary transition-colors gap-2 text-sm font-medium">
-        <span class="material-symbols-outlined text-lg text-text-muted">tune</span>
-        <span>Advanced Filters</span>
-      </button>
-      <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors gap-2 text-sm font-medium">
-        <span>Filter by Role</span>
-        <span class="material-symbols-outlined text-lg">arrow_drop_down</span>
-      </button>
-      <button class="flex items-center justify-center h-10 px-4 rounded-lg bg-primary/20 text-primary hover:bg-primary/30 transition-colors gap-2 text-sm font-medium">
-        <span class="material-symbols-outlined text-lg">person_add</span>
-        <span>Add User</span>
-      </button>
-    </div>
-  </div>
-  <div class="overflow-x-auto rounded-xl border border-border-dark bg-surface-dark shadow-sm">
-    <table class="w-full text-left border-collapse">
-      <thead>
-      <tr class="bg-background-dark/50 border-b border-border-dark">
-        <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[25%]">Name</th>
-        <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[20%]">Username</th>
-        <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[25%]">Email</th>
-        <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[20%]">Role</th>
-        <th class="px-6 py-4 text-xs font-semibold text-text-muted uppercase tracking-wider w-[10%] text-right">Actions</th>
-      </tr>
-      </thead>
-      <tbody class="divide-y divide-border-dark">
-      <tr class="hover:bg-background-dark/30 transition-colors group">
-        <td class="px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-sm">JD</div>
-            <span class="font-medium text-slate-900 dark:text-slate-100">Jane Doe</span>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-text-muted text-sm">janedoe</td>
-        <td class="px-6 py-4 text-text-muted text-sm">jane@example.com</td>
-        <td class="px-6 py-4">
-          <div class="relative inline-block w-32">
-            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-              <option selected="">User</option>
-              <option>Moderator</option>
-              <option>Admin</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-              <span class="material-symbols-outlined text-sm">expand_more</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100" title="Delete User">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
-        </td>
-      </tr>
-      <tr class="hover:bg-background-dark/30 transition-colors group">
-        <td class="px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">JS</div>
-            <span class="font-medium text-slate-900 dark:text-slate-100">John Smith</span>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-text-muted text-sm">jsmith123</td>
-        <td class="px-6 py-4 text-text-muted text-sm">john@example.com</td>
-        <td class="px-6 py-4">
-          <div class="relative inline-block w-32">
-            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-              <option>User</option>
-              <option selected="">Moderator</option>
-              <option>Admin</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-              <span class="material-symbols-outlined text-sm">expand_more</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100" title="Delete User">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
-        </td>
-      </tr>
-      <tr class="hover:bg-background-dark/30 transition-colors group">
-        <td class="px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">AJ</div>
-            <span class="font-medium text-slate-900 dark:text-slate-100">Alice Johnson</span>
-            <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-primary/20 text-primary uppercase tracking-wider">Current</span>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-text-muted text-sm">alicej</td>
-        <td class="px-6 py-4 text-text-muted text-sm">alice@example.com</td>
-        <td class="px-6 py-4">
-          <div class="relative inline-block w-32">
-            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-primary focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-              <option>User</option>
-              <option>Moderator</option>
-              <option selected="">Admin</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
-              <span class="material-symbols-outlined text-sm">expand_more</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-30 cursor-not-allowed" disabled="" title="Cannot delete current admin">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
-        </td>
-      </tr>
-      <tr class="hover:bg-background-dark/30 transition-colors group">
-        <td class="px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">BW</div>
-            <span class="font-medium text-slate-900 dark:text-slate-100">Bob Williams</span>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-text-muted text-sm">bobw</td>
-        <td class="px-6 py-4 text-text-muted text-sm">bob@example.com</td>
-        <td class="px-6 py-4">
-          <div class="relative inline-block w-32">
-            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-              <option selected="">User</option>
-              <option>Moderator</option>
-              <option>Admin</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-              <span class="material-symbols-outlined text-sm">expand_more</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100" title="Delete User">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
-        </td>
-      </tr>
-      <tr class="hover:bg-background-dark/30 transition-colors group">
-        <td class="px-6 py-4">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center font-bold text-sm">CB</div>
-            <span class="font-medium text-slate-900 dark:text-slate-100">Charlie Brown</span>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-text-muted text-sm">cbrown</td>
-        <td class="px-6 py-4 text-text-muted text-sm">charlie@example.com</td>
-        <td class="px-6 py-4">
-          <div class="relative inline-block w-32">
-            <select class="block w-full pl-3 pr-8 py-1.5 text-sm font-medium bg-background-dark border border-border-dark rounded-md text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary appearance-none cursor-pointer">
-              <option selected="">User</option>
-              <option>Moderator</option>
-              <option>Admin</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-muted">
-              <span class="material-symbols-outlined text-sm">expand_more</span>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 text-right">
-          <button class="text-text-muted hover:text-red-500 transition-colors p-2 rounded-lg hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100" title="Delete User">
-            <span class="material-symbols-outlined text-xl">delete</span>
-          </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-surface-dark">
-      <div class="text-sm text-text-muted">
-        Showing <span class="font-medium text-slate-100">1</span> to <span class="font-medium text-slate-100">5</span> of <span class="font-medium text-slate-100">1,234</span> results
-      </div>
-      <div class="flex gap-2">
-        <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed" disabled="">Previous</button>
-        <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100">Next</button>
-      </div>
-    </div>
-  </div>
 </main>
-<footer class="mt-auto border-t border-border-dark bg-surface-dark py-6 px-10">
-  <div class="max-w-[1200px] mx-auto flex justify-between items-center text-sm text-text-muted">
-    <p>© 2024 SoundHub Inc. Admin Portal.</p>
-    <div class="flex gap-4">
-      <a class="hover:text-primary transition-colors" href="#">Support</a>
-      <a class="hover:text-primary transition-colors" href="#">Documentation</a>
-      <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
-    </div>
-  </div>
-</footer>
-</body></html>
+</body>
+</html>
