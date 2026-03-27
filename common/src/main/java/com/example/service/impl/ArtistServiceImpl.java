@@ -112,4 +112,12 @@ public class ArtistServiceImpl implements ArtistService {
                 .boxed()
                 .toList();
     }
+
+    @Override
+    public Page<Artist> getArtistsByName(String name, Pageable pageable) {
+        if(name == null || name.isEmpty()) {
+            return artistRepository.findAll(pageable);
+        }
+        return artistRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
 }

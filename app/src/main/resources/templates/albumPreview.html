@@ -57,11 +57,11 @@
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4" th:text="${album.title}"></h1>
                     <div class="flex items-center gap-2 text-sm md:text-base text-gray-300 mb-6 font-medium">
                         <img alt="Artist Avatar" class="w-8 h-8 rounded-full object-cover"
-                             th:src="${album.artist.pictureUrl}"/>
-                        <a class="text-white hover:text-primary transition-colors font-bold" href="#" th:text="${album.artist?.name}"></a>
-                        <a class="text-white hover:text-primary transition-colors font-bold" th:href="@{/bands/preview(id=${album.band.id})}" th:text="${album.band?.name}"></a>
+                             th:src="${album.artist?.pictureUrl ?: album.band?.pictureUrl}"/>
+                        <a class="text-white hover:text-primary transition-colors font-bold" th:href="@{/bands/preview(id=${album.band?.id})}" th:text="${album.band?.name}"></a>
+                        <a class="text-white hover:text-primary transition-colors font-bold" th:href="@{/artists/preview(id=${album.artist?.id})}" th:text="${album.artist?.name}"></a>
                         <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
-                        <span th:text="${album.releaseDate.getYear()}"></span>
+                        <span th:text="${album.releaseDate != null ? album.releaseDate.year : ''}"></span>
                         <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
                         <span th:text="${album.songs.size()}">12</span><span> songs</span>
                     </div>

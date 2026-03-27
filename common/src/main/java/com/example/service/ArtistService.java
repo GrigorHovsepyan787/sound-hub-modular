@@ -20,4 +20,6 @@ public interface ArtistService {
     Artist getArtistById(Long id);
 
     List<Integer> getPageNumbers(Page<Artist> artists);
+
+    Page<Artist> getArtistsByName(String name, Pageable pageable);
 }

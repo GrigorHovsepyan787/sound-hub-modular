@@ -3,6 +3,7 @@ package com.example.service.impl;
 
 import com.example.model.Album;
 import com.example.repository.AlbumRepository;
+import com.example.repository.ArtistRepository;
 import com.example.repository.BandRepository;
 import com.example.service.AlbumService;
 import com.example.storage.StorageService;
@@ -21,7 +22,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final AlbumRepository albumRepository;
     private final StorageService storageService;
     private final BandRepository bandRepository;
-//    private final ArtistRepository artistRepository;
+    private final ArtistRepository artistRepository;
 
     @Override
     public Page<Album> findAlbumPage(Pageable pageable) {
@@ -36,7 +37,7 @@ public class AlbumServiceImpl implements AlbumService {
             if (imageUrl != null) {
                 album.setPictureUrl(imageUrl);
                 log.info("Image uploaded for album: {}", album.getTitle());
-            }else{
+            } else {
                 album.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png");
             }
         }
@@ -44,7 +45,7 @@ public class AlbumServiceImpl implements AlbumService {
             album.setBand(bandRepository.findById(bandId).orElseThrow());
         }
         if (artistId != null) {
-//        album.setArtist(artistRepository.findById(artistId).orElseThrow());
+            album.setArtist(artistRepository.findById(artistId).orElseThrow());
         }
         albumRepository.save(album);
     }
@@ -56,7 +57,22 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public void update(Album album, MultipartFile multipartFile) {
-
+        Album existingAlbum = findAlbumById(album.getId());
+        existingAlbum.setTitle(album.getTitle());
+        if(album.getArtist() != null) {
+            existingAlbum.setArtist(album.getArtist());
+        }
+        if(album.getBand() != null) {
+            existingAlbum.setBand(album.getBand());
+        }
+        existingAlbum.setReleaseDate(album.getReleaseDate());
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String imageUrl = storageService.upload(multipartFile, "album-images");
+            existingAlbum.setPictureUrl(imageUrl);
+        } else {
+            album.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png");
+        }
+        albumRepository.save(existingAlbum);
     }
 }
 

@@ -3,6 +3,7 @@ package com.example.app.controller;
 
 import com.example.model.Album;
 import com.example.service.AlbumService;
+import com.example.service.ArtistService;
 import com.example.service.BandService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AlbumController {
     private final AlbumService albumService;
     private final BandService bandService;
-    // private final ArtistService artistService;
+    private final ArtistService artistService;
 
     @GetMapping("/albums")
     public String albums(ModelMap modelMap,
@@ -42,7 +43,7 @@ public class AlbumController {
                            @RequestParam(value = "bandName", required = false) String bandName,
                            @RequestParam(value = "artistName", required = false) String artistName) {
         modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
-        //modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
+        modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
 
         return "addAlbum";
     }
@@ -51,12 +52,13 @@ public class AlbumController {
     public String updateAlbum(ModelMap modelMap,
                               @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                               @RequestParam(value = "bandName", required = false) String bandName,
-                              @RequestParam(value = "artistName", required = false) String artistName)
-        {
-            modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
-            //modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
-            return "editAlbum";
-        }
+                              @RequestParam(value = "artistName", required = false) String artistName,
+                              @RequestParam("id")  Long id) {
+        modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
+        modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
+        modelMap.addAttribute("album", albumService.findAlbumById(id));
+        return "editAlbum";
+    }
 
     @PostMapping("/albums/add")
     public String addAlbum(@ModelAttribute Album album,
@@ -71,7 +73,7 @@ public class AlbumController {
     }
 
     @PostMapping("/albums/update")
-    public String updateAlbum(@ModelAttribute Album album,@RequestParam("pic") MultipartFile multipartFile) {
+    public String updateAlbum(@ModelAttribute Album album, @RequestParam("pic") MultipartFile multipartFile) {
         albumService.update(album, multipartFile);
         return "redirect:/albums";
     }

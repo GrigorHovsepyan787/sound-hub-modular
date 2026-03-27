@@ -58,7 +58,7 @@
                             <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
                         </button>
                         <div class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1 z-10">
-                            <a class="flex items-center justify-between px-4 py-2 text-sm/"
+                            <a class="flex items-center justify-between px-4 py-2 text-sm"
                                th:classappend="${currentSort == 'releaseDate'} ? 'text-primary bg-primary/10'"
                                th:href="@{/albums(page = 0,
                                                   sort='releaseDate',
@@ -66,7 +66,7 @@
                                 Recent
                                 <i class="fa-solid fa-check text-xs" th:if="${param.sort == 'releaseDate'}"></i>
                             </a>
-                            <a class="flex items-center justify-between px-4 py-2 text-sm/"
+                            <a class="flex items-center justify-between px-4 py-2 text-sm"
                                th:classappend="${currentSort == 'title'} ? 'text-primary bg-primary/10'"
                                th:href="@{/albums(page=0,
                                                   sort='title',
@@ -98,7 +98,8 @@
                     <div class="flex items-center gap-2">
                         <a th:href="@{/albums(
                     page=${albums.number}-1,
-                    sort=${currentSort}
+                    sort=${currentSort},
+                    direction=${param.direction}
                     )}">
                             <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                                     th:disabled="${!albums.hasPrevious()}">
@@ -107,7 +108,8 @@
                         </a>
                         <a th:href="@{/albums(
                     page=${albums.number}+1,
-                    sort=${currentSort}
+                    sort=${currentSort},
+                    direction=${param.direction}
                     )}">
                             <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
                                     th:disabled="${!albums.hasNext()}">
