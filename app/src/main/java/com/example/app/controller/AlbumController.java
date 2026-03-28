@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequiredArgsConstructor
 public class AlbumController {
@@ -44,7 +46,7 @@ public class AlbumController {
                            @RequestParam(value = "artistName", required = false) String artistName) {
         modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
         modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
-
+        modelMap.addAttribute("now", LocalDateTime.now());
         return "addAlbum";
     }
 
@@ -56,7 +58,8 @@ public class AlbumController {
                               @RequestParam("id")  Long id) {
         modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
         modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
-        modelMap.addAttribute("album", albumService.findAlbumById(id));
+        modelMap.addAttribute("now", LocalDateTime.now());
+        modelMap.addAttribute("albumId", id);
         return "editAlbum";
     }
 

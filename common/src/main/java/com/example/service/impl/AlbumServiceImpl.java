@@ -9,6 +9,7 @@ import com.example.service.AlbumService;
 import com.example.storage.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,8 @@ public class AlbumServiceImpl implements AlbumService {
     private final StorageService storageService;
     private final BandRepository bandRepository;
     private final ArtistRepository artistRepository;
+    @Value("${album.default-image}")
+    private String defaultImageUrl;
 
     @Override
     public Page<Album> findAlbumPage(Pageable pageable) {
@@ -38,7 +41,7 @@ public class AlbumServiceImpl implements AlbumService {
                 album.setPictureUrl(imageUrl);
                 log.info("Image uploaded for album: {}", album.getTitle());
             } else {
-                album.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png");
+                album.setPictureUrl(defaultImageUrl);
             }
         }
         if (bandId != null) {
@@ -70,7 +73,7 @@ public class AlbumServiceImpl implements AlbumService {
             String imageUrl = storageService.upload(multipartFile, "album-images");
             existingAlbum.setPictureUrl(imageUrl);
         } else {
-            album.setPictureUrl("https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png");
+            existingAlbum.setPictureUrl(defaultImageUrl);
         }
         albumRepository.save(existingAlbum);
     }
