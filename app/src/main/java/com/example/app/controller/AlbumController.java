@@ -59,7 +59,7 @@ public class AlbumController {
         modelMap.addAttribute("bands", bandService.getBandsByName(bandName, pageable));
         modelMap.addAttribute("artists", artistService.getArtistsByName(artistName, pageable));
         modelMap.addAttribute("now", LocalDateTime.now());
-        modelMap.addAttribute("albumId", id);
+        modelMap.addAttribute("album", albumService.findAlbumById(id));
         return "editAlbum";
     }
 

@@ -50,7 +50,7 @@
                             Edit Album</h1>
                     </div>
                     <form th:action="@{/albums/update}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" th:name="id" th:value="${albumId}"/>
+                        <input type="hidden" th:name="id" th:value="${album.id}"/>
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                             <div class="lg:col-span-4 flex flex-col gap-4">
                                 <p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" th:text="#{editAlbum.cover}">Album
@@ -104,7 +104,7 @@
                                             <label class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-colors"
                                                    th:each="artist : ${artists}">
                                                 <input class="form-radio rounded text-primary border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark size-5"
-                                                       type="radio" th:value="${artist.id}" name="artistId"/>
+                                                       type="radio" th:value="${artist.id}" name="artistId" th:checked="${album.artist != null and artist.id == album.artist.id}"/>
                                                 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border border-slate-200 dark:border-slate-700">
                                                     <img th:src="${artist.pictureUrl}" alt="artist image"></div>
                                                 <span class="text-slate-800 dark:text-slate-200 text-sm font-medium"
@@ -131,7 +131,7 @@
                                             <label class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-colors"
                                                    th:each="band : ${bands}">
                                                 <input class="form-radio rounded text-primary border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark size-5"
-                                                       name="bandId" th:value="${band.id}" type="radio"/>
+                                                       name="bandId" th:value="${band.id}" type="radio" th:checked="${album.band != null and band.id == album.band.id}"/>
                                                 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 border border-slate-200 dark:border-slate-700">
                                                     <img th:src="${band.pictureUrl}" alt="artist image"></div>
                                                 <span class="text-slate-800 dark:text-slate-200 text-sm font-medium"
