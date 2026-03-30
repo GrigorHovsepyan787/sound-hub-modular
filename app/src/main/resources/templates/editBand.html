@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
-  <title>Edit Band - SoundHub</title>
+  <title th:text="#{band.edit.title} + ' - SoundHub'">Edit Band - SoundHub</title>
 </head>
 <body>
 <section>
   <div class="max-w-7xl mx-auto px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-10">
     <div class="layout-content-container flex flex-col w-full max-w-[640px] flex-1">
       <div class="flex flex-col mb-8 gap-2">
-        <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight">Edit Band</h1>
-        <p class="text-gray-400 text-sm font-medium">Update band details on the SoundHub platform.</p>
+        <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight" th:text="#{band.edit.title}">Edit Band</h1>
+        <p class="text-gray-400 text-sm font-medium" th:text="#{band.edit.subtitle}">Update band details on the SoundHub platform.</p>
       </div>
 
       <form th:action="@{/bands/edit}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
@@ -18,7 +18,7 @@
         <input type="hidden" name="id" th:value="${band.id}"/>
 
         <div class="flex flex-col gap-3">
-          <label class="text-sm font-semibold">Band Image</label>
+          <label class="text-sm font-semibold" th:text="#{band.form.image}">Band Image</label>
           <div id="uploadBox" class="relative w-full aspect-video md:aspect-[21/9] bg-brand-surface rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center cursor-pointer hover:border-brand-accent transition-all group overflow-hidden">
             <img id="previewImage"
                  th:src="${band.pictureUrl != null} ? ${band.pictureUrl} : '#'"
@@ -30,7 +30,7 @@
                 <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
               </div>
               <div class="text-center">
-                <p id="uploadText" class="text-base font-bold">Click to change photo</p>
+                <p id="uploadText" class="text-base font-bold" th:text="#{band.form.clickChange}">Click to change photo</p>
               </div>
             </div>
             <input id="bandImage" name="bandImage" accept="image/*" type="file" class="hidden"/>
@@ -38,31 +38,26 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <label for="bandName" class="text-sm font-semibold">Band Name</label>
+          <label for="bandName" class="text-sm font-semibold" th:text="#{band.form.name}">Band Name</label>
           <input id="bandName" name="name" type="text" th:value="${band.name}"
-                 placeholder="Band Name"
+                 th:placeholder="#{band.form.namePlaceholder}"
                  class="form-input w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 placeholder:text-gray-500 text-base font-medium transition-colors"/>
         </div>
 
         <div class="flex flex-col gap-2">
-          <label for="biography" class="text-sm font-semibold">Biography</label>
+          <label for="biography" class="text-sm font-semibold" th:text="#{band.form.biography}">Biography</label>
           <textarea id="biography" name="bio" rows="5" th:text="${band.bio}"
-                    placeholder="Tell us about the band's history, influences, and style..."
+                    th:placeholder="#{band.form.biographyPlaceholder}"
                     class="form-textarea w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent p-4 placeholder:text-gray-500 text-base font-medium resize-y transition-colors"></textarea>
         </div>
 
         <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/5">
-
           <a th:href="@{/bands}"
-             class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-surface hover:bg-white/10 text-gray-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1 text-center">
-            Cancel
-          </a>
-
+             class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-surface hover:bg-white/10 text-gray-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1 text-center"
+             th:text="#{band.form.cancel}">Cancel</a>
           <button type="submit"
-                  class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-accent hover:bg-brand-accentHover text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-brand-accent/20 order-1 sm:order-2 ml-auto">
-            Save Changes
-          </button>
-
+                  class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-accent hover:bg-brand-accentHover text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-brand-accent/20 order-1 sm:order-2 ml-auto"
+                  th:text="#{band.form.saveChanges}">Save Changes</button>
         </div>
 
       </form>
@@ -71,7 +66,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
+  <script th:inline="javascript">
     const uploadBox = document.getElementById('uploadBox');
     const fileInput = document.getElementById('bandImage');
     const previewImage = document.getElementById('previewImage');
@@ -100,6 +95,16 @@
         allowInput: true
       });
 
+      const i18n = {
+        title:       /*[[#{validation.title}]]*/ 'Missing Required Fields',
+        introSingle: /*[[#{validation.intro.single}]]*/ 'Please fill in the following required field before submitting:',
+        introPlural: /*[[#{validation.intro.plural}]]*/ 'Please fill in the following required fields before submitting:',
+        suffix:      /*[[#{validation.suffix}]]*/ 'These fields cannot be left empty.',
+        confirm:     /*[[#{validation.confirm}]]*/ 'Got it',
+        fieldName:   /*[[#{validation.field.bandName}]]*/ 'Band Name',
+        fieldBio:    /*[[#{validation.field.biography}]]*/ 'Biography',
+      };
+
       const modal = document.createElement('div');
       modal.innerHTML = `
         <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center;">
@@ -108,10 +113,10 @@
               <div style="background:rgba(239,68,68,0.15); border-radius:50%; padding:10px; flex-shrink:0;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               </div>
-              <h3 style="margin:0; font-size:1.1rem; font-weight:700; color:#fff;">Missing Required Fields</h3>
+              <h3 id="modalTitle" style="margin:0; font-size:1.1rem; font-weight:700; color:#fff;"></h3>
             </div>
             <p id="modalMessage" style="margin:0 0 24px; color:#9ca3af; font-size:0.9rem; line-height:1.6;"></p>
-            <button id="modalClose" style="width:100%; padding:10px; border-radius:50px; background:#6366f1; color:#fff; font-weight:700; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s;">Got it</button>
+            <button id="modalClose" style="width:100%; padding:10px; border-radius:50px; background:#6366f1; color:#fff; font-weight:700; font-size:0.875rem; border:none; cursor:pointer; transition:background 0.2s;"></button>
           </div>
         </div>
         <style>
@@ -122,32 +127,26 @@
       document.body.appendChild(modal);
 
       const overlay = document.getElementById('modalOverlay');
+      document.getElementById('modalTitle').textContent = i18n.title;
+      document.getElementById('modalClose').textContent = i18n.confirm;
       document.getElementById('modalClose').addEventListener('click', () => overlay.style.display = 'none');
       overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
 
       function showValidationModal(missingFields) {
+        const intro = missingFields.length > 1 ? i18n.introPlural : i18n.introSingle;
         const fieldList = missingFields.map(f => `<li><strong style="color:#e5e7eb;">${f}</strong></li>`).join('');
         document.getElementById('modalMessage').innerHTML =
-                `Please fill in the following required ${missingFields.length > 1 ? 'fields' : 'field'} before submitting:
-          <ul style="margin-top:5px; padding-left:20px;">${fieldList}</ul>
-          These fields cannot be left empty.`;
+                `${intro}<ul style="margin-top:5px; padding-left:20px;">${fieldList}</ul>${i18n.suffix}`;
         overlay.style.display = 'flex';
       }
 
       document.querySelector('form').addEventListener('submit', function (e) {
         const name = document.getElementById('bandName').value.trim();
-        const date = document.getElementById('formationDate').value.trim();
-        const bio = document.getElementById('biography').value.trim();
-
+        const bio  = document.getElementById('biography').value.trim();
         const missing = [];
-        if (!name) missing.push('Band Name');
-        if (!date) missing.push('Formation Date');
-        if (!bio) missing.push('Biography');
-
-        if (missing.length > 0) {
-          e.preventDefault();
-          showValidationModal(missing);
-        }
+        if (!name) missing.push(i18n.fieldName);
+        if (!bio)  missing.push(i18n.fieldBio);
+        if (missing.length > 0) { e.preventDefault(); showValidationModal(missing); }
       });
     });
   </script>

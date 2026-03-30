@@ -18,7 +18,7 @@
             <line x1="19" y1="12" x2="5" y2="12"/>
             <polyline points="12 19 5 12 12 5"/>
           </svg>
-          Back to Bands
+          <span th:text="#{band.preview.backToBands}">Back to Bands</span>
         </a>
       </div>
 
@@ -27,10 +27,12 @@
              ? 'background-image: url(' + ${band.getPictureUrl()} + ');'
              : 'background-color: #1978e5;'">
       </div>
+
       <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight"
           th:text="${band.name}"></h1>
       <p class="text-slate-500 text-sm mt-1">
-        Founded at <span th:text="${#temporals.format(band.createdDate, 'yyyy')}"></span>
+        <span th:text="#{band.preview.founded}">Founded at</span>
+        <span th:text="${#temporals.format(band.createdDate, 'yyyy')}"></span>
       </p>
     </section>
 
@@ -40,7 +42,7 @@
 
         <section>
           <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">Bio</span>
+            <span class="material-symbols-outlined text-primary" th:text="#{band.preview.bio}">Bio</span>
           </h3>
           <div class="text-slate-600 dark:text-slate-400 leading-relaxed space-y-4">
             <p th:text="${band.bio}">Band biography.</p>
@@ -49,9 +51,9 @@
 
         <section>
           <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">Popular Tracks</span>
+            <span class="material-symbols-outlined text-primary" th:text="#{band.preview.popularTracks}">Popular Tracks</span>
           </h3>
-          <div class="text-slate-500 dark:text-slate-400 text-sm italic">
+          <div class="text-slate-500 dark:text-slate-400 text-sm italic" th:text="#{band.preview.noTracks}">
             No tracks available yet.
           </div>
         </section>
@@ -63,12 +65,12 @@
         <section class="bg-slate-200/50 dark:bg-slate-800/30 p-8 rounded-2xl">
           <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
             <i class="fa-solid fa-users text-primary"></i>
-            Band Members
+            <span th:text="#{band.preview.members}">Band Members</span>
           </h3>
 
-          <!-- No members -->
           <div th:if="${#sets.isEmpty(band.artists)}"
-               class="text-slate-500 dark:text-slate-400 text-sm italic">
+               class="text-slate-500 dark:text-slate-400 text-sm italic"
+               th:text="#{band.preview.noMembers}">
             No members added yet.
           </div>
 
@@ -81,9 +83,9 @@
                    th:alt="${artist.name}"
                    class="w-12 h-12 rounded-full object-cover flex-shrink-0 ring-2 ring-transparent group-hover:ring-primary transition-all"/>
               <div class="flex flex-col">
-            <span class="text-sm font-semibold text-slate-900 dark:text-white"
-                  th:text="${#strings.isEmpty(artist.nickname) ? artist.name + ' ' + artist.surname : artist.nickname}">
-            </span>
+                <span class="text-sm font-semibold text-slate-900 dark:text-white"
+                      th:text="${#strings.isEmpty(artist.nickname) ? artist.name + ' ' + artist.surname : artist.nickname}">
+                </span>
               </div>
               <i class="fa-solid fa-arrow-right ml-auto text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity text-xs"></i>
             </a>

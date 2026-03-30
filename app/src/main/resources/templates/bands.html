@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
-    <title>Groups Directory - SoundHub</title>
+    <title th:text="#{bands.title} + ' - SoundHub'">Groups Directory - SoundHub</title>
 </head>
 <body>
 <section>
@@ -10,8 +10,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Groups Directory</h1>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2">Discover and connect with your favorite bands and groups.</p>
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white" th:text="#{bands.title}">Groups Directory</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-2" th:text="#{bands.subtitle}">Discover and connect with your favorite bands and groups.</p>
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -23,13 +23,13 @@
                             <line x1="12" y1="5" x2="12" y2="19"/>
                             <line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        Add Band
+                        <span th:text="#{bands.add}">Add Band</span>
                     </a>
 
                     <div class="relative group w-max">
                         <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-sm transition-all active:scale-95">
                             <i class="fa-solid fa-arrow-down-a-z text-primary/80"></i>
-                            <span>Sort: <span th:text="${currentSort == 'name,asc' ? 'A-Z' : (currentSort == 'name,desc' ? 'Z-A' : 'Newest')}">A-Z</span></span>
+                            <span th:text="#{bands.sort.label} + ': ' + (${currentSort == 'name,asc'} ? #{bands.sort.az} : (${currentSort == 'name,desc'} ? #{bands.sort.za} : #{bands.sort.newest}))">Sort: A-Z</span>
                             <i class="fa-solid fa-chevron-down text-[10px] ml-1 opacity-50 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
 
@@ -38,14 +38,14 @@
                             <a th:href="@{/bands(page=0, size=${bands.size}, sort='name,asc')}"
                                th:classappend="${currentSort == 'name,asc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
                                class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
-                                <span>A - Z</span>
+                                <span th:text="#{bands.sort.az}">A - Z</span>
                                 <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'name,asc'}"></i>
                             </a>
 
                             <a th:href="@{/bands(page=0, size=${bands.size}, sort='name,desc')}"
                                th:classappend="${currentSort == 'name,desc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
                                class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
-                                <span>Z - A</span>
+                                <span th:text="#{bands.sort.za}">Z - A</span>
                                 <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'name,desc'}"></i>
                             </a>
 
@@ -54,13 +54,14 @@
                             <a th:href="@{/bands(page=0, size=${bands.size}, sort='id,desc')}"
                                th:classappend="${currentSort == 'id,desc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
                                class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
-                                <span>Recently Added</span>
+                                <span th:text="#{bands.sort.newest}">Recently Added</span>
                                 <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'id,desc'}"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
                 <div th:each="band : ${bands.content}" class="flex flex-col items-center group text-center">
 
@@ -73,38 +74,30 @@
 
                         <div class="absolute inset-0 rounded-2xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center gap-2 p-3 z-10 pointer-events-none">
                             <a th:href="@{/bands/edit(id=${band.id})}"
-                               class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold
-bg-white/15 hover:bg-blue-500/80 text-white border border-white/20 hover:border-blue-400 transition-all backdrop-blur-sm pointer-events-auto">
-                                Edit
-                            </a>
+                               class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold bg-white/15 hover:bg-blue-500/80 text-white border border-white/20 hover:border-blue-400 transition-all backdrop-blur-sm pointer-events-auto"
+                               th:text="#{bands.edit}">Edit</a>
 
                             <a th:href="@{/bands/delete(id=${band.id})}"
-                               onclick="return confirm('Are you sure you want to delete this band? This action cannot be undone.')"
-                               class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold
-bg-white/15 hover:bg-red-500/80 text-white border border-white/20 hover:border-red-400 transition-all backdrop-blur-sm pointer-events-auto">
-                                Delete
-                            </a>
+                               th:onclick="'return confirm(\'' + #{bands.confirm.delete} + '\')'"
+                               class="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-xs font-semibold bg-white/15 hover:bg-red-500/80 text-white border border-white/20 hover:border-red-400 transition-all backdrop-blur-sm pointer-events-auto"
+                               th:text="#{bands.delete}">Delete</a>
                         </div>
-
                     </div>
 
                     <h3 class="font-bold text-gray-900 dark:text-white truncate w-full" th:text="${band.name}"></h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate w-full" th:text="${band.bio}"></p>
                 </div>
             </div>
+
             <div class="flex justify-center mt-6">
                 <ul class="inline-flex items-center space-x-2">
-
                     <li th:if="${bands.hasPrevious()}">
                         <a th:href="@{/bands(page=${bands.number - 1}, size=${bands.size}, sort=${currentSort})}"
-                           class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-                            &laquo;
-                        </a>
+                           class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">&laquo;</a>
                     </li>
                     <li th:unless="${bands.hasPrevious()}">
                         <span class="px-3 py-1 border rounded text-gray-400 cursor-not-allowed">&laquo;</span>
                     </li>
-
                     <li th:each="i : ${pageNumbers}">
                         <a th:href="@{/bands(page=${i - 1}, size=${bands.size}, sort=${currentSort})}"
                            th:text="${i}"
@@ -112,24 +105,17 @@ bg-white/15 hover:bg-red-500/80 text-white border border-white/20 hover:border-r
                            th:classappend="${i == bands.number + 1} ? ' bg-gray-300 dark:bg-gray-600' : ''">
                         </a>
                     </li>
-
                     <li th:if="${bands.hasNext()}">
                         <a th:href="@{/bands(page=${bands.number + 1}, size=${bands.size}, sort=${currentSort})}"
-                           class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-                            &raquo;
-                        </a>
+                           class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">&raquo;</a>
                     </li>
-
                     <li th:unless="${bands.hasNext()}">
                         <span class="px-3 py-1 border rounded text-gray-400 cursor-not-allowed">&raquo;</span>
                     </li>
-
                 </ul>
             </div>
         </div>
     </main>
-
-    </div>
 </section>
 </body>
 </html>
