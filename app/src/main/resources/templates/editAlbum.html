@@ -53,16 +53,16 @@
                         <input type="hidden" th:name="id" th:value="${album.id}"/>
                         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                             <div class="lg:col-span-4 flex flex-col gap-4">
-                                <p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" th:text="#{editAlbum.cover}">Album
-                                    Cover</p>
-                                <label for="pic"
-                                       class="bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary transition-colors flex flex-col items-center justify-center rounded-xl p-8 aspect-square cursor-pointer group">
+                                <p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal" th:text="#{editAlbum.cover}">Album Cover</p>
+                                <label id="coverLabel" for="pic"
+                                       class="bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary transition-colors flex flex-col items-center justify-center rounded-xl p-8 aspect-square cursor-pointer group relative overflow-hidden">
                                     <span class="material-symbols-outlined text-6xl text-slate-400 group-hover:text-primary transition-colors mb-4">cloud_upload</span>
                                     <p class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight mb-2" th:text="#{editAlbum.upload}">
-                                        Upload Cover</p>
-                                    <p class="text-slate-500 dark:text-slate-400 text-sm text-center" th:text="#{editAlbum.drag}">Drag and drop or
-                                        click
-                                        to select a high-resolution image</p>
+                                        Upload Cover
+                                    </p>
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm text-center" th:text="#{editAlbum.drag}">
+                                        Drag and drop or click to select a high-resolution image
+                                    </p>
                                     <input id="pic" name="pic" accept="image/*" type="file" class="hidden"/>
                                 </label>
                             </div>
@@ -188,6 +188,23 @@
                 }
             });
         });
+    });
+
+    const input = document.getElementById('pic');
+    const label = document.getElementById('coverLabel');
+
+    input.addEventListener('change', function() {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Устанавливаем background и убираем иконку/текст
+                label.style.backgroundImage = `url(${e.target.result})`;
+                label.style.backgroundSize = 'cover';
+                label.style.backgroundPosition = 'center';
+                label.querySelectorAll('span, p').forEach(el => el.style.display = 'none');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
     });
 </script>
 </html>
