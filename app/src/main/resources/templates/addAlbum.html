@@ -166,5 +166,26 @@
         url.searchParams.set("artistName", value);
         window.location.href = url.toString();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const artistRadios = document.querySelectorAll('input[name="artistId"]');
+        const bandRadios = document.querySelectorAll('input[name="bandId"]');
+
+        artistRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    bandRadios.forEach(b => b.checked = false);
+                }
+            });
+        });
+
+        bandRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    artistRadios.forEach(a => a.checked = false);
+                }
+            });
+        });
+    });
 </script>
 </html>

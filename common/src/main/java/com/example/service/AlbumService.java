@@ -12,5 +12,5 @@ public interface AlbumService {
 
     Album findAlbumById(Long id);
 
-    void update(Album album, MultipartFile multipartFile);
+    void update(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 }

@@ -68,16 +68,16 @@ public class AlbumController {
                            @RequestParam("pic") MultipartFile multipartfile,
                            @RequestParam(value = "bandId", required = false) Long bandId,
                            @RequestParam(value = "artistId", required = false) Long artistId) {
-        if (artistId == null && bandId == null) {
-            return "redirect:/albums";
-        }
         albumService.save(album, multipartfile, bandId, artistId);
         return "redirect:/albums";
     }
 
     @PostMapping("/albums/update")
-    public String updateAlbum(@ModelAttribute Album album, @RequestParam("pic") MultipartFile multipartFile) {
-        albumService.update(album, multipartFile);
+    public String updateAlbum(@ModelAttribute Album album,
+                              @RequestParam("pic") MultipartFile multipartFile,
+                              @RequestParam(value = "bandId", required = false) Long bandId,
+                              @RequestParam(value = "artistId", required = false) Long artistId) {
+        albumService.update(album, multipartFile, bandId, artistId);
         return "redirect:/albums";
     }
 }
