@@ -195,7 +195,6 @@
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Устанавливаем background и убираем иконку/текст
                 label.style.backgroundImage = `url(${e.target.result})`;
                 label.style.backgroundSize = 'cover';
                 label.style.backgroundPosition = 'center';

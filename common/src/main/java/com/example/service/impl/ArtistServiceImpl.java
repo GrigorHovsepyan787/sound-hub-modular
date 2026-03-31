@@ -9,6 +9,7 @@ import com.example.storage.StorageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -115,7 +116,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<Artist> getArtistsByName(String name, Pageable pageable) {
-        if(name == null || name.isEmpty()) {
+        if(StringUtils.isBlank(name)) {
             return artistRepository.findAll(pageable);
         }
         return artistRepository.findByNameContainingIgnoreCase(name, pageable);
