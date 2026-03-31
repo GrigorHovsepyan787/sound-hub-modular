@@ -25,6 +25,10 @@ aws:
       band-images: band-images
       user-images: user-images
       artist-images: artist-images
+      album-images: album-images
 
 server:
   port: 8080
+
+album:
+  default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png
