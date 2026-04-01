@@ -25,4 +25,14 @@ public class Song {
     private Long id;
     @ManyToOne
     private Album album;
+
+    private Integer playCount;
+
+    public void incrementPlayCount() {
+        if (playCount == null) {
+            playCount = 1;
+        } else {
+            playCount++;
+        }
+    }
 }
