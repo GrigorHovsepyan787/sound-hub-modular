@@ -1,5 +1,6 @@
 package com.example.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,29 +13,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "song")
-public class Song {
+@NoArgsConstructor
+@Table(name = "song_plays")
+public class SongPlay {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Album album;
-    @ManyToOne
-    private Artist artist;
 
-    private Integer playCount;
+    @ManyToOne
+    private Song song;
 
-    public void incrementPlayCount() {
-        if (playCount == null) {
-            playCount = 1;
-        } else {
-            playCount++;
-        }
-    }
+    @Column(nullable = false)
+    private LocalDateTime playedAt;
 }

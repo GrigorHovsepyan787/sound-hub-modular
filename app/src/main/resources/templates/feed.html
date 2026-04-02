@@ -109,17 +109,18 @@
                         <h2 class="text-2xl font-bold">Most Popular Artists of the Month</h2>
                         <p class="text-gray-400 text-sm">Artists ruling the charts this month.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">View all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/artists}">View all</a>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8" th:each="artist : ${artists}">
                     <div class="artist-card text-center group cursor-pointer">
                         <div class="relative aspect-square mb-4 mx-auto overflow-hidden rounded-full border-2 border-transparent transition-all duration-300">
                             <img alt="Artist Profile"
                                  class="object-cover w-full h-full transition-transform duration-500"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdb3Lwnf5n00HN_ek4njLmP2f6Sg-ohbux0oExIZQNl9rThrDKbZMbA37jzhpDDKsYz6FmTVf0zUzCzC4ukJ4uCEledlnbAnHnY5nqWb3IWoNhK7oAMHT4TAZ8HikOU-TkqD3xe4vildeScWd1uac4Vu0nj6JkHm4x2TCOHqBIOcKJITVawyXgYxyGy2DjurxYYyPEb0ArzOCQ7C1LQt7eJGL4yBk4m_p2CkPRnr8VYyaYW5dVfm5RsCpnLLr_cn5DzU3o5hDJ_wo4"/>
+                                 th:src="${artist.artist.pictureUrl}"/>
                         </div>
-                        <h3 class="font-bold text-sm">Elena Vox</h3>
-                        <p class="text-xs text-gray-500 mt-1">@elenavox</p>
+                        <h3 class="font-bold text-sm" th:text="${artist.artist.name}"></h3>
+                        <h3 class="font-bold text-sm" th:text="${artist.artist.surname}"></h3>
+                        <p class="text-xs text-gray-500 mt-1" th:text="${artist.artist.nickname}"></p>
                     </div>
                 </div>
             </section>

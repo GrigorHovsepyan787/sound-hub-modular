@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.Artist;
+import com.example.projection.ArtistPopularity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,4 +23,6 @@ public interface ArtistService {
     List<Integer> getPageNumbers(Page<Artist> artists);
 
     Page<Artist> getArtistsByName(String name, Pageable pageable);
+
+    Page<ArtistPopularity> getTopArtistPopularityCurrentMonth(Pageable pageable);
 }
