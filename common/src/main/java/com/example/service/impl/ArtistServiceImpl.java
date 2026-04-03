@@ -8,6 +8,8 @@ import com.example.repository.BandRepository;
 import com.example.repository.SongPlayRepository;
 import com.example.service.ArtistService;
 import com.example.storage.StorageService;
+import com.example.util.DateRange;
+import com.example.util.DateRangeUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -121,7 +121,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<Artist> getArtistsByName(String name, Pageable pageable) {
-        if(StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             return artistRepository.findAll(pageable);
         }
         return artistRepository.findByNameContainingIgnoreCase(name, pageable);
@@ -129,16 +129,11 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<ArtistPopularity> getTopArtistPopularityCurrentMonth(Pageable pageable) {
+        DateRange month = DateRangeUtils.last30Days();
 
-        LocalDate now = LocalDate.now();
-
-        LocalDateTime start =
-                now.withDayOfMonth(1)
-                        .atStartOfDay();
-
-        LocalDateTime end =
-                start.plusMonths(1);
-
-        return songPlayRepository.findTopArtistsForPeriod(start, end, pageable);
+        return songPlayRepository.findTopArtistsForPeriod(
+                month.start(),
+                month.end(),
+                pageable);
     }
 }

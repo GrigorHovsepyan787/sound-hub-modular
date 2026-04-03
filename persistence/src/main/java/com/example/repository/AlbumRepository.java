@@ -8,4 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     Page<Album> findAll(Specification<Album> spec, Pageable pageable);
+
+    Page<Album> findByArtistIsNotNull(Pageable pageable);
+
+    Page<Album> findByBandIsNotNull(Pageable pageable);
 }

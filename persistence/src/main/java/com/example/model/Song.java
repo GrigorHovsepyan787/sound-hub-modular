@@ -27,6 +27,8 @@ public class Song {
     private Album album;
     @ManyToOne
     private Artist artist;
+    @ManyToOne
+    private Band band;
 
     private Integer playCount;
 

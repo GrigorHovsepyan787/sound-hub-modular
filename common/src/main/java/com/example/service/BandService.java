@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.Band;
+import com.example.projection.BandPopularity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,4 +28,5 @@ public interface BandService {
 
     Band getBandByIdForArtists(Long id);
 
+    Page<BandPopularity> getTopBandPopularityCurrentMonth(Pageable pageable);
 }
