@@ -43,15 +43,21 @@
 <body class="font-sans antialiased">
 <th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
     <section>
-        <section class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-hero-gradient"
-                 data-purpose="hero-banner">
+        <section
+                class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat">
+            <img
+                    src="https://images.unsplash.com/photo-1509335919466-c196457ea95a?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    class="absolute inset-0 w-full h-full object-cover object-center"
+                    alt="Hero Banner"
+            />
             <div class="absolute inset-0 z-0 opacity-20">
             </div>
             <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-500"
+                    th:text="#{feed.music}">
                     Your music, <br class="md:hidden"/>your hub.
                 </h1>
-                <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto" th:text="#{feed.experience}">
                     Experience sound in its purest form. Stream millions of tracks, follow your favorite artists, and
                     discover new vibes daily.
                 </p>
@@ -61,58 +67,74 @@
             <section data-purpose="new-solo-artists">
                 <div class="flex justify-between items-end mb-8">
                     <div>
-                        <h2 class="text-2xl font-bold">New from Solo Artists</h2>
-                        <p class="text-gray-400 text-sm">The latest drops from independent creators.</p>
+                        <h2 class="text-2xl font-bold" th:text="#{feed.solo}">New from Solo Artists</h2>
+                        <p class="text-gray-400 text-sm" th:text="#{feed.soloDrops}">The latest drops from independent
+                            creators.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">Show all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/artists}"
+                       th:text="#{feed.show}">Show
+                        all</a>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    <div class="album-card group cursor-pointer" data-purpose="album-item">
+                    <a class="album-card group cursor-pointer"
+                       data-purpose="album-item"
+                       th:each="album :${recentArtistAlbums}"
+                       th:href="@{/albums/preview(id=${album.id})}">
                         <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
                             <img alt="Album Art"
                                  class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwyaH4d0HU2wLcTPTzk66bKeF2-8OMzAz1VAh3Db73G18q6cELTJQv1MwpxpnYipKVeFHiHACvfAWYT7_CSeO92dhmLwSREE5Nx6kvl630VESwoqCiDQ7aroz7NZt4H84jRTOWuGXcLs4dvrpODKjsQFEf1m87g-d5zFHlkXeiKDd02l9ljXu541PZQTN-wd5c1aaEw1eP_lsrJq3QpifooGScNbJ0pNfJ0Jqd0d3cZ7MTbDZSUhYW3nzqHuCYu4zHy7G56n9e76O"/>
+                                 th:src="${album.pictureUrl}"/>
                             <div class="play-overlay absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-all duration-300 translate-y-4">
                                 <div class="w-12 h-12 bg-brand-secondary rounded-full flex items-center justify-center shadow-lg shadow-brand-secondary/30">
                                     <i class="fa-solid fa-play text-black ml-1"></i>
                                 </div>
                             </div>
                         </div>
-                        <h3 class="font-bold text-sm truncate">Example title</h3>
-                        <p class="text-xs text-gray-400 mt-1">Example Artist</p>
-                    </div>
+                        <h3 class="font-bold text-sm truncate" th:text="${album.title}"></h3>
+                        <p class="text-xs text-gray-400 mt-1" th:text="${album.artist.nickname}"></p>
+                    </a>
                 </div>
             </section>
             <section data-purpose="new-groups">
                 <div class="flex justify-between items-end mb-8">
                     <div>
-                        <h2 class="text-2xl font-bold">New from Groups</h2>
-                        <p class="text-gray-400 text-sm">Latest collaborations and band releases.</p>
+                        <h2 class="text-2xl font-bold" th:text="#{feed.newGroups}">New from Groups</h2>
+                        <p class="text-gray-400 text-sm" th:text="#{feed.newGroupDrops}">Latest collaborations and band
+                            releases.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">Show all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/albums}"
+                       th:text="#{feed.show}">Show all</a>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    <div class="album-card group cursor-pointer">
+                    <a class="album-card group cursor-pointer"
+                       th:each="album :${recentBandAlbums}"
+                       th:href="@{/albums/preview(id=${album.id})}">
                         <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
                             <img alt="Group Art"
                                  class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKTbqz4-QDTt8urdPRYfTiyRLnwiMnw68R4jDCUlJ2XOc3ePvXNIXoz10QxF6UMfds9tdCrwK-zSqdQDu10cXEGgQgbyFhiqOJzqIYZPg_yz0A-S9n5XKcv3D9p4gPB3liHDmvDb0tnLbkuzSuPdoyJ_56-fe7MJihA_O7Lm1iDcHtlgVW8pCBplxLoEpyIWQ3GUHsdB3DyyIwvCEs3M8YAFj9VO6sxXJEhHfItjJLqnk6-53G1nUFh7PaMTUvl1quw8P923uSJMGv"/>
+                                 th:src="${album.pictureUrl}"/>
                         </div>
-                        <h3 class="font-bold text-sm truncate">Example title</h3>
-                        <p class="text-xs text-gray-400 mt-1">Example band</p>
-                    </div>
+                        <h3 class="font-bold text-sm truncate" th:text="${album.title}"></h3>
+                        <p class="text-xs text-gray-400 mt-1" th:text="${album.band.name}"></p>
+                    </a>
                 </div>
             </section>
             <section data-purpose="popular-artists">
                 <div class="flex justify-between items-end mb-8">
                     <div>
-                        <h2 class="text-2xl font-bold">Most Popular Artists of the Month</h2>
-                        <p class="text-gray-400 text-sm">Artists ruling the charts this month.</p>
+                        <h2 class="text-2xl font-bold" th:text="#{feed.popularArtists}">Most Popular Artists of the
+                            Month</h2>
+                        <p class="text-gray-400 text-sm" th:text="#{feed.artistsCharts}">Artists ruling the charts this
+                            month.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/artists}">View all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/artists}"
+                       th:text="#{feed.show}">Show
+                        all</a>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8" th:each="artist : ${artists}">
-                    <div class="artist-card text-center group cursor-pointer">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8">
+                    <a class="artist-card text-center group cursor-pointer"
+                       th:each="artist : ${artists}"
+                       th:href="@{/artists/preview(id=${artist.artist.id})}">
                         <div class="relative aspect-square mb-4 mx-auto overflow-hidden rounded-full border-2 border-transparent transition-all duration-300">
                             <img alt="Artist Profile"
                                  class="object-cover w-full h-full transition-transform duration-500"
@@ -121,80 +143,95 @@
                         <h3 class="font-bold text-sm" th:text="${artist.artist.name}"></h3>
                         <h3 class="font-bold text-sm" th:text="${artist.artist.surname}"></h3>
                         <p class="text-xs text-gray-500 mt-1" th:text="${artist.artist.nickname}"></p>
-                    </div>
+                    </a>
                 </div>
             </section>
             <section data-purpose="popular-groups">
                 <div class="flex justify-between items-end mb-8">
                     <div>
-                        <h2 class="text-2xl font-bold">Most Popular Groups of the Month</h2>
-                        <p class="text-gray-400 text-sm">Top collectives currently trending.</p>
+                        <h2 class="text-2xl font-bold" th:text="#{feed.popularGroups}">Most Popular Groups of the
+                            Month</h2>
+                        <p class="text-gray-400 text-sm" th:text="#{feed.groupsTop}">Top collectives currently
+                            trending.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" href="#">View all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/bands}"
+                       th:text="#{feed.show}">Show all</a>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    <div class="album-card group cursor-pointer">
+                    <a class="album-card group cursor-pointer"
+                       th:each="band : ${bands}"
+                       th:href="@{/bands/preview(band=${band.band.id})}">
                         <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
                             <img alt="Group Photo"
                                  class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKTbqz4-QDTt8urdPRYfTiyRLnwiMnw68R4jDCUlJ2XOc3ePvXNIXoz10QxF6UMfds9tdCrwK-zSqdQDu10cXEGgQgbyFhiqOJzqIYZPg_yz0A-S9n5XKcv3D9p4gPB3liHDmvDb0tnLbkuzSuPdoyJ_56-fe7MJihA_O7Lm1iDcHtlgVW8pCBplxLoEpyIWQ3GUHsdB3DyyIwvCEs3M8YAFj9VO6sxXJEhHfItjJLqnk6-53G1nUFh7PaMTUvl1quw8P923uSJMGv"/>
+                                 th:src="${band.band.pictureUrl}"/>
                         </div>
-                        <h3 class="font-bold text-sm truncate">The Electric Flow</h3>
-                    </div>
+                        <h3 class="font-bold text-sm truncate" th:text="${band.band.name}"></h3>
+                    </a>
                 </div>
             </section>
             <section data-purpose="most-streamed-albums">
                 <div class="flex justify-between items-end mb-8">
                     <div>
-                        <h2 class="text-2xl font-bold">Most Streamed Albums of the Month</h2>
-                        <p class="text-gray-400 text-sm">The albums everyone has on repeat.</p>
+                        <h2 class="text-2xl font-bold" th:text="#{feed.streamedAlbums}">Most Streamed Albums of the
+                            Month</h2>
+                        <p class="text-gray-400 text-sm" th:text="#{feed.albumsRepeat}">The albums everyone has on
+                            repeat.</p>
                     </div>
-                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/albums}">View all</a>
+                    <a class="text-brand-accent text-sm font-semibold hover:underline" th:href="@{/albums}"
+                       th:text="#{feed.show}">Show all</a>
                 </div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-                    <div class="album-card group cursor-pointer">
+                    <a class="album-card group cursor-pointer"
+                       th:each="album : ${albums}"
+                       th:href="@{/albums/preview(id=${album.album.id})}">
                         <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
                             <img alt="Album Cover"
                                  class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwyaH4d0HU2wLcTPTzk66bKeF2-8OMzAz1VAh3Db73G18q6cELTJQv1MwpxpnYipKVeFHiHACvfAWYT7_CSeO92dhmLwSREE5Nx6kvl630VESwoqCiDQ7aroz7NZt4H84jRTOWuGXcLs4dvrpODKjsQFEf1m87g-d5zFHlkXeiKDd02l9ljXu541PZQTN-wd5c1aaEw1eP_lsrJq3QpifooGScNbJ0pNfJ0Jqd0d3cZ7MTbDZSUhYW3nzqHuCYu4zHy7G56n9e76O"/>
+                                 th:src="${album.album.pictureUrl}"/>
                             <div class="play-overlay absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-all duration-300 translate-y-4">
                                 <div class="w-12 h-12 bg-brand-accent rounded-full flex items-center justify-center shadow-lg shadow-brand-accent/30">
                                     <i class="fa-solid fa-play text-white ml-1"></i>
                                 </div>
                             </div>
                         </div>
-                        <h3 class="font-bold text-sm truncate">Midnight Echoes</h3>
-                        <p class="text-xs text-gray-400 mt-1">Elena Vox</p>
-                    </div>
+                        <h3 class="font-bold text-sm truncate" th:text="${album.album.title}"></h3>
+                        <p class="text-xs text-gray-400 mt-1" th:text="${album.album.artist?.nickname}"></p>
+                        <p class="text-xs text-gray-400 mt-1" th:text="${album.album.band?.name}"></p>
+                    </a>
                 </div>
             </section>
             <section data-purpose="popular-list">
-                <h2 class="text-2xl font-bold mb-8">Most Popular Monthly</h2>
+                <h2 class="text-2xl font-bold mb-8" th:text="#{feed.popular}">Most Popular Monthly</h2>
                 <div class="bg-brand-surface/50 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
                     <div class="grid grid-cols-[40px_1fr_40px_100px_60px] md:grid-cols-[60px_2fr_1fr_100px_80px] gap-4 px-6 py-4 border-b border-white/5 text-gray-500 text-xs uppercase tracking-wider font-bold">
                         <span class="text-center">#</span>
-                        <span>Title</span>
-                        <span class="hidden md:block">Artist</span>
-                        <span class="text-center">Plays</span>
+                        <span th:text="#{feed.title}">Title</span>
+                        <span class="hidden md:block" th:text="#{feed.artist}">Artist</span>
+                        <span class="text-center" th:text="#{feed.plays}">Plays</span>
                         <span class="text-right"><i class="fa-regular fa-clock"></i></span>
                     </div>
                     <div class="divide-y divide-white/5">
                         <div class="grid grid-cols-[40px_1fr_40px_100px_60px] md:grid-cols-[60px_2fr_1fr_100px_80px] gap-4 px-6 py-4 items-center hover:bg-white/5 group transition-colors cursor-pointer"
-                             data-purpose="track-item">
-                            <span class="text-center text-gray-500 group-hover:hidden">1</span>
+                             data-purpose="track-item"
+                             th:each="song, stat : ${songs}">
+                            <span class="text-center text-gray-500 group-hover:hidden" th:text="${stat.count}"></span>
                             <span class="text-center text-brand-secondary hidden group-hover:block"><i
                                     class="fa-solid fa-play"></i></span>
                             <div class="flex items-center gap-4 overflow-hidden">
                                 <img alt="Track thumbnail" class="w-10 h-10 rounded shadow-md flex-shrink-0"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6PhJS-wKHdQkx4buUr87ZjTKCQEPnRixnl-3msnGkzns0npLxpDGosiccBJEdnTYCY1a-qX5K8IEorPTUO4OaxEEXr4YHsWHOG1B8AiAdsGFU5OkajY2bsqRUDw7ZxeZtUSdqYcgY8i3Ldbm1UGulVun_T7tWDVLkGbySXc4TJhG40bjF5Fpczn5C3qBfVDl63TXKOe_np8yGXNt-UqW21nW2AR3iLCcadmc4MNKyh9D0lpYL8HJH2hJa0arDXBKRd4RHGbvPTA8t"/>
-                                <span class="font-semibold truncate">Example title</span>
+                                     th:src="${song.song.album.pictureUrl}"/>
+                                <span class="font-semibold truncate" th:text="${song.song.title}"></span>
                             </div>
-                            <span class="hidden md:block text-gray-400 truncate">Example Artist</span>
+                            <span class="hidden md:block text-gray-400 truncate" th:if="${song.song.artist != null}"
+                                  th:text="${song.song.artist.nickname}"></span>
+                            <span class="hidden md:block text-gray-400 truncate" th:if="${song.song.band != null}"
+                                  th:text="${song.song.band.name}"></span>
                             <div class="flex items-center justify-center gap-2 text-gray-400">
                                 <i class="fa-solid fa-headphones text-[10px]"></i>
-                                <span class="text-xs">1.2M</span>
+                                <span class="text-xs" th:text="${song.song.playCount}"></span>
                             </div>
-                            <span class="text-right text-gray-400 text-sm">3:42</span>
+                            <span class="text-right text-gray-400 text-sm" th:text="${song.song.duration}"></span>
                         </div>
                     </div>
                 </div>

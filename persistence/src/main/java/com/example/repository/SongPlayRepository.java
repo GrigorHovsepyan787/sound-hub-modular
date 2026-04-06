@@ -125,8 +125,8 @@ public interface SongPlayRepository extends JpaRepository<SongPlay, Long> {
                     """
     )
     Page<SongPopularity> findTopSongsForPeriod(
-            LocalDateTime start,
-            LocalDateTime end,
+            @Param("start") LocalDateTime start,
+            @Param("end") LocalDateTime end,
             Pageable pageable
     );
 }

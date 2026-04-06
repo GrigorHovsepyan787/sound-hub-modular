@@ -36,8 +36,8 @@ public class MainController {
         modelMap.addAttribute("bands", bandService.getTopBandPopularityCurrentMonth(pageable));
         modelMap.addAttribute("albums", albumService.getTopAlbumPopularityCurrentMonth(pageable));
         modelMap.addAttribute("songs", songService.getTopSongPopularityCurrentMonth(pageable));
-        modelMap.addAttribute("recentArtistAlbums", albumService.findByBandIsNotNull(recentPageable));
-        modelMap.addAttribute("recentBandAlbums", albumService.findByArtistIsNotNull(recentPageable));
+        modelMap.addAttribute("recentArtistAlbums", albumService.findByArtistIsNotNull(recentPageable));
+        modelMap.addAttribute("recentBandAlbums", albumService.findByBandIsNotNull(recentPageable));
         return "feed";
     }
 }

@@ -29,7 +29,8 @@ public class Song {
     private Artist artist;
     @ManyToOne
     private Band band;
-
+    private String title;
+    private String duration;
     private Integer playCount;
 
     public void incrementPlayCount() {
