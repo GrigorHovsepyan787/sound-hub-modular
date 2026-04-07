@@ -1,5 +1,6 @@
 package com.example.app.service.security;
 
+import com.example.model.User;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -7,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.example.model.User;
 
 @Service
 @RequiredArgsConstructor
