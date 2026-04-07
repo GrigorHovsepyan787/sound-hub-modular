@@ -37,7 +37,7 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Page<SongPopularity> getTopSongPopularityCurrentMonth(Pageable pageable) {
+    public Page<SongPopularity> getTopSongPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.last30Days();
 
         return songPlayRepository.findTopSongsForPeriod(

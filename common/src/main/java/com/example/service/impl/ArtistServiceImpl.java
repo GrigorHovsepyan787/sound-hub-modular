@@ -128,7 +128,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Page<ArtistPopularity> getTopArtistPopularityCurrentMonth(Pageable pageable) {
+    public Page<ArtistPopularity> getTopArtistPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.last30Days();
 
         return songPlayRepository.findTopArtistsForPeriod(

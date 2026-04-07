@@ -44,9 +44,9 @@
 <th:block th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
     <section>
         <section
-                class="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat">
+                class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat">
             <img
-                    src="https://images.unsplash.com/photo-1509335919466-c196457ea95a?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    th:src="${bannerUrl}"
                     class="absolute inset-0 w-full h-full object-cover object-center"
                     alt="Hero Banner"
             />
@@ -160,7 +160,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                     <a class="album-card group cursor-pointer"
                        th:each="band : ${bands}"
-                       th:href="@{/bands/preview(band=${band.band.id})}">
+                       th:href="@{/bands/preview(id=${band.band.id})}">
                         <div class="relative aspect-square mb-4 overflow-hidden rounded-xl bg-brand-surface shadow-xl">
                             <img alt="Group Photo"
                                  class="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
@@ -216,8 +216,17 @@
                              data-purpose="track-item"
                              th:each="song, stat : ${songs}">
                             <span class="text-center text-gray-500 group-hover:hidden" th:text="${stat.count}"></span>
-                            <span class="text-center text-brand-secondary hidden group-hover:block"><i
-                                    class="fa-solid fa-play"></i></span>
+                            <span class="text-center text-brand-secondary hidden group-hover:block"><button
+                                    type="button"
+                                    th:data-id="${song.id}"
+                                    th:data-title="${song.title}"
+                                    th:data-performer="${song.performer}"
+                                    th:attr="onclick=|playSong('${song.songUrl}', this)|"
+                                    class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent
+                            group-hover:bg-primary group-hover:text-white transition-all text-slate-400">
+                                <i
+                                        class="fa-solid fa-play"></i>
+                            </button></span>
                             <div class="flex items-center gap-4 overflow-hidden">
                                 <img alt="Track thumbnail" class="w-10 h-10 rounded shadow-md flex-shrink-0"
                                      th:src="${song.song.album.pictureUrl}"/>

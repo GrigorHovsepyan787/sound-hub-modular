@@ -15,7 +15,7 @@ public interface AlbumService {
 
     void update(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 
-    Page<AlbumPopularity> getTopAlbumPopularityCurrentMonth(Pageable pageable);
+    Page<AlbumPopularity> getTopAlbumPopularityLastMonth(Pageable pageable);
 
     Page<Album> findByArtistIsNotNull(Pageable pageable);
 

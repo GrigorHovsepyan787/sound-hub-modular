@@ -91,7 +91,7 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Page<AlbumPopularity> getTopAlbumPopularityCurrentMonth(Pageable pageable) {
+    public Page<AlbumPopularity> getTopAlbumPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.last30Days();
 
         return songPlayRepository.findTopAlbumsForPeriod(

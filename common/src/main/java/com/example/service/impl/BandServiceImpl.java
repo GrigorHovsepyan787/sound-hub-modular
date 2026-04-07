@@ -115,7 +115,7 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Page<BandPopularity> getTopBandPopularityCurrentMonth(Pageable pageable) {
+    public Page<BandPopularity> getTopBandPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.last30Days();
 
         return songPlayRepository.findTopBandsForPeriod(

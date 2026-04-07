@@ -7,6 +7,7 @@ import com.example.service.ArtistService;
 import com.example.service.BandService;
 import com.example.service.SongService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,8 @@ public class MainController {
     private final BandService bandService;
     private final AlbumService albumService;
     private final SongService songService;
+    @Value("${hero-banner.image-url}")
+    private String HERO_BANNER_URL;
 
     @GetMapping("/")
     public String mainPage(@AuthenticationPrincipal SpringUser springUser,
@@ -32,12 +35,13 @@ public class MainController {
         if (springUser != null) {
             modelMap.addAttribute("user", springUser.getUser());
         }
-        modelMap.addAttribute("artists", artistService.getTopArtistPopularityCurrentMonth(pageable));
-        modelMap.addAttribute("bands", bandService.getTopBandPopularityCurrentMonth(pageable));
-        modelMap.addAttribute("albums", albumService.getTopAlbumPopularityCurrentMonth(pageable));
-        modelMap.addAttribute("songs", songService.getTopSongPopularityCurrentMonth(pageable));
+        modelMap.addAttribute("artists", artistService.getTopArtistPopularityLastMonth(pageable));
+        modelMap.addAttribute("bands", bandService.getTopBandPopularityLastMonth(pageable));
+        modelMap.addAttribute("albums", albumService.getTopAlbumPopularityLastMonth(pageable));
+        modelMap.addAttribute("songs", songService.getTopSongPopularityLastMonth(pageable));
         modelMap.addAttribute("recentArtistAlbums", albumService.findByArtistIsNotNull(recentPageable));
         modelMap.addAttribute("recentBandAlbums", albumService.findByBandIsNotNull(recentPageable));
+        modelMap.addAttribute("bannerUrl", HERO_BANNER_URL);
         return "feed";
     }
 }
