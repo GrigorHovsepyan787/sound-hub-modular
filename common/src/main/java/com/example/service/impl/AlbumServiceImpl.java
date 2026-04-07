@@ -1,6 +1,5 @@
 package com.example.service.impl;
 
-
 import com.example.model.Album;
 import com.example.repository.AlbumRepository;
 import com.example.repository.ArtistRepository;
@@ -17,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -31,6 +32,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Page<Album> findAlbumPage(Pageable pageable) {
         return albumRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Album> findAll() {
+        return albumRepository.findAll();
     }
 
     @Override

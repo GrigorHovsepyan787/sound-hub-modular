@@ -1,0 +1,30 @@
+package com.example.model;
+
+public enum Genre {
+    POP,
+    ROCK,
+    HIP_HOP,
+    RNB,
+    ELECTRONIC,
+    DANCE,
+    HOUSE,
+    TRAP,
+    METAL,
+    JAZZ,
+    BLUES,
+    COUNTRY,
+    REGGAE,
+    FOLK,
+    CLASSICAL,
+    PUNK,
+    SOUL,
+    FUNK,
+    LATIN,
+    K_POP,
+    INDIE,
+    ALTERNATIVE,
+    SOUNDTRACK,
+    WORLD,
+    AMBIENT,
+    LO_FI
+}
