@@ -14,7 +14,5 @@ public interface SongMapper {
     @Mapping(target = "bandName", source = "band.name")
     @Mapping(target = "bandId", source = "band.id")
     @Mapping(target = "artistId", source = "artist.id")
-    @Mapping(target = "songUrl", source = "songUrl")
-    @Mapping(target = "playCount", source = "playCount")
     SongDto toDto(Song song);
 }

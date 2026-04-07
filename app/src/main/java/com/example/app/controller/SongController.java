@@ -1,9 +1,6 @@
 package com.example.app.controller;
 
 import com.example.dto.SongDto;
-import com.example.model.Album;
-import com.example.model.Artist;
-import com.example.model.Band;
 import com.example.model.Genre;
 import com.example.model.Song;
 import com.example.service.AlbumService;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class SongController {
@@ -42,13 +37,7 @@ public class SongController {
                         @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
                         Pageable pageable) {
 
-        Page<SongDto> songs = songService.findAll(pageable);
-
-        if (genre != null) {
-            songs = songService.findByGenre(genre, pageable);
-        } else {
-            songs = songService.findAll(pageable);
-        }
+        Page<SongDto> songs = songService.findSongsByGenre(genre, pageable);
 
         modelMap.addAttribute("songs", songs);
         modelMap.addAttribute("genres", Genre.values());
@@ -73,12 +62,9 @@ public class SongController {
     @GetMapping("/songs/add")
     public String addSong(ModelMap modelMap) {
         modelMap.addAttribute("genres", Genre.values());
-        List<Artist> artists = artistService.findAll();
-        List<Band> bands = bandService.findAll();
-        List<Album> albums = albumService.findAll();
-        modelMap.addAttribute("artists", artists);
-        modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("albums", albums);
+        modelMap.addAttribute("artists", artistService.findAll());
+        modelMap.addAttribute("bands", bandService.findAll());
+        modelMap.addAttribute("albums", albumService.findAll());
         return "addSong";
     }
 
@@ -86,13 +72,6 @@ public class SongController {
     public String deleteSong(@RequestParam("id") Long id) {
         songService.delete(id);
         return "redirect:/songs";
-    }
-
-    @GetMapping("/songs/preview")
-    public String songPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
-        Song song = songService.getSongById(id);
-        modelMap.addAttribute("song", song);
-        return "songPreview";
     }
 
     @GetMapping("/songs/play")

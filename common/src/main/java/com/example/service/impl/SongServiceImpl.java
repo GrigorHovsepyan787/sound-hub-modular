@@ -86,6 +86,17 @@ public class SongServiceImpl implements SongService {
                 .map(songMapper::toDto);
     }
 
+    @Override
+    public Page<SongDto> findSongsByGenre(Genre genre, Pageable pageable) {
+        if (genre != null) {
+            log.info("Fetching songs by genre: {}", genre);
+            return songRepository.findByGenre(genre, pageable).map(songMapper::toDto);
+        }
+
+        log.info("Fetching all songs");
+        return songRepository.findAll(pageable).map(songMapper::toDto);
+    }
+
     private int getDuration(MultipartFile multipartFile) {
         try {
             File temp = File.createTempFile("upload-", "mp3");

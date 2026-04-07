@@ -24,4 +24,6 @@ public interface SongService {
     void incrementPlayCount(Long id);
 
     Page<SongDto> findByGenre(Genre genre, Pageable pageable);
+
+    Page<SongDto> findSongsByGenre(Genre genre, Pageable pageable);
 }
