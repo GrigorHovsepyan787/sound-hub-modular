@@ -12,7 +12,8 @@ spring:
     show-sql: true
   servlet:
     multipart:
-      max-file-size: 10MB
+      max-file-size: 30MB
+      max-request-size: 30MB
   profiles:
     active:
 aws:
@@ -26,6 +27,7 @@ aws:
       user-images: user-images
       artist-images: artist-images
       album-images: album-images
+      songs: songs
 
 server:
   port: 8080

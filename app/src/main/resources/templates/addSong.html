@@ -1,238 +1,455 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>SoundHub Add New Track</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#1978e5",
-            "background-light": "#f6f7f8",
-            "background-dark": "#111821",
-            "surface-dark": "#1e293b",
-            "surface-darker": "#0f172a",
-            "border-dark": "#334155"
-          },
-          fontFamily: {
-            "display": ["Inter", "sans-serif"]
-          },
-          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
-        },
-      },
-    }
-  </script>
+<html class="dark" lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title th:text="#{addSong.pageTitle}">SoundHub - Add New Track</title>
 </head>
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen antialiased selection:bg-primary/30">
-<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
-  <div class="layout-container flex h-full grow flex-col">
-    <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-dark px-10 py-3 bg-surface-darker sticky top-0 z-50">
-      <div class="flex items-center gap-8">
-        <div class="flex items-center gap-4 text-primary">
-          <div class="size-6 flex items-center justify-center">
-            <span class="material-symbols-outlined text-2xl">graphic_eq</span>
-          </div>
-          <h2 class="text-slate-100 text-xl font-bold leading-tight tracking-tight">SoundHub</h2>
-        </div>
-        <label class="flex flex-col min-w-40 !h-10 max-w-64">
-          <div class="flex w-full flex-1 items-stretch rounded-full h-full bg-surface-dark border border-border-dark focus-within:border-primary transition-colors">
-            <div class="text-slate-400 flex items-center justify-center pl-4 rounded-l-full">
-              <span class="material-symbols-outlined text-xl">search</span>
-            </div>
-            <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 px-3 rounded-r-full text-sm font-medium" placeholder="Search" value=""/>
-          </div>
-        </label>
-      </div>
-      <div class="flex flex-1 justify-end gap-8 items-center">
-        <nav class="flex items-center gap-9">
-          <a class="text-slate-300 hover:text-primary transition-colors text-sm font-semibold leading-normal" href="#">Discover</a>
-          <a class="text-slate-300 hover:text-primary transition-colors text-sm font-semibold leading-normal" href="#">Library</a>
-          <a class="text-primary text-sm font-semibold leading-normal" href="#">Upload</a>
-        </nav>
-        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAShq04QBkOg1OqpfRIPsMNswMHinHal_ekkUVM9lty0sjBPRfbLdUvd_JCu8wl32qG_0O82O4jBHl2vqumkHOTA2QOlO0kucpRcssHhfNxDrq35iwaJp8hO6JI0IfpLyiUz0fOdqhc6zte6fxoFVJ9YWhgvDBQRYTXqmtOZjCj0VPy8dGZJla2y8f3P7oXVDRPNtdRWUqdlwUCfJmcdR8Kr7jQng4JGRWbhNO_sJS97k5Vuu-EB8fw8TnBsjjPDMVpV6NJvcBhhdQ');"></div>
-      </div>
-    </header>
-    <main class="flex flex-1 justify-center py-8 px-4 sm:px-8 lg:px-12">
-      <div class="layout-content-container flex flex-col max-w-5xl flex-1 gap-8">
+<body>
+<main class="flex flex-1 justify-center py-8 px-4 sm:px-8 lg:px-12">
+    <div class="layout-content-container flex flex-col max-w-5xl flex-1 gap-8">
         <div>
-          <h1 class="text-slate-100 tracking-tight text-3xl font-bold leading-tight mb-2">Add New Track</h1>
-          <p class="text-slate-400 text-sm">Fill in the details below to publish a new track to SoundHub.</p>
+            <h1 class="text-slate-100 tracking-tight text-3xl font-bold leading-tight mb-2" th:text="#{addSong.title}">
+                Add New Track</h1>
+            <p class="text-slate-400 text-sm" th:text="#{addSong.subtitle}">Fill in the details below to publish a new
+                track to SoundHub.</p>
         </div>
-        <div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-sm">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <label class="flex flex-col">
-              <span class="text-slate-300 text-sm font-semibold mb-2">Track Title</span>
-              <input class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary border border-border-dark bg-surface-darker h-12 placeholder:text-slate-500 px-4 text-base font-medium transition-all" placeholder="Enter track title" value=""/>
+
+        <form th:action="@{/songs}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
+
+            <label for="track-upload"
+                   class="relative bg-surface-dark border-2 border-dashed border-border-dark rounded-xl p-10 flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
+
+                <div class="absolute -top-4 -right-4 text-yellow-400 text-xl opacity-60 animate-float">🎶</div>
+                <div class="absolute bottom-0 left-0 text-blue-400 text-xl opacity-60 animate-float animation-delay-200">
+                    🎵
+                </div>
+                <div class="absolute -bottom-3 -left-4 text-pink-400 text-xl opacity-60 animate-float animation-delay-400">
+                    🎤
+                </div>
+
+                <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span class="text-4xl bounce">🎵🎤</span>
+                </div>
+
+                <div class="text-center">
+                    <p class="text-slate-100 font-bold text-lg" th:text="#{addSong.upload.click}">
+                        Click to upload or drag &amp; drop your next hit 🎶
+                    </p>
+                    <p class="text-slate-400 text-sm mt-1" th:text="#{addSong.upload.formats}">MP3, WAV, FLAC
+                        supported</p>
+                </div>
+
+                <input type="file"
+                       id="track-upload"
+                       name="songUrl"
+                       accept=".mp3,.wav,.flac"
+                       class="hidden"
+                       onchange="
+        const display = document.getElementById('file-name-display');
+        const err = document.getElementById('error-file');
+        if (this.files && this.files[0]) {
+            display.textContent = this.files[0].name;
+            display.classList.remove('hidden');
+            err.classList.add('hidden');
+        } else {
+            display.classList.add('hidden');
+        }
+    "
+                />
+
+                <p id="file-name-display" class="text-primary text-sm font-medium hidden mt-2"></p>
             </label>
-            <label class="flex flex-col">
-              <span class="text-slate-300 text-sm font-semibold mb-2">Genre</span>
-              <select class="form-select flex w-full resize-none overflow-hidden rounded-lg text-slate-100 focus:ring-2 focus:ring-primary/50 focus:border-primary border border-border-dark bg-surface-darker h-12 placeholder:text-slate-500 px-4 text-base font-medium transition-all cursor-pointer">
-                <option disabled="" selected="" value="">Select genre</option>
-                <option value="electronic">Electronic</option>
-                <option value="rock">Rock</option>
-                <option value="pop">Pop</option>
-                <option value="hiphop">Hip Hop</option>
-                <option value="jazz">Jazz</option>
-                <option value="classical">Classical</option>
-              </select>
-            </label>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Bands Column -->
-          <div class="flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[500px]">
-            <div class="p-4 border-b border-border-dark bg-surface-darker/50">
-              <div class="flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined text-primary">groups</span>
-                <h2 class="text-slate-100 text-lg font-bold">Bands</h2>
-              </div>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-                <input class="w-full bg-surface-darker border border-border-dark rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary placeholder-slate-500" placeholder="Search bands..." type="text"/>
-              </div>
+            <p id="error-file" class="hidden text-red-400 text-sm font-medium mt-1 text-center"
+               th:text="#{addSong.error.file}">⚠ Please upload an audio file before submitting.</p>
+
+            <style>
+                .bounce {
+                    display: inline-block;
+                    transition: transform 0.2s;
+                }
+
+                .group:hover .bounce {
+                    animation: bounce 0.6s infinite;
+                }
+
+                @keyframes bounce {
+                    0%, 100% {
+                        transform: translateY(0);
+                    }
+                    50% {
+                        transform: translateY(-6px);
+                    }
+                }
+
+                .animate-float {
+                    display: inline-block;
+                    animation: float 3s ease-in-out infinite;
+                }
+
+                .animation-delay-200 {
+                    animation-delay: 0.2s;
+                }
+
+                .animation-delay-400 {
+                    animation-delay: 0.4s;
+                }
+
+                @keyframes float {
+                    0%, 100% {
+                        transform: translateY(0);
+                    }
+                    50% {
+                        transform: translateY(-10px);
+                    }
+                }
+            </style>
+
+            <div class="bg-surface-dark border border-border-dark rounded-xl p-6 shadow-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label class="flex flex-col">
+                        <span class="text-slate-300 text-sm font-semibold mb-2" th:text="#{addSong.form.trackTitle}">Track Title</span>
+                        <input
+                                name="title"
+                                required
+                                class="form-input flex w-full resize-none overflow-hidden rounded-lg text-black focus:ring-2 focus:ring-primary/50 focus:border-primary border border-border-dark bg-surface-darker h-12 placeholder:text-slate-500 px-4 text-base font-medium transition-all"
+                                th:placeholder="#{addSong.form.trackTitlePlaceholder}"/>
+                    </label>
+                    <label class="flex flex-col">
+                        <span class="text-slate-300 text-sm font-semibold mb-2"
+                              th:text="#{addSong.form.genre}">Genre</span>
+                        <select name="genre"
+                                required
+                                class="form-select flex w-full rounded-lg text-black focus:ring-2 focus:ring-primary/50 focus:border-primary border border-border-dark bg-surface-darker h-12 px-4 text-base font-medium transition-all cursor-pointer">
+                            <option value="" disabled selected th:text="#{addSong.form.genrePlaceholder}">Select genre
+                            </option>
+                            <option th:each="genre : ${genres}"
+                                    th:value="${genre}"
+                                    th:text="${#strings.capitalize(genre.name().toLowerCase().replace('_',' '))}">
+                            </option>
+                        </select>
+                    </label>
+                </div>
             </div>
-            <div class="flex-1 overflow-y-auto p-2 custom-scrollbar">
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">music_note</span>
+
+            <div class="flex flex-col gap-6">
+
+                <div class="bg-surface-dark border border-border-dark rounded-xl p-6">
+                    <span class="text-slate-300 text-sm font-semibold mb-4 block"
+                          th:text="#{addSong.form.performerType}">Performer Type</span>
+                    <div class="flex gap-4">
+                        <label class="flex-1 cursor-pointer">
+                            <input class="peer hidden" id="performer-artist" name="performer_type" type="radio"
+                                   value="ARTIST"/>
+                            <div class="flex items-center justify-center gap-3 p-4 rounded-lg border border-border-dark bg-surface-darker
+                        peer-checked:border-violet-500 peer-checked:bg-violet-500/10 transition-all">
+                                <span class="text-slate-400 peer-checked:text-violet-400 text-lg">🎤🎵</span>
+                                <span class="text-slate-300 font-bold peer-checked:text-violet-400"
+                                      th:text="#{addSong.form.artistType}">Individual Artist</span>
+                            </div>
+                        </label>
+
+                        <label class="flex-1 cursor-pointer">
+                            <input class="peer hidden" id="performer-band" name="performer_type" type="radio"
+                                   value="BAND"/>
+                            <div class="flex items-center justify-center gap-3 p-4 rounded-lg border border-border-dark bg-surface-darker
+                        peer-checked:border-violet-500 peer-checked:bg-violet-500/10 transition-all">
+                                <span class="text-slate-400 peer-checked:text-violet400 text-lg">👥🎵</span>
+                                <span class="text-slate-300 font-bold peer-checked:text-violet-400"
+                                      th:text="#{addSong.form.bandType}">Band</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">The Midnight</span>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">music_note</span>
+                <p id="error-performer-type" class="hidden text-red-400 text-sm font-medium mt-1"
+                   th:text="#{addSong.error.performerType}">⚠ Please select a performer type (Artist or Band).</p>
+                <p id="error-performer-pick" class="hidden text-red-400 text-sm font-medium mt-1"
+                   th:text="#{addSong.error.performerPick}">⚠ Please select a specific artist / band from the list.</p>
+
+                <div id="selection-sections" class="hidden grid grid-cols-1 gap-6">
+
+                    <div id="artist-section"
+                         class="hidden flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[450px]">
+                        <div class="p-4 border-b border-border-dark bg-surface-darker/50">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="material-symbols-outlined text-primary">🎤</span>
+                                <h2 class="text-slate-100 text-lg font-bold" th:text="#{addSong.form.selectArtist}">
+                                    Select Artist</h2>
+                            </div>
+                        </div>
+                        <div class="flex flex-col h-full">
+
+                            <div class="p-2">
+                                <input id="artistSearch"
+                                       class="w-full bg-surface-darker border border-border-dark rounded-lg pl-3 pr-3 py-2 text-sm text-slate-900"
+                                       th:placeholder="#{addSong.form.searchArtists}"
+                                       type="text"/>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto p-2 custom-scrollbar" id="artistList">
+
+                                <label th:each="artist : ${artists}"
+                                       class="artist-item flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
+                                    <input type="radio" name="artist.id" th:value="${artist.id}"
+                                           class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary"/>
+                                    <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm"
+                                          th:text="${#strings.isEmpty(artist.nickname) ? artist.name + ' ' + artist.surname : artist.nickname}">
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="band-section"
+                         class="hidden flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[450px]">
+                        <div class="p-4 border-b border-border-dark bg-surface-darker/50">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="material-symbols-outlined text-primary">🎤</span>
+                                <h2 class="text-slate-100 text-lg font-bold" th:text="#{addSong.form.selectBand}">Select
+                                    Band</h2>
+                            </div>
+                        </div>
+                        <div class="flex flex-col h-full">
+
+                            <div class="p-2">
+                                <input id="bandSearch"
+                                       class="w-full bg-surface-darker border border-border-dark rounded-lg pl-3 pr-3 py-2 text-sm text-slate-900"
+                                       th:placeholder="#{addSong.form.searchBands}"
+                                       type="text"/>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto p-2 custom-scrollbar" id="bandList">
+
+                                <label th:each="band : ${bands}"
+                                       class="band-item flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
+                                    <input type="radio" name="band.id" th:value="${band.id}"
+                                           class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary"/>
+                                    <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm"
+                                          th:text="${band.name}">
+                                    </span>
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">Gunship</span>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">music_note</span>
+
+                <div class="bg-surface-dark border border-border-dark rounded-xl p-6">
+                    <span class="text-slate-300 text-sm font-semibold mb-4 block"
+                          th:text="#{addSong.form.albumQuestion}">Is this song part of an album?</span>
+                    <div class="flex gap-4">
+
+                        <label class="flex-1 cursor-pointer">
+                            <input class="peer hidden" id="album-yes" name="has_album" type="radio" value="yes"/>
+                            <div class="flex items-center justify-center gap-3 p-4 rounded-lg border border-border-dark bg-surface-darker
+                        peer-checked:border-violet-500 peer-checked:bg-violet-500/10 transition-all">
+                                <span class="text-slate-400 peer-checked:text-violet-400 text-lg">💿🎵</span>
+                                <span class="text-slate-300 font-bold peer-checked:text-violet-400"
+                                      th:text="#{addSong.form.albumYes}">Yes, add to album</span>
+                            </div>
+                        </label>
+
+                        <label class="flex-1 cursor-pointer">
+                            <input class="peer hidden" id="album-no" name="has_album" type="radio" value="no"/>
+                            <div class="flex items-center justify-center gap-3 p-4 rounded-lg border border-border-dark bg-surface-darker
+                        peer-checked:border-violet-500 peer-checked:bg-violet-500/10 transition-all">
+                                <span class="text-slate-400 peer-checked:text-violet-400 text-lg">🎵</span>
+                                <span class="text-slate-300 font-bold peer-checked:text-violet-400"
+                                      th:text="#{addSong.form.albumNo}">No, single track</span>
+                            </div>
+                        </label>
+
+                    </div>
                 </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">Timecop1983</span>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">music_note</span>
+                <p id="error-album-choice" class="hidden text-red-400 text-sm font-medium mt-1"
+                   th:text="#{addSong.error.albumChoice}">⚠ Please answer whether this song is part of an album.</p>
+                <p id="error-album-pick" class="hidden text-red-400 text-sm font-medium mt-1"
+                   th:text="#{addSong.error.albumPick}">⚠ Please select an album from the list.</p>
+
+                <div id="album-section"
+                     class="hidden flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[450px]">
+                    <div class="p-4 border-b border-border-dark bg-surface-darker/50">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">🎤</span>
+                            <h2 class="text-slate-100 text-lg font-bold" th:text="#{addSong.form.selectAlbum}">Select
+                                Album</h2>
+                        </div>
+                    </div>
+                    <div class="flex flex-col h-full">
+
+                        <div class="p-2">
+                            <input id="albumSearch"
+                                   class="w-full bg-surface-darker border border-border-dark rounded-lg pl-3 pr-3 py-2 text-sm text-slate-900"
+                                   th:placeholder="#{addSong.form.searchAlbums}"
+                                   type="text"/>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto p-2 custom-scrollbar" id="albumList">
+
+                            <label th:each="album : ${albums}"
+                                   class="album-item flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
+                                <input type="radio" name="album.id" th:value="${album.id}"
+                                       class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary"/>
+                                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm"
+                                      th:text="${album.title}">
+                                    </span>
+                            </label>
+
+                        </div>
+                    </div>
                 </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">FM-84</span>
-              </label>
             </div>
-          </div>
-          <!-- Artists Column -->
-          <div class="flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[500px]">
-            <div class="p-4 border-b border-border-dark bg-surface-darker/50">
-              <div class="flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined text-primary">person</span>
-                <h2 class="text-slate-100 text-lg font-bold">Artists</h2>
-              </div>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-                <input class="w-full bg-surface-darker border border-border-dark rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary placeholder-slate-500" placeholder="Search artists..." type="text"/>
-              </div>
+
+            <script>
+                const artistRadio = document.getElementById('performer-artist');
+                const bandRadio = document.getElementById('performer-band');
+                const container = document.getElementById('selection-sections');
+                const artistSection = document.getElementById('artist-section');
+                const bandSection = document.getElementById('band-section');
+
+                function updatePerformerUI() {
+                    container.classList.remove('hidden');
+                    document.getElementById('error-performer-type').classList.add('hidden');
+                    document.getElementById('error-performer-pick').classList.add('hidden');
+                    if (artistRadio.checked) {
+                        artistSection.classList.remove('hidden');
+                        bandSection.classList.add('hidden');
+                        bandSection.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                    } else if (bandRadio.checked) {
+                        bandSection.classList.remove('hidden');
+                        artistSection.classList.add('hidden');
+                        artistSection.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                    }
+                }
+
+                artistRadio.addEventListener('change', updatePerformerUI);
+                bandRadio.addEventListener('change', updatePerformerUI);
+
+                const albumYes = document.getElementById('album-yes');
+                const albumNo = document.getElementById('album-no');
+                const albumSection = document.getElementById('album-section');
+
+                function updateAlbumUI() {
+                    document.getElementById('error-album-choice').classList.add('hidden');
+                    document.getElementById('error-album-pick').classList.add('hidden');
+                    if (albumYes.checked) {
+                        albumSection.classList.remove('hidden');
+                    } else {
+                        albumSection.classList.add('hidden');
+                        albumSection.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                    }
+                }
+
+                albumYes.addEventListener('change', updateAlbumUI);
+                albumNo.addEventListener('change', updateAlbumUI);
+
+                document.getElementById('artistSearch').addEventListener('input', function () {
+                    const value = this.value.toLowerCase();
+                    document.querySelectorAll('.artist-item').forEach(item => {
+                        item.style.display = item.innerText.toLowerCase().includes(value) ? 'flex' : 'none';
+                    });
+                });
+
+                document.getElementById('bandSearch').addEventListener('input', function () {
+                    const value = this.value.toLowerCase();
+                    document.querySelectorAll('.band-item').forEach(item => {
+                        item.style.display = item.innerText.toLowerCase().includes(value) ? 'flex' : 'none';
+                    });
+                });
+
+                document.getElementById('albumSearch').addEventListener('input', function () {
+                    const value = this.value.toLowerCase();
+                    document.querySelectorAll('.album-item').forEach(item => {
+                        item.style.display = item.innerText.toLowerCase().includes(value) ? 'flex' : 'none';
+                    });
+                });
+
+                document.querySelector('form').addEventListener('submit', function (e) {
+                    let valid = true;
+
+                    const fileInput = document.getElementById('track-upload');
+                    const errorFile = document.getElementById('error-file');
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        errorFile.classList.remove('hidden');
+                        fileInput.closest('label').scrollIntoView({behavior: 'smooth', block: 'center'});
+                        valid = false;
+                    } else {
+                        errorFile.classList.add('hidden');
+                    }
+
+                    const errorPerformerType = document.getElementById('error-performer-type');
+                    const errorPerformerPick = document.getElementById('error-performer-pick');
+                    if (!artistRadio.checked && !bandRadio.checked) {
+                        errorPerformerType.classList.remove('hidden');
+                        errorPerformerPick.classList.add('hidden');
+                        valid = false;
+                    } else {
+                        errorPerformerType.classList.add('hidden');
+
+                        const artistChosen = document.querySelector('input[name="artist.id"]:checked');
+                        const bandChosen = document.querySelector('input[name="band.id"]:checked');
+                        if (artistRadio.checked && !artistChosen) {
+                            errorPerformerPick.classList.remove('hidden');
+                            valid = false;
+                        } else if (bandRadio.checked && !bandChosen) {
+                            errorPerformerPick.classList.remove('hidden');
+                            valid = false;
+                        } else {
+                            errorPerformerPick.classList.add('hidden');
+                        }
+                    }
+
+                    const errorAlbumChoice = document.getElementById('error-album-choice');
+                    const errorAlbumPick = document.getElementById('error-album-pick');
+                    if (!albumYes.checked && !albumNo.checked) {
+                        errorAlbumChoice.classList.remove('hidden');
+                        errorAlbumPick.classList.add('hidden');
+                        valid = false;
+                    } else {
+                        errorAlbumChoice.classList.add('hidden');
+                        if (albumYes.checked && !document.querySelector('input[name="album.id"]:checked')) {
+                            errorAlbumPick.classList.remove('hidden');
+                            valid = false;
+                        } else {
+                            errorAlbumPick.classList.add('hidden');
+                        }
+                    }
+
+                    if (!valid) {
+                        e.preventDefault();
+                    }
+                });
+            </script>
+
+            <div class="flex items-center justify-end gap-4 mt-8 pt-8 border-t border-slate-800/60">
+                <a th:href="@{/songs}"
+                   class="px-6 py-3 rounded-xl text-slate-400 font-semibold text-sm tracking-wide
+              hover:text-slate-100 hover:bg-white/5 transition-all duration-300
+              active:scale-95"
+                   th:text="#{addSong.form.cancel}">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="group relative px-10 py-3.5 rounded-xl bg-violet-600 overflow-hidden
+                   transition-all duration-300 hover:bg-violet-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.4)]
+                   active:scale-95 flex items-center gap-3">
+
+                    <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                    <span class="relative text-white font-bold text-sm tracking-tight" th:text="#{addSong.form.submit}">
+                        Add song
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="relative h-4 w-4 text-white transform group-hover:translate-x-1 transition-transform duration-300"
+                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </button>
             </div>
-            <div class="flex-1 overflow-y-auto p-2 custom-scrollbar">
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">mic</span>
-                </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">Tyler Lyle</span>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">mic</span>
-                </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">Tim McEwan</span>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-checkbox text-primary rounded border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" type="checkbox"/>
-                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary/20 transition-colors">
-                  <span class="material-symbols-outlined text-sm">mic</span>
-                </div>
-                <span class="text-slate-300 group-hover:text-slate-100 font-medium text-sm">Ollie Wride</span>
-              </label>
-            </div>
-          </div>
-          <!-- Albums Column -->
-          <div class="flex flex-col bg-surface-dark border border-border-dark rounded-xl overflow-hidden h-[500px]">
-            <div class="p-4 border-b border-border-dark bg-surface-darker/50">
-              <div class="flex items-center gap-2 mb-4">
-                <span class="material-symbols-outlined text-primary">album</span>
-                <h2 class="text-slate-100 text-lg font-bold">Albums</h2>
-              </div>
-              <div class="relative">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
-                <input class="w-full bg-surface-darker border border-border-dark rounded-lg pl-9 pr-3 py-2 text-sm text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary placeholder-slate-500" placeholder="Search albums..." type="text"/>
-              </div>
-            </div>
-            <div class="flex-1 overflow-y-auto p-2 custom-scrollbar">
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" name="album_selection" type="radio"/>
-                <div class="w-10 h-10 rounded bg-surface-darker border border-border-dark flex items-center justify-center text-slate-500 overflow-hidden">
-                  <span class="material-symbols-outlined text-lg">image</span>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-slate-200 group-hover:text-slate-100 font-medium text-sm">Endless Summer</span>
-                  <span class="text-slate-500 text-xs">2016</span>
-                </div>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" name="album_selection" type="radio"/>
-                <div class="w-10 h-10 rounded bg-surface-darker border border-border-dark flex items-center justify-center text-slate-500 overflow-hidden">
-                  <span class="material-symbols-outlined text-lg">image</span>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-slate-200 group-hover:text-slate-100 font-medium text-sm">Days of Thunder</span>
-                  <span class="text-slate-500 text-xs">2014</span>
-                </div>
-              </label>
-              <label class="flex items-center gap-3 p-3 hover:bg-surface-darker rounded-lg cursor-pointer transition-colors group">
-                <input class="form-radio text-primary border-slate-600 bg-transparent focus:ring-primary focus:ring-offset-surface-dark" name="album_selection" type="radio"/>
-                <div class="w-10 h-10 rounded bg-surface-darker border border-border-dark flex items-center justify-center text-slate-500 overflow-hidden">
-                  <span class="material-symbols-outlined text-lg">image</span>
-                </div>
-                <div class="flex flex-col">
-                  <span class="text-slate-200 group-hover:text-slate-100 font-medium text-sm">Nocturnal</span>
-                  <span class="text-slate-500 text-xs">2017</span>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="flex justify-end gap-4 mt-4 pt-6 border-t border-border-dark">
-          <button class="px-6 py-3 rounded-lg text-slate-300 font-semibold hover:bg-surface-dark transition-colors text-sm">
-            Cancel
-          </button>
-          <button class="px-8 py-3 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold transition-colors shadow-lg shadow-primary/20 flex items-center gap-2 text-sm">
-            <span class="material-symbols-outlined text-sm">add_circle</span>
-            Add Track
-          </button>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
-<style>
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: theme('colors.border-dark');
-    border-radius: 20px;
-  }
-</style>
-</body></html>
+        </form>
+    </div>
+</main>
+</body>
+</html>

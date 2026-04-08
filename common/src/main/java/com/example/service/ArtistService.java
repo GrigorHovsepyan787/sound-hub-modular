@@ -12,6 +12,8 @@ public interface ArtistService {
 
     Page<Artist> findAll(Pageable pageable);
 
+    List<Artist> findAll();
+
     Artist save(Artist artist, MultipartFile multipartFile, List<Long> bandIds);
 
     Artist update(Artist editedArtist, MultipartFile multipartFile, List<Long> bandIds);

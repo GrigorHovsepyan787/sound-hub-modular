@@ -43,6 +43,11 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    public List<Artist> findAll() {
+        return artistRepository.findAll();
+    }
+
+    @Override
     public Artist save(Artist artist, MultipartFile multipartFile, List<Long> bandIds) {
         String imageUrl;
         if (multipartFile != null && !multipartFile.isEmpty()) {

@@ -1,361 +1,429 @@
 <!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
 
-<html class="dark" lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap"
-          rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-          rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-          rel="stylesheet"/>
-    <script id="tailwind-config">tailwind.config = {
-        darkMode: "class",
-        theme: {
-            extend: {
-                colors: {
-                    "primary": "#3b82f6",
-                    "background-light": "#f8f6f6",
-                    "background-dark": "#0f172a",
-                },
-                fontFamily: {
-                    "display": ["Public Sans", "sans-serif"]
-                },
-                borderRadius: {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-                },
-            },
-        },
-    }</script>
-    <style>
-        body {
-            font-family: 'Public Sans', sans-serif;
-        }
-
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #374151;
-            border-radius: 10px;
-        }
-    </style>
+    <title th:text="#{songs.pageTitle}">Songs Directory - SoundHub</title>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
-<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+
+<body>
+<main class="pt-24 pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <div class="flex items-center gap-8">
-                <div class="flex items-center gap-2 text-primary">
-                    <span class="material-symbols-outlined text-3xl">library_music</span>
-                    <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">SoundHub</h1>
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white" th:text="#{songs.title}">Songs</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2" th:text="#{songs.subtitle}">
+                    Discover your next favorite track. Explore our vast library of millions of songs across every genre
+                    imaginable.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a th:href="@{/songs/add}"
+                   class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-sm transition-all active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary/80" viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    <span th:text="#{songs.addSong}">Add Song</span>
+                </a>
+
+                <div class="relative group w-max">
+                    <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium text-gray-700 dark:text-gray-200 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-sm transition-all active:scale-95">
+                        <i class="fa-solid fa-arrow-down-a-z text-primary/80"></i>
+                        <span th:text="#{songs.sort.label}">Sort</span>: <span
+                            th:with="az=#{songs.sort.az},za=#{songs.sort.za},newest=#{songs.sort.newest}"
+                            th:text="${currentSort == 'title,asc' ? az : (currentSort == 'title,desc' ? za : newest)}">Newest</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-1 opacity-50 group-hover:rotate-180 transition-transform duration-300"></i>
+                    </button>
+
+                    <div class="absolute right-0 mt-2 w-48 origin-top-right bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl opacity-0 invisible scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100 transition-all duration-200 ease-out py-1.5 z-50">
+                        <a th:href="@{/songs(page=0, size=${songs.size}, sort='title,asc')}"
+                           th:classappend="${currentSort == 'title,asc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
+                           class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
+                            <span th:text="#{songs.sort.az}">A - Z</span>
+                            <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'title,asc'}"></i>
+                        </a>
+
+                        <a th:href="@{/songs(page=0, size=${songs.size}, sort='title,desc')}"
+                           th:classappend="${currentSort == 'title,desc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
+                           class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
+                            <span th:text="#{songs.sort.za}">Z - A</span>
+                            <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'title,desc'}"></i>
+                        </a>
+
+                        <div class="my-1.5 border-t border-gray-100 dark:border-white/5 mx-3"></div>
+
+                        <a th:href="@{/songs(page=0, size=${songs.size}, sort='id,desc')}"
+                           th:classappend="${currentSort == 'id,desc'} ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-gray-300'"
+                           class="group/item flex items-center justify-between mx-1.5 px-3 py-2.5 text-sm rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 transition-all active:scale-[0.98]">
+                            <span th:text="#{songs.sort.newest}">Recently Added</span>
+                            <i class="fa-solid fa-check text-[10px]" th:if="${currentSort == 'id,desc'}"></i>
+                        </a>
+                    </div>
                 </div>
-                <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Home</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Artists</a>
-                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Albums</a>
-                    <a class="text-sm font-bold text-primary border-b-2 border-primary" href="#">Playlists</a>
-                </nav>
             </div>
-            <div class="flex items-center gap-4 flex-1 justify-end max-w-md ml-4">
-                <div class="relative w-full hidden sm:block">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
-                    <input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary focus:bg-white dark:focus:bg-slate-700 transition-all"
-                           placeholder="Search artists..." type="text"/>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-12 shadow-sm">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                        <th class="py-4 px-4"></th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400"
+                            th:text="#{songs.table.title}">Title
+                        </th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400"
+                            th:text="#{songs.table.performer}">Performer
+                        </th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 hidden md:table-cell">
+
+                            <form method="get" th:action="@{/songs}" class="flex items-center gap-2">
+
+                                <span th:text="#{songs.table.genre}">Genre</span>
+
+                                <select name="genre" onchange="this.form.submit()" class="text-xs bg-transparent border border-slate-300 dark:border-slate-700 rounded px-1 py-[2px]">
+                                    <option value=""
+                                            th:selected="${selectedGenre == null or #strings.isEmpty(selectedGenre)}">
+                                        All
+                                    </option>
+                                    <option th:each="g : ${genres}"
+                                            th:value="${g}"
+                                            th:text="${g}"
+                                            th:selected="${selectedGenre != null and #strings.equals(g.toString(), selectedGenre)}">
+                                    </option>
+                                </select>
+
+                                <input type="hidden" name="sort" th:value="${currentSort}"/>
+                                <input type="hidden" name="size" th:value="${songs.size}"/>
+                                <input type="hidden" name="page" value="0"/>
+
+                            </form>
+
+                        </th>
+                        <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 text-right"
+                            th:text="#{songs.table.duration}">
+                            Duration
+                        </th>
+                        <th class="py-4 px-4"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr th:each="song : ${songs.content}"
+                        class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer">
+
+                        <td class="py-4 px-4">
+                            <button type="button"
+                                    th:data-id="${song.id}"
+                                    th:data-title="${song.title}"
+                                    th:data-performer="${song.performer}"
+                                    th:attr="onclick=|playSong('${song.songUrl}', this)|"
+                                    class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent
+                            group-hover:bg-primary group-hover:text-white transition-all text-slate-400">
+                                ▶
+                            </button>
+                        </td>
+
+                        <td class="py-4 px-6">
+                            <span class="block font-semibold text-slate-900 dark:text-white"
+                                  th:text="${song.title}"></span>
+                            <span class="text-[10px] text-slate-400 font-mono"
+                                  th:text="${song.playCount} + ' ' + #{songs.plays}"></span>
+                            <div class="md:hidden" th:if="${song.bandId == null && song.artistId != null}">
+                                <a th:href="@{/artists/preview(id=${song.artistId})}"
+                                   class="text-xs text-slate-500 hover:underline"
+                                   th:text="${song.performer}"></a>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6 hidden md:table-cell">
+                            <div th:if="${song.bandId != null}">
+                                <a th:href="@{/bands/preview(id=${song.bandId})}"
+                                   class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors group">
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-white"
+                                          th:text="${song.performer}"></span>
+                                </a>
+                            </div>
+                            <div th:if="${song.bandId == null && song.artistId != null}">
+                                <a th:href="@{/artists/preview(id=${song.artistId})}"
+                                   class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-300/50 dark:hover:bg-slate-700/50 transition-colors group">
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-white"
+                                          th:text="${#strings.isEmpty(song.artistNickname) ? song.artistFullName : song.artistNickname}">
+                                    </span>
+                                </a>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-6 hidden lg:table-cell">
+                            <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-md"
+                                  th:text="${song.genre}"></span>
+                        </td>
+
+                        <td class="py-4 px-6 text-right font-mono text-sm text-slate-500"
+                            th:text="${song.durationFormatted}"></td>
+
+                        <td class="py-4 px-4 text-right">
+                            <a th:href="@{/songs/delete(id=${song.id})}"
+                               th:onclick="|return confirm('#{songs.confirm.delete}')|"
+                               class="w-8 h-8 inline-flex items-center justify-center rounded-full text-slate-400 hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-500/10 transition-all">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="playerBar"
+             class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 p-4 transform translate-y-full transition-transform duration-300 z-50">
+            <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3 w-1/3">
+                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p id="nowPlayingTitle" class="font-bold text-slate-900 dark:text-white truncate"
+                           th:text="#{songs.player.selectSong}">Select a
+                            song</p>
+                        <p id="nowPlayingArtist" class="text-xs text-slate-500 dark:text-slate-400 truncate">Artist</p>
+                    </div>
                 </div>
-                <div class="size-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-300 dark:border-slate-700">
-                    <img class="w-full h-full object-cover" data-alt="User profile avatar"
-                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs8HCTuBzNp7gJtnn2PjJHHOFiZo6ezasuB88AWyAiTuzicSwys2SHBtn7JTJ_Hso8sEBKNKQbi-mRiLckFrn2Gy9_DJkokCQxH3zCwejcDJj50ktdCaN5murNfsupbF1algEQULWfEzEjqwypg2bE9Nf2i2MEwmsIROwcvrYng2P37-rffBqe5U8McR28t77KogTHc7k6OK87SpXRRfYvROWyiUe-LiSW4IYdci1X98JtG_cjQMcdyqM7L4r5o5aVpSTLLRjItaY"/>
+
+                <div class="flex flex-col items-center w-1/3 gap-2">
+                    <div class="flex items-center gap-6">
+                        <button onclick="playPrev()"
+                                class="text-slate-400 hover:text-primary transition-colors active:scale-90">
+                            <i class="fa-solid fa-backward-step"></i>
+                        </button>
+
+                        <button id="masterPlayBtn"
+                                class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                            <i class="fa-solid fa-play ml-1"></i>
+                        </button>
+
+                        <button onclick="playNext()"
+                                class="text-slate-400 hover:text-primary transition-colors active:scale-90">
+                            <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                    </div>
+
+                    <div class="w-full flex items-center gap-3 text-[10px] font-mono text-slate-400">
+                        <span id="currentTime">0:00</span>
+                        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1"
+                               class="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary">
+                        <span id="totalTime">0:00</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 w-1/3">
+
+                    <style>
+                        .vol-bars {
+                            display: flex;
+                            align-items: center;
+                            gap: 2px;
+                            height: 18px;
+                        }
+
+                        .vol-bar {
+                            width: 3px;
+                            border-radius: 2px;
+                            background: #94a3b8;
+                            transition: height 0.12s cubic-bezier(.4, 0, .2, 1), background 0.2s;
+                        }
+
+                        #volumeControl {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 88px;
+                            height: 3px;
+                            border-radius: 2px;
+                            outline: none;
+                            border: none;
+                            cursor: pointer;
+                        }
+
+                        #volumeControl::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            width: 13px;
+                            height: 13px;
+                            border-radius: 50%;
+                            background: white;
+                            cursor: pointer;
+                            transition: transform 0.15s cubic-bezier(.4, 0, .2, 1);
+                            box-shadow: 0 0 0 2px #1e293b;
+                        }
+
+                        #volumeControl:hover::-webkit-slider-thumb {
+                            transform: scale(1.3);
+                        }
+                    </style>
+
+                    <div class="vol-bars" id="waveform">
+                        <div class="vol-bar" style="height:4px"></div>
+                        <div class="vol-bar" style="height:8px"></div>
+                        <div class="vol-bar" style="height:13px"></div>
+                        <div class="vol-bar" style="height:9px"></div>
+                        <div class="vol-bar" style="height:5px"></div>
+                        <div class="vol-bar" style="height:11px"></div>
+                        <div class="vol-bar" style="height:7px"></div>
+                    </div>
+
+                    <input type="range" id="volumeControl" min="0" max="100" value="50">
+
+                    <span id="volumePercent" class="text-[10px] font-mono text-slate-400 w-8 text-right">50%</span>
+
+                    <script>
+                        const slider = document.getElementById('volumeControl');
+                        const label = document.getElementById('volumePercent');
+                        const bars = document.querySelectorAll('.vol-bar');
+                        const baseH = [4, 8, 13, 9, 5, 11, 7];
+
+                        function update(val) {
+                            const pct = val / 100;
+                            label.textContent = val + '%';
+                            slider.style.background = `linear-gradient(to right, ${val === 0 ? '#475569' : '#7c3aed'} ${val}%, #334155 ${val}%)`;
+                            bars.forEach((bar, i) => {
+                                bar.style.height = (val === 0 ? 2 : Math.max(2, Math.round(baseH[i] * pct * 1.4 + 1))) + 'px';
+                                bar.style.background = val === 0 ? '#475569' : `rgba(124,58,237,${0.45 + pct * 0.55})`;
+                            });
+                        }
+
+                        slider.addEventListener('input', e => update(+e.target.value));
+                        update(50);
+                    </script>
                 </div>
             </div>
         </div>
-    </div>
-</header>
-<main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
-    <div class="mb-10">
-        <h2 class="text-4xl font-black text-slate-900 dark:text-white mb-2">Songs</h2>
-        <p class="text-slate-500 dark:text-slate-400 max-w-2xl">Discover your next favorite track. Explore our vast
-            library of millions of songs across every genre imaginable.</p>
-    </div>
-    <div class="flex flex-col lg:flex-row gap-4 mb-8 items-start lg:items-center justify-between">
-        <div class="flex flex-wrap items-center gap-3">
-            <div class="relative group">
-                <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:border-primary transition-all">
-                    <span class="material-symbols-outlined text-slate-400">sort_by_alpha</span>
-                    Sort by Name (A-Z)
-                    <span class="material-symbols-outlined text-slate-400">expand_more</span>
-                </button>
-            </div>
-            <div class="relative group">
-                <button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:border-primary transition-all">
-                    <span class="material-symbols-outlined text-slate-400">category</span>
-                    Genre: All
-                    <span class="material-symbols-outlined text-slate-400">expand_more</span>
-                </button>
-            </div>
-            <button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">
-                <span class="material-symbols-outlined">trending_up</span>
-                Most Played
-            </button>
-        </div>
-        <div class="flex items-center gap-2 text-sm text-slate-500">
-            <span class="material-symbols-outlined text-sm">info</span>
-            <span>Showing 248,102 tracks</span>
-        </div>
-    </div>
-    <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden mb-24">
-        <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 w-12 text-center">#
-                    </th>
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400">Title &amp; Artist
-                    </th>
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 hidden md:table-cell">
-                        Genre
-                    </th>
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 hidden lg:table-cell">
-                        Popularity
-                    </th>
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 text-right">
-                        Duration
-                    </th>
-                    <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 w-12"></th>
-                </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">1</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-4">
-                            <div class="relative flex-shrink-0">
-                                <img alt="Album" class="w-12 h-12 rounded-lg object-cover"
-                                     data-alt="Album cover with neon colors abstract"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Ybae2WFOccaDv2Qh_RJyCr2Afuj2sQT360lr1qJnrojshr98FS65B-nP9v-he00u3YXTqHe-HIt7YztT5yoKJcfaVv6c5FGR3NfyEzyX0KmnncQxtJE5OrWO-_0oA8-e6guuhfZK8uKNrwLcpiswTg4vDRlUvpze7sVrsugWlbAEccSPyCdmiIc5yS752mW9J1Eb2bv0xA5fEYSmCz0mN6NAdhXbqm2wSUAFy03R6Be15bw1LbwJLv04qHVVQca5QxciaC0LHXY"/>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity">
-                                    <span class="material-symbols-outlined text-white text-xl">play_arrow</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                                    Blinding Lights</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">The Weeknd</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 hidden md:table-cell">
-                        <span class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">Pop</span>
-                    </td>
-                    <td class="py-4 px-6 hidden lg:table-cell">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span class="material-symbols-outlined text-sm">play_circle</span>
-                            2.5B
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 text-right text-sm text-slate-500 font-medium tabular-nums">3:20</td>
-                    <td class="py-4 px-6 text-right">
-                        <button class="p-1 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                            <span class="material-symbols-outlined">more_horiz</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">2</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-4">
-                            <div class="relative flex-shrink-0">
-                                <img alt="Album" class="w-12 h-12 rounded-lg object-cover"
-                                     data-alt="Vintage record player close up"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYEIsnvr0DfebPNhZ6StM7CL561EQ0koCp3tDJoINTavw25rEuPqbSr_UKz4-_DFtPvYCxWgrfx__cHMCloVUDS2eaetb5Dhmt3Y-M7h1BARTxqJH6OZX9LM_flKTuIb_LdTUEPhXk2pNzXFl7dc1AWmAzouaY5Gys9Z2ZkyLuNCTop9T8QPlrvyBzYX_0Nc7JzYHf4oSyej7DFZinV2ndridyXsRmyZQoceDr0N_FqOM8SDMXQvbX5pWwPmdUQxrpgT8C9VGf__4"/>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity">
-                                    <span class="material-symbols-outlined text-white text-xl">play_arrow</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                                    Bohemian Rhapsody</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Queen</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 hidden md:table-cell">
-                        <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded-full">Rock</span>
-                    </td>
-                    <td class="py-4 px-6 hidden lg:table-cell">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span class="material-symbols-outlined text-sm">play_circle</span>
-                            1.8B
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 text-right text-sm text-slate-500 font-medium tabular-nums">5:55</td>
-                    <td class="py-4 px-6 text-right">
-                        <button class="p-1 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                            <span class="material-symbols-outlined">more_horiz</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">3</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-4">
-                            <div class="relative flex-shrink-0">
-                                <img alt="Album" class="w-12 h-12 rounded-lg object-cover"
-                                     data-alt="Electronic music festival lights"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZNrZ1MiH4T4QL621BZeU4JAb45Zd0bKQb5QCILJgH_7BuHrN9l1oBCnmlGfP5e1deexuf8Rl7iTMSaXdimUBnrB4ID7ooLbmqHpFBndfJPcpr7mhbyUl4j43FcFOEXLZ1U-ZlwJabFsqqZ87GMFk8MOhrhwlWdZx07E7qBEPRyDsSMkXwhXQqu5HfdgftgUUeQmUkp5Nyum8J-nc58e0FScw817LkUcFgksuBS_prmyTbLeA71pqaUi2autc5o4nKp2rR7ID8vpc"/>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity">
-                                    <span class="material-symbols-outlined text-white text-xl">play_arrow</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                                    Starboy</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">The Weeknd ft. Daft Punk</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 hidden md:table-cell">
-                        <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded-full">Electronic</span>
-                    </td>
-                    <td class="py-4 px-6 hidden lg:table-cell">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span class="material-symbols-outlined text-sm">play_circle</span>
-                            2.1B
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 text-right text-sm text-slate-500 font-medium tabular-nums">3:50</td>
-                    <td class="py-4 px-6 text-right">
-                        <button class="p-1 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                            <span class="material-symbols-outlined">more_horiz</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">4</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-4">
-                            <div class="relative flex-shrink-0">
-                                <img alt="Album" class="w-12 h-12 rounded-lg object-cover"
-                                     data-alt="Colorful abstract oil painting style"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5ar014TIzb7OECLE0JvO-Z_s-0vfpPxqapcKLV0zXtjYPuzoGCj9Q7idENTg3KskVOlWynJOWEySkKscDBa_FNUQN3RqchhMHZF52gOrgFk53hNaOnNFYHoLGcazmxlwDsIRYBjEsVnkOXFrYoUjTCBY8xPuz-CzfGWYTLhysjeq2TwXZk7KZQCpgNa-ffDLeH_l-bXTDRs5cJNY8CUZAv3rwFuKT4FhYzR2BCqoG1txzo2uWJQd8D6T4ZfHQvJKfD22VeNIC5w0"/>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity">
-                                    <span class="material-symbols-outlined text-white text-xl">play_arrow</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                                    Levitating</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Dua Lipa</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 hidden md:table-cell">
-                        <span class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all">Pop</span>
-                    </td>
-                    <td class="py-4 px-6 hidden lg:table-cell">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span class="material-symbols-outlined text-sm">play_circle</span>
-                            1.2B
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 text-right text-sm text-slate-500 font-medium tabular-nums">3:23</td>
-                    <td class="py-4 px-6 text-right">
-                        <button class="p-1 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                            <span class="material-symbols-outlined">more_horiz</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-sm text-slate-400 text-center font-medium group-hover:text-primary">5</td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-4">
-                            <div class="relative flex-shrink-0">
-                                <img alt="Album" class="w-12 h-12 rounded-lg object-cover"
-                                     data-alt="Microphone in dark studio setting"
-                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCioKsisO446NTQ0Aruz6a6iA6VCOXsqDExCiAFqojrsTyGgloM5z_-C7_n6pZ89fABzZbS3eNnFHEn-tyebe11zIJ2YjJjYJzrcbyjxajmUC3BDwxhIpb0INU9PkPhGgpG7QCiYaHnLx7WMzviLfI1C114hf7FdUVq8TZjPFbJzqmE8cg9hmq_3R_hVonukIbxYzCDCgeKeGhkwfWZsnoXmMm-D76l4oOLfm_mMCSMEtuQFbJzvobMlASHMi_H57SYKdXH0aLeE8w"/>
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg transition-opacity">
-                                    <span class="material-symbols-outlined text-white text-xl">play_arrow</span>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                                    Sicko Mode</p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400">Travis Scott</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 hidden md:table-cell">
-                        <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold uppercase tracking-widest rounded-full">Hip-Hop</span>
-                    </td>
-                    <td class="py-4 px-6 hidden lg:table-cell">
-                        <div class="flex items-center gap-2 text-sm text-slate-500">
-                            <span class="material-symbols-outlined text-sm">play_circle</span>
-                            1.5B
-                        </div>
-                    </td>
-                    <td class="py-4 px-6 text-right text-sm text-slate-500 font-medium tabular-nums">5:12</td>
-                    <td class="py-4 px-6 text-right">
-                        <button class="p-1 hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
-                            <span class="material-symbols-outlined">more_horiz</span>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="px-6 py-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/30">
-            <button class="text-sm font-medium text-slate-500 hover:text-primary flex items-center gap-1">
-                <span class="material-symbols-outlined text-sm">chevron_left</span> Previous
-            </button>
-            <div class="flex items-center gap-2">
-                <span class="w-8 h-8 flex items-center justify-center bg-primary text-white text-sm font-bold rounded-lg">1</span>
-                <span class="w-8 h-8 flex items-center justify-center text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">2</span>
-                <span class="w-8 h-8 flex items-center justify-center text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">3</span>
-                <span class="w-8 h-8 flex items-center justify-center text-sm font-medium">...</span>
-                <span class="w-8 h-8 flex items-center justify-center text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer">12</span>
-            </div>
-            <button class="text-sm font-medium text-slate-500 hover:text-primary flex items-center gap-1">
-                Next <span class="material-symbols-outlined text-sm">chevron_right</span>
-            </button>
+
+        <audio id="audioPlayer"></audio>
+
+        <script>
+            const player = document.getElementById("audioPlayer");
+            const playerBar = document.getElementById("playerBar");
+            const masterPlayBtn = document.getElementById("masterPlayBtn");
+            const progressBar = document.getElementById("progressBar");
+            const volumeControl = document.getElementById("volumeControl");
+            const volumePercent = document.getElementById("volumePercent");
+
+            let currentSongIndex = -1;
+            const allSongs = Array.from(document.querySelectorAll('button[data-title]'));
+
+            let counted = false;
+
+            function playSong(url, element) {
+                currentSongIndex = allSongs.indexOf(element);
+
+                counted = false;
+
+                const songId = element.getAttribute('data-id');   // ADD
+                fetch(`/songs/play?id=${songId}`, {redirect: 'manual'});   // ADD
+
+                playerBar.classList.remove('translate-y-full');
+                document.getElementById("nowPlayingTitle").innerText = element.getAttribute('data-title');
+                document.getElementById("nowPlayingArtist").innerText = element.getAttribute('data-performer');
+
+                player.src = url;
+                player.play();
+                masterPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+            }
+
+            progressBar.addEventListener('input', () => {
+                const seekTime = (progressBar.value / 100) * player.duration;
+                player.currentTime = seekTime;
+            });
+
+            volumeControl.addEventListener('input', () => {
+                player.volume = volumeControl.value / 100;
+                volumePercent.innerText = `${volumeControl.value}%`;
+
+                const icon = document.querySelector('.fa-volume-low, .fa-volume-high, .fa-volume-xmark');
+                if (volumeControl.value == 0) {
+                    icon.className = "fa-solid fa-volume-xmark text-slate-400";
+                } else if (volumeControl.value < 50) {
+                    icon.className = "fa-solid fa-volume-low text-slate-400";
+                } else {
+                    icon.className = "fa-solid fa-volume-high text-slate-400";
+                }
+            });
+
+            function playNext() {
+                if (currentSongIndex < allSongs.length - 1) {
+                    const nextBtn = allSongs[currentSongIndex + 1];
+                    nextBtn.click();
+                }
+            }
+
+            function playPrev() {
+                if (currentSongIndex > 0) {
+                    const prevBtn = allSongs[currentSongIndex - 1];
+                    prevBtn.click();
+                }
+            }
+
+            player.addEventListener('ended', playNext);
+
+            masterPlayBtn.addEventListener('click', () => {
+                if (player.src) {
+                    if (player.paused) {
+                        player.play();
+                        masterPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    } else {
+                        player.pause();
+                        masterPlayBtn.innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
+                    }
+                }
+            });
+
+            player.addEventListener('timeupdate', () => {
+                if (!isNaN(player.duration)) {
+                    const progress = (player.currentTime / player.duration) * 100;
+                    progressBar.value = progress;
+                    document.getElementById("currentTime").innerText = formatTime(player.currentTime);
+                    document.getElementById("totalTime").innerText = formatTime(player.duration);
+                }
+            });
+
+            function formatTime(seconds) {
+                const min = Math.floor(seconds / 60);
+                const sec = Math.floor(seconds % 60);
+                return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+            }
+        </script>
+
+        <div class="flex justify-center mt-6">
+            <ul class="inline-flex items-center space-x-2">
+                <li th:if="${songs.hasPrevious()}">
+                    <a th:href="@{/songs(page=${songs.number - 1}, size=${songs.size}, sort=${currentSort})}"
+                       class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">&laquo;</a>
+                </li>
+                <li th:unless="${songs.hasPrevious()}">
+                    <span class="px-3 py-1 border rounded text-gray-400 cursor-not-allowed">&laquo;</span>
+                </li>
+                <li th:each="i : ${pageNumbers}">
+                    <a th:href="@{/songs(page=${i - 1}, size=${songs.size}, sort=${currentSort})}"
+                       th:text="${i}"
+                       class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+                       th:classappend="${i == songs.number + 1} ? ' bg-gray-300 dark:bg-gray-600' : ''">
+                    </a>
+                </li>
+                <li th:if="${songs.hasNext()}">
+                    <a th:href="@{/songs(page=${songs.number + 1}, size=${songs.size}, sort=${currentSort})}"
+                       class="px-3 py-1 border rounded hover:bg-gray-200 dark:hover:bg-gray-700">&raquo;</a>
+                </li>
+                <li th:unless="${songs.hasNext()}">
+                    <span class="px-3 py-1 border rounded text-gray-400 cursor-not-allowed">&raquo;</span>
+                </li>
+            </ul>
         </div>
     </div>
 </main>
-<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 bg-background-light dark:bg-background-dark py-8 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2 text-slate-400">
-                <span class="material-symbols-outlined text-2xl">library_music</span>
-                <span class="font-bold tracking-tight">© 2024 SoundHub. All rights reserved.</span>
-            </div>
-            <div class="flex gap-8">
-                <a class="text-slate-400 hover:text-primary transition-colors text-sm" href="#">Privacy Policy</a>
-                <a class="text-slate-400 hover:text-primary transition-colors text-sm" href="#">Terms of Service</a>
-                <a class="text-slate-400 hover:text-primary transition-colors text-sm" href="#">Help Center</a>
-            </div>
-            <div class="flex gap-4">
-                <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-primary cursor-pointer transition-colors">
-                    <span class="material-symbols-outlined text-lg">public</span>
-                </div>
-                <div class="size-8 rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-primary cursor-pointer transition-colors">
-                    <span class="material-symbols-outlined text-lg">share</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
 </body>
 </html>
