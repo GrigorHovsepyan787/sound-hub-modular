@@ -21,6 +21,7 @@ public class SongDto {
     private Long bandId;
     private Long artistId;
     private String songUrl;
+    private String pictureUrl;
 
     public String getDurationFormatted() {
         int minutes = duration / 60;

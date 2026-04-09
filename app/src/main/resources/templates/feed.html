@@ -218,10 +218,10 @@
                             <span class="text-center text-gray-500 group-hover:hidden" th:text="${stat.count}"></span>
                             <span class="text-center text-brand-secondary hidden group-hover:block"><button
                                     type="button"
-                                    th:data-id="${song.id}"
-                                    th:data-title="${song.title}"
-                                    th:data-performer="${song.performer}"
-                                    th:attr="onclick=|playSong('${song.songUrl}', this)|"
+                                    th:data-id="${song.song.id}"
+                                    th:data-title="${song.song.title}"
+                                    th:data-performer="${song.song.performer}"
+                                    th:attr="onclick=|playSong('${song.song.songUrl}', this)|"
                                     class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent
                             group-hover:bg-primary group-hover:text-white transition-all text-slate-400">
                                 <i
@@ -229,18 +229,22 @@
                             </button></span>
                             <div class="flex items-center gap-4 overflow-hidden">
                                 <img alt="Track thumbnail" class="w-10 h-10 rounded shadow-md flex-shrink-0"
-                                     th:src="${song.song.album.pictureUrl}"/>
+                                     th:src="${song.song.pictureUrl}"/>
                                 <span class="font-semibold truncate" th:text="${song.song.title}"></span>
                             </div>
-                            <span class="hidden md:block text-gray-400 truncate" th:if="${song.song.artist != null}"
-                                  th:text="${song.song.artist.nickname}"></span>
-                            <span class="hidden md:block text-gray-400 truncate" th:if="${song.song.band != null}"
-                                  th:text="${song.song.band.name}"></span>
+                            <a th:if="${song.song.artistId != null}" th:href="@{/artists/preview(id=${song.song.artistId})}">
+                            <span class="hidden md:block text-gray-400 truncate"
+                                  th:text="${song.song.performer}"></span>
+                            </a>
+                            <a th:if="${song.song.bandId != null}" th:href="@{/bands/preview(id=${song.song.bandId})}">
+                            <span class="hidden md:block text-gray-400 truncate"
+                                  th:text="${song.song.performer}"></span>
+                            </a>
                             <div class="flex items-center justify-center gap-2 text-gray-400">
                                 <i class="fa-solid fa-headphones text-[10px]"></i>
                                 <span class="text-xs" th:text="${song.song.playCount}"></span>
                             </div>
-                            <span class="text-right text-gray-400 text-sm" th:text="${song.song.duration}"></span>
+                            <span class="text-right text-gray-400 text-sm" th:text="${song.song.durationFormatted}"></span>
                         </div>
                     </div>
                 </div>

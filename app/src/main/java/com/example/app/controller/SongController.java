@@ -76,7 +76,7 @@ public class SongController {
 
     @GetMapping("/songs/play")
     public String registerPlay(@RequestParam("id") Long id) {
-        songService.incrementPlayCount(id);
+        songService.registerPlay(id);
         return "redirect:/songs";
     }
 
