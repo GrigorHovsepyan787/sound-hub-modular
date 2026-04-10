@@ -34,3 +34,6 @@ server:
 
 album:
   default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png
+
+hero-banner:
+  image-url: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/hero_banner.jpg

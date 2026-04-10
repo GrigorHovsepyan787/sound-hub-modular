@@ -2,10 +2,14 @@ package com.example.service.impl;
 
 import com.example.model.Artist;
 import com.example.model.Band;
+import com.example.projection.ArtistPopularity;
 import com.example.repository.ArtistRepository;
 import com.example.repository.BandRepository;
+import com.example.repository.SongPlayRepository;
 import com.example.service.ArtistService;
 import com.example.storage.StorageService;
+import com.example.util.DateRange;
+import com.example.util.DateRangeUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,7 @@ public class ArtistServiceImpl implements ArtistService {
     private final ArtistRepository artistRepository;
     private final BandRepository bandRepository;
     private final StorageService storageService;
+    private final SongPlayRepository songPlayRepository;
     private static final String DEFAULT_ARTIST_IMAGE =
             "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/ArtistDefault.png";
 
@@ -121,9 +126,19 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<Artist> getArtistsByName(String name, Pageable pageable) {
-        if(StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             return artistRepository.findAll(pageable);
         }
         return artistRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    @Override
+    public Page<ArtistPopularity> getTopArtistPopularityLastMonth(Pageable pageable) {
+        DateRange month = DateRangeUtils.last30Days();
+
+        return songPlayRepository.findTopArtistsForPeriod(
+                month.start(),
+                month.end(),
+                pageable);
     }
 }

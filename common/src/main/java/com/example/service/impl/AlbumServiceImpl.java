@@ -1,11 +1,15 @@
 package com.example.service.impl;
 
 import com.example.model.Album;
+import com.example.projection.AlbumPopularity;
 import com.example.repository.AlbumRepository;
 import com.example.repository.ArtistRepository;
 import com.example.repository.BandRepository;
+import com.example.repository.SongPlayRepository;
 import com.example.service.AlbumService;
 import com.example.storage.StorageService;
+import com.example.util.DateRange;
+import com.example.util.DateRangeUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final StorageService storageService;
     private final BandRepository bandRepository;
     private final ArtistRepository artistRepository;
+    private final SongPlayRepository songPlayRepository;
     @Value("${album.default-image}")
     private String defaultImageUrl;
 
@@ -89,6 +94,26 @@ public class AlbumServiceImpl implements AlbumService {
             existingAlbum.setPictureUrl(imageUrl);
         }
         albumRepository.save(existingAlbum);
+    }
+
+    @Override
+    public Page<AlbumPopularity> getTopAlbumPopularityLastMonth(Pageable pageable) {
+        DateRange month = DateRangeUtils.last30Days();
+
+        return songPlayRepository.findTopAlbumsForPeriod(
+                month.start(),
+                month.end(),
+                pageable);
+    }
+
+    @Override
+    public Page<Album> findByArtistIsNotNull(Pageable pageable) {
+        return albumRepository.findByArtistIsNotNull(pageable);
+    }
+
+    @Override
+    public Page<Album> findByBandIsNotNull(Pageable pageable) {
+        return albumRepository.findByBandIsNotNull(pageable);
     }
 }
 

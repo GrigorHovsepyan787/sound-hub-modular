@@ -1,16 +1,23 @@
 package com.example.service.impl;
 
 import com.example.dto.SongDto;
+import com.example.dto.SongPopularityDto;
 import com.example.mapper.SongMapper;
+import com.example.mapper.SongPopularityMapper;
 import com.example.model.Genre;
 import com.example.model.Song;
+import com.example.model.SongPlay;
+import com.example.repository.SongPlayRepository;
 import com.example.repository.SongRepository;
 import com.example.service.SongService;
 import com.example.storage.StorageService;
+import com.example.util.DateRange;
+import com.example.util.DateRangeUtils;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -30,7 +38,9 @@ public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
     private final SongMapper songMapper;
+    private final SongPopularityMapper songPopularityMapper;
     private final StorageService storageService;
+    private final SongPlayRepository songPlayRepository;
 
     @Override
     public Page<SongDto> findAll(Pageable pageable) {
@@ -76,11 +86,6 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public void incrementPlayCount(Long id) {
-        songRepository.incrementPlayCount(id);
-    }
-
-    @Override
     public Page<SongDto> findByGenre(Genre genre, Pageable pageable) {
         return songRepository.findByGenre(genre, pageable)
                 .map(songMapper::toDto);
@@ -110,5 +115,25 @@ public class SongServiceImpl implements SongService {
             log.warn("Could not extract duration for file: {}", multipartFile.getOriginalFilename(), e);
             return 0;
         }
+    }
+
+    @Override
+    @Transactional
+    public void registerPlay(Long songId) {
+        Song song = songRepository.findById(songId).orElseThrow(EntityNotFoundException::new);
+        SongPlay songPlay = new SongPlay();
+        songPlay.setSong(song);
+        songPlay.setPlayedAt(LocalDateTime.now());
+        songPlayRepository.save(songPlay);
+        songRepository.incrementPlayCount(songId);
+    }
+
+    public Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable) {
+        DateRange month = DateRangeUtils.last30Days();
+        return songPlayRepository.findTopSongsForPeriod(
+                month.start(),
+                month.end(),
+                pageable)
+                .map(songPopularityMapper::toDto);
     }
 }
