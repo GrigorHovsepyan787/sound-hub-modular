@@ -30,6 +30,8 @@ public class User {
     private String password;
     private String pictureUrl;
     private LocalDateTime registrationDate;
+    private String verificationCode;
+    private LocalDateTime verificationCodeExpiresAt;
 
     @PrePersist
     public void onPrePersist() {

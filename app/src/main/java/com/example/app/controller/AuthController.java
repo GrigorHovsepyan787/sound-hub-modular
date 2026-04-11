@@ -5,6 +5,7 @@ import com.example.model.User;
 import com.example.model.UserType;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
@@ -45,13 +48,31 @@ public class AuthController {
         return "registerPage";
     }
 
+    @GetMapping("/verify")
+    public String verifyPage(@RequestParam("email") String email, ModelMap modelMap) {
+        modelMap.addAttribute("email", email);
+        return "verifyPage";
+    }
+
     @PostMapping("/register")
     public String register(@ModelAttribute User registeredUser, @RequestParam("pic") MultipartFile multipartfile) {
+        Locale locale = LocaleContextHolder.getLocale();
         if (userService.findByUsername(registeredUser.getUsername()).isPresent()) {
             return "redirect:/registerPage?msg=Username already exists!";
         }
         registeredUser.setPassword(passwordEncoder.encode(registeredUser.getPassword()));
-        userService.save(registeredUser, multipartfile);
-        return "redirect:/loginPage?msg=Registration successful, pls login!";
+        userService.save(registeredUser, multipartfile, locale);
+        return "redirect:/verify?email=" + registeredUser.getEmail();
+    }
+
+    @PostMapping("/verify")
+    public String verify(@RequestParam("email") String email, @RequestParam("verificationCode")  String verificationCode) {
+        boolean isVerified = userService.verifyUser(email, verificationCode);
+        if(isVerified) {
+            return "redirect:/loginPage?msg=Verification successful!";
+        }
+        else {
+            return "redirect:/loginPage?msg=Verification failed!";
+        }
     }
 }

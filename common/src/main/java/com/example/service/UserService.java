@@ -6,14 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Locale;
 import java.util.Optional;
 
 public interface UserService {
     Page<User> findUsersPage(Pageable pageable, UserSearchCriteria criteria);
 
-    void save(User user, MultipartFile multipartFile);
+    void save(User user, MultipartFile multipartFile, Locale locale);
 
     void update(User user);
 
     Optional<User> findByUsername(String username);
+
+    boolean verifyUser(String email, String code);
 }

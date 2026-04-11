@@ -26,6 +26,7 @@ public class WebSecurityConfig {
                                         "/register",
                                         "/static/css/**",
                                         "/js/**",
+                                        "/verify",
                                         "/images/**").permitAll()
                                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated()

@@ -45,49 +45,61 @@
                 <main class="flex flex-1 items-center justify-center p-6 py-12">
                     <div class="layout-content-container flex flex-col w-full max-w-[520px] bg-slate-900/40 border border-slate-800 p-8 rounded-xl shadow-2xl backdrop-blur-sm">
                         <div class="flex flex-col gap-2 mb-8">
-                            <h1 class="text-slate-100 text-4xl font-black leading-tight tracking-[-0.033em]" th:text="#{register.createAccount}">Create
+                            <h1 class="text-slate-100 text-4xl font-black leading-tight tracking-[-0.033em]"
+                                th:text="#{register.createAccount}">Create
                                 Account</h1>
-                            <p class="text-slate-400 text-base font-normal leading-normal" th:text="#{register.join}">Join the global community of
+                            <p class="text-slate-400 text-base font-normal leading-normal" th:text="#{register.join}">
+                                Join the global community of
                                 music creators and fans.</p>
                         </div>
                         <form class="flex flex-col gap-5" th:action="@{/register}" method="POST"
                               enctype="multipart/form-data">
-                            <div class="avatar-upload">
-                                <div class="avatar-preview">
-                                    <label for="pic" class="avatar-edit">
-                                        <span class="material-symbols-outlined">photo_camera</span>
-                                    </label>
+                            <label class="flex flex-col items-center justify-center mb-4 cursor-pointer" for="pic">
+                                <div id="preview"
+                                     class="w-24 h-24 rounded-full bg-slate-800 border-2 border-dashed border-slate-700 flex flex-col items-center justify-center overflow-hidden group-hover:border-primary transition-colors">
+                                    <span id="icon" class="material-symbols-outlined text-slate-500 text-3xl">add_a_photo</span>
                                 </div>
-
-                                <input type="file" id="pic" name="pic" accept="image/*">
-                            </div>
+                                <input
+                                        id="pic"
+                                        name="pic"
+                                        accept="image/*"
+                                        type="file"
+                                        class="hidden"
+                                />
+                                <p id="text" class="text-slate-400 text-sm mt-3">
+                                    Upload profile picture
+                                </p>
+                            </label>
                             <div class="flex flex-wrap md:flex-nowrap gap-4">
                                 <label class="flex flex-col flex-1">
-                                    <span class="text-slate-200 text-sm font-medium pb-2 ml-1" th:text="#{register.name}">First Name</span>
+                                    <span class="text-slate-200 text-sm font-medium pb-2 ml-1"
+                                          th:text="#{register.name}">First Name</span>
                                     <div class="relative group">
                                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">person</span>
                                         <input name="name"
                                                class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
-                                               th:placeholder="#{register.namePlaceholder}" type="text"/>
+                                               th:placeholder="#{register.namePlaceholder}" type="text" required/>
                                     </div>
                                 </label>
                                 <label class="flex flex-col flex-1">
-                                    <span class="text-slate-200 text-sm font-medium pb-2 ml-1" th:text="#{register.surname}">Surname</span>
+                                    <span class="text-slate-200 text-sm font-medium pb-2 ml-1"
+                                          th:text="#{register.surname}">Surname</span>
                                     <div class="relative group">
                                         <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">person</span>
                                         <input name="surname"
                                                class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
-                                               th:placeholder="#{register.surnamePlaceholder}" type="text"/>
+                                               th:placeholder="#{register.surnamePlaceholder}" type="text" required/>
                                     </div>
                                 </label>
                             </div>
                             <label class="flex flex-col">
-                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1" th:text="#{register.username}">Username</span>
+                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1"
+                                      th:text="#{register.username}">Username</span>
                                 <div class="relative group">
                                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">alternate_email</span>
                                     <input name="username"
                                            class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
-                                           th:placeholder="#{register.usernamePlaceholder}" type="text"/>
+                                           th:placeholder="#{register.usernamePlaceholder}" type="text" required/>
                                 </div>
                             </label>
                             <label class="flex flex-col">
@@ -96,16 +108,19 @@
                                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">mail</span>
                                     <input name="email"
                                            class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-4 placeholder:text-slate-500 transition-all"
-                                           placeholder="email@example.com" type="email"/>
+                                           placeholder="email@example.com" type="email" required/>
                                 </div>
                             </label>
                             <label class="flex flex-col">
-                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1" th:text="#{register.password}">Password</span>
+                                <span class="text-slate-200 text-sm font-medium pb-2 ml-1"
+                                      th:text="#{register.password}">Password</span>
                                 <div class="relative group">
                                     <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors">lock</span>
                                     <input name="password"
                                            class="form-input flex w-full rounded-xl text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary/50 border border-slate-700 bg-slate-800/50 focus:border-primary h-14 pl-12 pr-12 placeholder:text-slate-500 transition-all"
-                                           placeholder="••••••••" type="password"/>
+                                           placeholder="••••••••" type="password"
+                                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$" required
+                                           title="Password must contain at least 8 characters, one uppercase, one lowercase, one digit and one special character"/>
                                 </div>
                             </label>
                             <button class="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-slate-100 font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20"
@@ -114,8 +129,12 @@
                             </button>
                         </form>
                         <div class="mt-8 flex flex-col items-center gap-4">
-                            <p class="text-slate-400 text-sm" th:if="${msg} != null" th:text="${msg}">
-                            </p>
+                            <div th:if="${msg} != null">
+                                <p class="text-slate-400 text-base">
+                                    <span class="material-symbols-outlined text-[20px]">error</span>
+                                    <span th:text="${msg}"></span>
+                                </p>
+                            </div>
                             <div class="h-px w-full bg-slate-800 my-2"></div>
                             <p class="text-slate-400 text-base" th:text="#{register.haveAccount}">
                                 Already have an account?
@@ -130,4 +149,37 @@
     </section>
 </th:block>
 </body>
+<script>
+    const input = document.getElementById('pic');
+    const preview = document.getElementById('preview');
+    const icon = document.getElementById('icon');
+    const text = document.getElementById('text');
+
+    input.addEventListener('change', function () {
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Image must be less than 2MB');
+                return;
+            }
+            reader.onload = function (e) {
+                preview.style.backgroundImage = `url(${e.target.result})`;
+                preview.style.backgroundSize = 'cover';
+                preview.style.backgroundPosition = 'center';
+
+                icon.style.display = 'none';
+                text.style.display = 'none';
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 </html>
