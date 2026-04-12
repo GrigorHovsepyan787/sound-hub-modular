@@ -75,7 +75,8 @@
                                 <span class="material-symbols-outlined text-[20px]">person</span>
                             </div>
                             <input class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-background-dark/50 border border-slate-200 dark:border-primary/20 rounded-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none"
-                                   id="username" name="username" th:placeholder="#{login.enterUsername}" type="text" required/>
+                                   id="username" name="username" th:placeholder="#{login.enterUsername}" type="text"
+                                   required/>
                         </div>
                     </div>
                     <div>
@@ -106,10 +107,13 @@
                            th:href="@{/registerPage}" th:text="#{login.signUp}">Sign up for free</a>
                     </div>
                 </div>
-                <div class="mt-8 pt-6 border-t border-slate-100 dark:border-primary/10" th:if="${msg} != null">
-                    <div class="flex flex-col gap-4">
-                        <span class="material-symbols-outlined text-[20px]">error</span>
-                        <p class="text-center text-slate-500 dark:text-slate-400 text-sm" th:text="${msg}"></p>
+                <div th:fragment="alert(msg, type)">
+                    <div th:if="${msg}" class="mt-8 pt-6 border-t border-slate-100 dark:border-primary/10">
+                        <div class="flex flex-col items-center gap-3 text-center">
+                        <span class="material-symbols-outlined text-[20px]" th:text="${type == 'error'} ? 'error' : 'info'"></span>
+                            <p class="text-sm" th:classappend="${type == 'error'} ? 'text-red-500' : 'text-slate-500 dark:text-slate-400'"
+                               th:text="${msg}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
