@@ -2,9 +2,9 @@ package com.example.service.impl;
 
 import com.example.dto.RegisterRequest;
 import com.example.dto.UserSearchCriteria;
+import com.example.mapper.RegisterRequestMapper;
 import com.example.model.User;
 import com.example.model.UserStatus;
-import com.example.model.UserType;
 import com.example.repository.UserRepository;
 import com.example.service.SendMailService;
 import com.example.service.UserService;
@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final StorageService storageService;
     private final SendMailService sendMailService;
+    private final RegisterRequestMapper registerRequestMapper;
     private final SecureRandom secureRandom = new SecureRandom();
     private static final int VERIFICATION_CODE_MIN = 100000;
     private static final int VERIFICATION_CODE_RANGE = 900000;
@@ -52,6 +54,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void isRegisterRequestPresent(ModelMap modelMap) {
+        if (!modelMap.containsAttribute("registerRequest")) {
+            modelMap.addAttribute("registerRequest", new RegisterRequest());
+        }
+    }
+
+    @Override
     @Transactional
     public void save(RegisterRequest request, MultipartFile multipartFile, Locale locale) {
 
@@ -63,16 +72,9 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        User user = new User();
+        User user = registerRequestMapper.toEntity(request);
 
-        user.setName(request.getName());
-        user.setSurname(request.getSurname());
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setUserStatus(UserStatus.UNENABLED);
-        user.setUserType(UserType.USER);
         user.setVerificationCode(generateVerificationCode());
-        user.setPassword(request.getPassword());
         user.setVerificationCodeExpiresAt(LocalDateTime.now().plusMinutes(CODE_EXPIRATION_MINS));
 
         handleUserImage(user, multipartFile);
@@ -106,23 +108,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean verifyUser(String email, String code) {
+    public String verifyUser(String email, String code) {
         User user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
 
         if (user.getUserStatus() == UserStatus.ENABLED) {
-            return true;
+            return "redirect:/loginPage?msg=Verification successful!";
         }
 
         if (user.getVerificationCode() == null) {
-            return false;
+            return "redirect:/loginPage?msg=Verification failed!";
         }
 
         if (!user.getVerificationCode().equals(code)) {
-            return false;
+            return "redirect:/loginPage?msg=Verification failed!";
         }
 
         if (user.getVerificationCodeExpiresAt().isBefore(LocalDateTime.now())) {
-            return false;
+            return "redirect:/loginPage?msg=Verification failed!";
         }
 
         user.setUserStatus(UserStatus.ENABLED);
@@ -133,7 +135,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        return true;
+        return "redirect:/loginPage?msg=Verification successful!";
     }
 
     private String generateVerificationCode() {

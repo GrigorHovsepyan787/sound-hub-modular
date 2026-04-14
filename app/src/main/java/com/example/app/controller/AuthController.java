@@ -46,9 +46,7 @@ public class AuthController {
 
     @GetMapping("/registerPage")
     public String registerPage(@RequestParam(required = false) String msg, ModelMap modelMap) {
-        if (!modelMap.containsAttribute("registerRequest")) {
-            modelMap.addAttribute("registerRequest", new RegisterRequest());
-        }
+        userService.isRegisterRequestPresent(modelMap);
         modelMap.addAttribute("msg", msg);
         return "registerPage";
     }
@@ -77,12 +75,6 @@ public class AuthController {
 
     @PostMapping("/verify")
     public String verify(@RequestParam("email") String email, @RequestParam("verificationCode")  String verificationCode) {
-        boolean isVerified = userService.verifyUser(email, verificationCode);
-        if(isVerified) {
-            return "redirect:/loginPage?msg=Verification successful!";
-        }
-        else {
-            return "redirect:/loginPage?msg=Verification failed!";
-        }
+        return userService.verifyUser(email, verificationCode);
     }
 }

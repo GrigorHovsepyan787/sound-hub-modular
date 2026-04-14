@@ -7,13 +7,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -49,9 +53,6 @@ public class RegisterRequest {
 
     @AssertTrue(message = "Passwords do not match")
     public boolean isPasswordsMatching() {
-        if (password == null || confirmPassword == null) {
-            return false;
-        }
-        return password.equals(confirmPassword);
+        return Objects.equals(password, confirmPassword);
     }
 }

@@ -147,8 +147,8 @@
                                            placeholder="••••••••" type="password"/>
                                 </div>
                                 <p class="text-red-500 text-sm mt-1"
-                                   th:if="${#fields.hasErrors('confirmPassword')}"
-                                   th:errors="*{confirmPassword}"></p>
+                                   th:if="${#fields.hasErrors('passwordsMatching')}"
+                                   th:errors="*{passwordsMatching}"></p>
                             </label>
                             <button class="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 bg-primary text-slate-100 font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20"
                                     type="submit" th:text="#{register.signUp}">
