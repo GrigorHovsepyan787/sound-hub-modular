@@ -1,9 +1,9 @@
 package com.example.app.controller;
 
 import com.example.model.Artist;
-import com.example.model.Band;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
+import com.example.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +25,7 @@ public class ArtistController {
 
     private final ArtistService artistService;
     private final BandService bandService;
+    private final SongService songService;
 
     @GetMapping("/artists")
     public String artists(ModelMap modelMap,
@@ -62,11 +63,8 @@ public class ArtistController {
 
     @GetMapping("/artists/edit")
     public String editArtist(@RequestParam("id") Long id, ModelMap modelMap) {
-        Artist artist = artistService.getArtistById(id);
-        List<Band> bands = bandService.findAll();
-
-        modelMap.addAttribute("artist", artist);
-        modelMap.addAttribute("bands", bands);
+        modelMap.addAttribute("artist", artistService.getArtistById(id));
+        modelMap.addAttribute("bands", bandService.findAll());
         return "editArtist";
     }
 
@@ -86,8 +84,8 @@ public class ArtistController {
 
     @GetMapping("/artists/preview")
     public String artistPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
-        Artist artist = artistService.getArtistById(id);
-        modelMap.addAttribute("artist", artist);
+        modelMap.addAttribute("artist", artistService.getArtistById(id));
+        modelMap.addAttribute("songs", songService.getTop5SongsOfArtistByPlayCount(id));
         return "artistPreview";
     }
 }

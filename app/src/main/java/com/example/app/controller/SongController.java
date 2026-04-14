@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,8 +55,11 @@ public class SongController {
     }
 
     @PostMapping("/songs")
-    public String addSong(@ModelAttribute Song song, @RequestParam("songUrl") MultipartFile multipartFile) {
+    public String addSong(@ModelAttribute Song song,
+                          @RequestParam("songUrl") MultipartFile multipartFile,
+                          RedirectAttributes redirectAttributes) {
         songService.save(song, multipartFile);
+        redirectAttributes.addFlashAttribute("success", "Song added successfully!");
         return "redirect:/songs";
     }
 

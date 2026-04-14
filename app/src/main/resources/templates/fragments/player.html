@@ -1,64 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
-<script data-purpose="mobile-nav-toggle">
-    const menuToggle = document.getElementById('mobile-menu-toggle');
-    // Simplified mobile toggle placeholder logic
-    menuToggle.addEventListener('click', () => {
-        alert('Mobile menu navigation triggered.');
-    });
-</script>
-<!-- END: Scripts -->
-<div class="fixed bottom-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-t border-white/5 px-4 py-3">
-    <div class="max-w-[1800px] mx-auto grid grid-cols-3 items-center">
-        <!-- Player Left: Track Info -->
-        <div class="flex items-center gap-4">
-            <img alt="Current Track" class="w-14 h-14 rounded-md shadow-lg"
-                 src="#"/>
-            <div class="overflow-hidden">
-                <h4 class="text-sm font-bold truncate" th:text="${currentAudio.getTitle()}"></h4>
-                <p class="text-xs text-gray-400 truncate" th:if="${currentAudio.getArtist} == null" th:text="${currentAudio.getBand()}"></p>
-                <p class="text-xs text-gray-400 truncate" th:if="${currentAudio.getBand} == null" th:text="${currentAudio.getArtist()}"></p>
-            </div>
-            <button class="text-gray-400 hover:text-white transition-colors">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-        </div>
-        <!-- Player Center: Controls -->
-        <div class="flex flex-col items-center gap-2">
-            <div class="flex items-center gap-6 text-gray-400">
-                <button class="hover:text-brand-accent transition-colors text-xs"><i class="fa-solid fa-shuffle"></i>
-                </button>
-                <button class="hover:text-white transition-colors"><i class="fa-solid fa-backward-step"></i></button>
-                <button class="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full hover:scale-105 transition-transform">
-                    <i class="fa-solid fa-play ml-0.5"></i>
-                </button>
-                <button class="hover:text-white transition-colors"><i class="fa-solid fa-forward-step"></i></button>
-                <button class="hover:text-brand-accent transition-colors text-xs"><i class="fa-solid fa-repeat"></i>
-                </button>
-            </div>
-            <div class="w-full max-w-md flex items-center gap-2">
-                <span class="text-[10px] text-gray-500 w-8 text-right" th:text="${currentAudio.getDuration}"></span>
-                <div class="flex-1 h-1 bg-white/10 rounded-full overflow-hidden relative group">
-                    <div class="absolute inset-y-0 left-0 bg-brand-accent group-hover:bg-brand-secondary transition-colors"
-                         style="width: 35%"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="player">
+
+    <audio id="audioPlayer"></audio>
+
+    <div id="playerBar"
+         class="fixed bottom-0 left-0 right-0 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 p-4 transform translate-y-full transition-transform duration-300 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+
+            <div class="flex items-center gap-3 w-1/3">
+                <div class="w-12 h-12 bg-brand-accent/20 rounded-lg flex items-center justify-center text-brand-accent">
+                    <i class="fa-solid fa-music"></i>
                 </div>
-                <span class="text-[10px] text-gray-500 w-8"></span>
-            </div>
-        </div>
-        <!-- Player Right: Volume & Utilities -->
-        <div class="flex items-center justify-end gap-4">
-            <button class="text-gray-400 hover:text-white transition-colors"><i class="fa-solid fa-list-ul text-sm"></i>
-            </button>
-            <button class="text-gray-400 hover:text-white transition-colors"><i
-                    class="fa-solid fa-computer-speaker text-sm"></i></button>
-            <div class="flex items-center gap-2 group">
-                <i class="fa-solid fa-volume-high text-gray-400 text-sm"></i>
-                <div class="w-24 h-1 bg-white/10 rounded-full overflow-hidden relative">
-                    <div class="absolute inset-y-0 left-0 bg-white group-hover:bg-brand-accent transition-colors"
-                         style="width: 70%"></div>
+                <div class="overflow-hidden">
+                    <p id="nowPlayingTitle" class="font-bold text-white truncate">Select a song</p>
+                    <p id="nowPlayingArtist" class="text-xs text-slate-400 truncate">Artist</p>
                 </div>
             </div>
+
+            <div class="flex flex-col items-center w-1/3 gap-2">
+                <div class="flex items-center gap-6">
+                    <button onclick="SoundHub.playPrev()"
+                            class="text-slate-400 hover:text-brand-accent transition-colors active:scale-90">
+                        <i class="fa-solid fa-backward-step"></i>
+                    </button>
+                    <button id="masterPlayBtn"
+                            class="w-10 h-10 rounded-full bg-brand-accent text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-accent/20">
+                        <i class="fa-solid fa-play ml-0.5"></i>
+                    </button>
+                    <button onclick="SoundHub.playNext()"
+                            class="text-slate-400 hover:text-brand-accent transition-colors active:scale-90">
+                        <i class="fa-solid fa-forward-step"></i>
+                    </button>
+                </div>
+                <div class="w-full flex items-center gap-3 text-[10px] font-mono text-slate-400">
+                    <span id="currentTime">0:00</span>
+                    <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1"
+                           class="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-violet-500">
+                    <span id="totalTime">0:00</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 w-1/3">
+                <div class="flex items-center gap-[2px] h-[18px]" id="waveform">
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:4px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:8px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:13px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:9px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:5px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:11px"></div>
+                    <div class="vol-bar w-[3px] rounded-sm bg-slate-500 transition-all duration-100"
+                         style="height:7px"></div>
+                </div>
+                <input type="range" id="volumeControl"
+                       class="w-22 h-[3px] rounded-sm outline-none border-none cursor-pointer appearance-none"
+                       min="0" max="100" value="50"
+                       style="background: linear-gradient(to right, #7c3aed 50%, #334155 50%)">
+                <span id="volumePercent" class="text-[10px] font-mono text-slate-400 w-8 text-right">50%</span>
+            </div>
+
         </div>
     </div>
+
+    <style>
+        #volumeControl::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px #1e293b;
+            transition: transform 0.15s;
+        }
+
+        #volumeControl:hover::-webkit-slider-thumb {
+            transform: scale(1.3);
+        }
+    </style>
+
+    <script>
+        window.SoundHub = (() => {
+            const player = document.getElementById('audioPlayer');
+            const bar = document.getElementById('playerBar');
+            const playBtn = document.getElementById('masterPlayBtn');
+            const progress = document.getElementById('progressBar');
+            const volSlider = document.getElementById('volumeControl');
+            const volPct = document.getElementById('volumePercent');
+            const bars = document.querySelectorAll('.vol-bar');
+            const baseH = [4, 8, 13, 9, 5, 11, 7];
+
+            let playlist = [];
+            let currentIndex = -1;
+
+            function updateVolume(val) {
+                const pct = val / 100;
+                volPct.textContent = val + '%';
+                volSlider.style.background =
+                    `linear-gradient(to right, ${val === 0 ? '#475569' : '#7c3aed'} ${val}%, #334155 ${val}%)`;
+                bars.forEach((bar, i) => {
+                    bar.style.height = (val === 0 ? 2 : Math.max(2, Math.round(baseH[i] * pct * 1.4 + 1))) + 'px';
+                    bar.style.background = val === 0 ? '#475569' : `rgba(124,58,237,${0.45 + pct * 0.55})`;
+                });
+            }
+
+            volSlider.addEventListener('input', e => {
+                player.volume = e.target.value / 100;
+                updateVolume(+e.target.value);
+            });
+            updateVolume(50);
+
+            progress.addEventListener('input', () => {
+                if (!isNaN(player.duration)) {
+                    player.currentTime = (progress.value / 100) * player.duration;
+                }
+            });
+            player.addEventListener('timeupdate', () => {
+                if (!isNaN(player.duration)) {
+                    progress.value = (player.currentTime / player.duration) * 100;
+                    document.getElementById('currentTime').textContent = fmt(player.currentTime);
+                    document.getElementById('totalTime').textContent = fmt(player.duration);
+                }
+            });
+
+            function fmt(s) {
+                const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+                return `${m}:${sec < 10 ? '0' : ''}${sec}`;
+            }
+
+            function setPlayIcon(playing) {
+                playBtn.innerHTML = playing
+                    ? '<i class="fa-solid fa-pause"></i>'
+                    : '<i class="fa-solid fa-play ml-0.5"></i>';
+            }
+
+            playBtn.addEventListener('click', () => {
+                if (!player.src) return;
+                player.paused ? player.play() : player.pause();
+            });
+            player.addEventListener('play', () => setPlayIcon(true));
+            player.addEventListener('pause', () => setPlayIcon(false));
+            player.addEventListener('ended', () => playNext());
+
+            function playSong(index) {
+                if (index < 0 || index >= playlist.length) return;
+                currentIndex = index;
+                const song = playlist[index];
+                document.getElementById('nowPlayingTitle').textContent = song.title;
+                document.getElementById('nowPlayingArtist').textContent = song.performer;
+                player.src = song.url;
+                player.play();
+                bar.classList.remove('translate-y-full');
+                bar.classList.add('translate-y-0');
+                requestAnimationFrame(() => {
+                    document.body.style.paddingBottom = bar.offsetHeight + 'px';
+                });
+                if (song.id) fetch(`/songs/play?id=${song.id}`, {redirect: 'manual'}).catch(() => {
+                });
+            }
+
+            function playNext() {
+                if (currentIndex < playlist.length - 1) playSong(currentIndex + 1);
+            }
+
+            function playPrev() {
+                if (currentIndex > 0) playSong(currentIndex - 1);
+            }
+
+            document.addEventListener('soundhub:register', e => {
+                playlist = e.detail.songs || [];
+            });
+
+            document.addEventListener('soundhub:play', e => {
+                const {url, title, performer, id, songs: eventSongs} = e.detail;
+                if (eventSongs && eventSongs.length > 0) playlist = eventSongs;
+                const idx = playlist.findIndex(s => s.id == id);
+                if (idx !== -1) {
+                    playSong(idx);
+                } else {
+                    playlist = [{url, title, performer, id}];
+                    playSong(0);
+                }
+            });
+
+            return {playNext, playPrev};
+        })();
+    </script>
 </div>
+</body>
 </html>

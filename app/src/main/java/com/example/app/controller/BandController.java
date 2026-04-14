@@ -1,7 +1,9 @@
 package com.example.app.controller;
 
+import com.example.dto.SongDto;
 import com.example.model.Band;
 import com.example.service.BandService;
+import com.example.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class BandController {
 
     private final BandService bandService;
+    private final SongService songService;
 
     @GetMapping("/bands")
     public String bands(ModelMap modelMap,
@@ -74,7 +79,9 @@ public class BandController {
     @GetMapping("/bands/preview")
     public String bandPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
         Band band = bandService.getBandByIdForArtists(id);
+        List<SongDto> songs = songService.getTop5SongsOfBandByPlayCount(id);
         modelMap.addAttribute("band", band);
+        modelMap.addAttribute("songs", songs);
         return "bandPreview";
     }
 }

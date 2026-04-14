@@ -2,118 +2,124 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
-  <title th:text="#{band.add.title} + ' - SoundHub'">Create New Band - SoundHub</title>
+    <title th:text="#{band.add.title} + ' - SoundHub'">Create New Band - SoundHub</title>
 </head>
 <body>
 <section>
-  <div class="max-w-7xl mx-auto px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-10">
-    <div class="layout-content-container flex flex-col w-full max-w-[640px] flex-1">
-      <div class="flex flex-col mb-8 gap-2">
-        <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight" th:text="#{band.add.title}">Create New Band</h1>
-        <p class="text-gray-400 text-sm font-medium" th:text="#{band.add.subtitle}">Add a new band to the SoundHub platform.</p>
-      </div>
-
-      <form th:action="@{/bands}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
-
-        <div class="flex flex-col gap-3">
-          <label for="bandImage" class="text-sm font-semibold" th:text="#{band.form.image}">Band Image</label>
-          <div id="uploadBox" class="relative w-full aspect-video md:aspect-[21/9] bg-brand-surface rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center cursor-pointer hover:border-brand-accent transition-all group overflow-hidden">
-            <img id="previewImage" class="absolute inset-0 w-full h-full object-cover rounded-xl hidden z-0"/>
-            <div class="flex flex-col items-center justify-center gap-3 p-6 z-10">
-              <div class="p-3 bg-gray-700 rounded-full text-gray-300 group-hover:text-brand-accent group-hover:bg-brand-accent/10 transition-colors">
-                <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
-              </div>
-              <div class="text-center">
-                <p id="uploadText" class="text-base font-bold" th:text="#{band.form.clickUpload}">Click to upload photo</p>
-              </div>
+    <div class="max-w-7xl mx-auto px-4 md:px-10 lg:px-40 flex flex-1 justify-center py-10">
+        <div class="layout-content-container flex flex-col w-full max-w-[640px] flex-1">
+            <div class="flex flex-col mb-8 gap-2">
+                <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight" th:text="#{band.add.title}">
+                    Create New Band</h1>
+                <p class="text-gray-400 text-sm font-medium" th:text="#{band.add.subtitle}">Add a new band to the
+                    SoundHub platform.</p>
             </div>
-            <input id="bandImage" name="bandImage" accept="image/*" type="file" class="hidden"/>
-          </div>
-        </div>
 
-        <div class="flex flex-col gap-2">
-          <label for="bandName" class="text-sm font-semibold" th:text="#{band.form.name}">Band Name</label>
-          <input id="bandName" name="name" type="text"
-                 th:placeholder="#{band.form.namePlaceholder}"
-                 class="form-input w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 placeholder:text-gray-500 text-base font-medium transition-colors"/>
-        </div>
+            <form th:action="@{/bands}" method="post" enctype="multipart/form-data" class="flex flex-col gap-8">
 
-        <div class="flex flex-col gap-2">
-          <label for="formationDate" class="text-sm font-semibold" th:text="#{band.form.formationDate}">Formation Date</label>
-          <div class="relative">
-            <input type="text" id="formationDate" name="createdDate"
-                   th:placeholder="#{band.form.formationDatePlaceholder}"
-                   class="w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 text-base font-medium transition-colors cursor-pointer"
-                   readonly/>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-              <i class="fa-regular fa-calendar"></i>
-            </div>
-          </div>
-        </div>
+                <div class="flex flex-col gap-3">
+                    <label for="bandImage" class="text-sm font-semibold" th:text="#{band.form.image}">Band Image</label>
+                    <div id="uploadBox"
+                         class="relative w-full aspect-video md:aspect-[21/9] bg-brand-surface rounded-xl border-2 border-dashed border-gray-700 flex flex-col items-center justify-center cursor-pointer hover:border-brand-accent transition-all group overflow-hidden">
+                        <img id="previewImage"
+                             class="absolute inset-0 w-full h-full object-cover rounded-xl hidden z-0"/>
+                        <div class="flex flex-col items-center justify-center gap-3 p-6 z-10">
+                            <div class="p-3 bg-gray-700 rounded-full text-gray-300 group-hover:text-brand-accent group-hover:bg-brand-accent/10 transition-colors">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                            </div>
+                            <div class="text-center">
+                                <p id="uploadText" class="text-base font-bold" th:text="#{band.form.clickUpload}">Click
+                                    to upload photo</p>
+                            </div>
+                        </div>
+                        <input id="bandImage" name="bandImage" accept="image/*" type="file" class="hidden"/>
+                    </div>
+                </div>
 
-        <div class="flex flex-col gap-2">
-          <label for="biography" class="text-sm font-semibold" th:text="#{band.form.biography}">Biography</label>
-          <textarea id="biography" name="bio" rows="5"
-                    th:placeholder="#{band.form.biographyPlaceholder}"
-                    class="form-textarea w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent p-4 placeholder:text-gray-500 text-base font-medium resize-y transition-colors"></textarea>
-        </div>
+                <div class="flex flex-col gap-2">
+                    <label for="bandName" class="text-sm font-semibold" th:text="#{band.form.name}">Band Name</label>
+                    <input id="bandName" name="name" type="text"
+                           th:placeholder="#{band.form.namePlaceholder}"
+                           class="form-input w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 placeholder:text-gray-500 text-base font-medium transition-colors"/>
+                </div>
 
-        <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/5">
-          <a th:href="@{/bands}"
-             class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-surface hover:bg-white/10 text-gray-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1 text-center"
-             th:text="#{band.form.cancel}">Cancel</a>
-          <button type="submit"
-                  class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-accent hover:bg-brand-accentHover text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-brand-accent/20 order-1 sm:order-2 ml-auto"
-                  th:text="#{band.form.create}">Create Band</button>
+                <div class="flex flex-col gap-2">
+                    <label for="formationDate" class="text-sm font-semibold" th:text="#{band.form.formationDate}">Formation
+                        Date</label>
+                    <div class="relative">
+                        <input type="text" id="formationDate" name="createdDate"
+                               th:placeholder="#{band.form.formationDatePlaceholder}"
+                               class="w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent h-12 px-4 text-base font-medium transition-colors cursor-pointer"/>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i class="fa-regular fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="biography" class="text-sm font-semibold"
+                           th:text="#{band.form.biography}">Biography</label>
+                    <textarea id="biography" name="bio" rows="5"
+                              th:placeholder="#{band.form.biographyPlaceholder}"
+                              class="form-textarea w-full rounded-xl bg-brand-surface border border-gray-700 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent p-4 placeholder:text-gray-500 text-base font-medium resize-y transition-colors"></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center gap-4 pt-4 border-t border-white/5">
+                    <a th:href="@{/bands}"
+                       class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-surface hover:bg-white/10 text-gray-200 text-sm font-bold tracking-wide transition-colors order-2 sm:order-1 text-center"
+                       th:text="#{band.form.cancel}">Cancel</a>
+                    <button type="submit"
+                            class="w-full sm:w-auto px-8 py-3 rounded-full bg-brand-accent hover:bg-brand-accentHover text-white text-sm font-bold tracking-wide transition-colors shadow-lg shadow-brand-accent/20 order-1 sm:order-2 ml-auto"
+                            th:text="#{band.form.create}">Create Band
+                    </button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script th:inline="javascript">
-    const uploadBox = document.getElementById('uploadBox');
-    const fileInput = document.getElementById('bandImage');
-    const previewImage = document.getElementById('previewImage');
-    const uploadText = document.getElementById('uploadText');
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script th:inline="javascript">
+        const uploadBox = document.getElementById('uploadBox');
+        const fileInput = document.getElementById('bandImage');
+        const previewImage = document.getElementById('previewImage');
+        const uploadText = document.getElementById('uploadText');
 
-    uploadBox.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => {
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          previewImage.src = e.target.result;
-          previewImage.classList.remove('hidden');
-          uploadText.classList.add('hidden');
+        uploadBox.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('hidden');
+                    uploadText.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        flatpickr("#formationDate", {
+            minDate: "1850-01-01",
+            maxDate: "today",
+            dateFormat: "Y-m-d",
+            disableMobile: true,
+            allowInput: true
+        });
+
+        const i18n = {
+            title:       /*[[#{validation.title}]]*/ 'Missing Required Fields',
+            introSingle: /*[[#{validation.intro.single}]]*/ 'Please fill in the following required field before submitting:',
+            introPlural: /*[[#{validation.intro.plural}]]*/ 'Please fill in the following required fields before submitting:',
+            suffix:      /*[[#{validation.suffix}]]*/ 'These fields cannot be left empty.',
+            confirm:     /*[[#{validation.confirm}]]*/ 'Got it',
+            fieldName:   /*[[#{validation.field.bandName}]]*/ 'Band Name',
+            fieldDate:   /*[[#{validation.field.formationDate}]]*/ 'Formation Date',
+            fieldBio:    /*[[#{validation.field.biography}]]*/ 'Biography',
         };
-        reader.readAsDataURL(file);
-      }
-    });
 
-    document.addEventListener("DOMContentLoaded", function () {
-      flatpickr("#formationDate", {
-        minDate: "1850-01-01",
-        maxDate: "today",
-        dateFormat: "Y-m-d",
-        disableMobile: true,
-        allowInput: true
-      });
-
-      const i18n = {
-        title:       /*[[#{validation.title}]]*/ 'Missing Required Fields',
-        introSingle: /*[[#{validation.intro.single}]]*/ 'Please fill in the following required field before submitting:',
-        introPlural: /*[[#{validation.intro.plural}]]*/ 'Please fill in the following required fields before submitting:',
-        suffix:      /*[[#{validation.suffix}]]*/ 'These fields cannot be left empty.',
-        confirm:     /*[[#{validation.confirm}]]*/ 'Got it',
-        fieldName:   /*[[#{validation.field.bandName}]]*/ 'Band Name',
-        fieldDate:   /*[[#{validation.field.formationDate}]]*/ 'Formation Date',
-        fieldBio:    /*[[#{validation.field.biography}]]*/ 'Biography',
-      };
-
-      const modal = document.createElement('div');
-      modal.innerHTML = `
+        const modal = document.createElement('div');
+        modal.innerHTML = `
         <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center;">
           <div style="background:#1e1e2e; border:1px solid rgba(255,255,255,0.1); border-radius:16px; padding:32px; max-width:400px; width:90%; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.2s ease;">
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
@@ -131,34 +137,39 @@
           #modalClose:hover { background: #4f46e5; }
         </style>
       `;
-      document.body.appendChild(modal);
+        document.body.appendChild(modal);
 
-      const overlay = document.getElementById('modalOverlay');
-      document.getElementById('modalTitle').textContent = i18n.title;
-      document.getElementById('modalClose').textContent = i18n.confirm;
-      document.getElementById('modalClose').addEventListener('click', () => overlay.style.display = 'none');
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
+        const overlay = document.getElementById('modalOverlay');
+        document.getElementById('modalTitle').textContent = i18n.title;
+        document.getElementById('modalClose').textContent = i18n.confirm;
+        document.getElementById('modalClose').addEventListener('click', () => overlay.style.display = 'none');
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.style.display = 'none';
+        });
 
-      function showValidationModal(missingFields) {
-        const intro = missingFields.length > 1 ? i18n.introPlural : i18n.introSingle;
-        const fieldList = missingFields.map(f => `<li><strong style="color:#e5e7eb;">${f}</strong></li>`).join('');
-        document.getElementById('modalMessage').innerHTML =
+        function showValidationModal(missingFields) {
+            const intro = missingFields.length > 1 ? i18n.introPlural : i18n.introSingle;
+            const fieldList = missingFields.map(f => `<li><strong style="color:#e5e7eb;">${f}</strong></li>`).join('');
+            document.getElementById('modalMessage').innerHTML =
                 `${intro}<ul style="margin-top:5px; padding-left:20px;">${fieldList}</ul>${i18n.suffix}`;
-        overlay.style.display = 'flex';
-      }
+            overlay.style.display = 'flex';
+        }
 
-      document.querySelector('form').addEventListener('submit', function (e) {
-        const name = document.getElementById('bandName').value.trim();
-        const date = document.getElementById('formationDate').value.trim();
-        const bio  = document.getElementById('biography').value.trim();
-        const missing = [];
-        if (!name) missing.push(i18n.fieldName);
-        if (!date) missing.push(i18n.fieldDate);
-        if (!bio)  missing.push(i18n.fieldBio);
-        if (missing.length > 0) { e.preventDefault(); showValidationModal(missing); }
-      });
-    });
-  </script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const name = document.getElementById('bandName').value.trim();
+            const date = document.getElementById('formationDate').value.trim();
+            const bio = document.getElementById('biography').value.trim();
+            const missing = [];
+            if (!name) missing.push(i18n.fieldName);
+            if (!date) missing.push(i18n.fieldDate);
+            if (!bio) missing.push(i18n.fieldBio);
+            if (missing.length > 0) {
+                e.preventDefault();
+                showValidationModal(missing);
+            }
+        })
+        ;
+    </script>
 </section>
 </body>
 </html>

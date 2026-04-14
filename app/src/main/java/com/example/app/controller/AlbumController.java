@@ -5,6 +5,7 @@ import com.example.model.Album;
 import com.example.service.AlbumService;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
+import com.example.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
 public class AlbumController {
     private final AlbumService albumService;
     private final BandService bandService;
+    private final SongService songService;
     private final ArtistService artistService;
 
     @GetMapping("/albums")
@@ -36,6 +38,7 @@ public class AlbumController {
     @GetMapping("/albums/preview")
     public String preview(ModelMap modelMap, @RequestParam("id") Long id) {
         modelMap.addAttribute("album", albumService.findAlbumById(id));
+        modelMap.addAttribute("songs", songService.getSongsByAlbumId(id));
         return "albumPreview";
     }
 

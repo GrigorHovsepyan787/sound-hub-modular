@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html class="dark" lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}" xmlns="http://www.w3.org/1999/html">
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}" xmlns="http://www.w3.org/1999/html">
 <head>
     <title th:text="#{addSong.pageTitle}">SoundHub - Add New Track</title>
 </head>
 <body>
-<main class="flex flex-1 justify-center py-8 px-4 sm:px-8 lg:px-12">
-    <div class="layout-content-container flex flex-col max-w-5xl flex-1 gap-8">
+<section class="flex flex-1 justify-center py-8 px-4 sm:px-8 lg:px-12">
+    <div class="layout-content-container flex flex-col max-w-5xl w-full mx-auto gap-8">
         <div>
             <h1 class="text-slate-100 tracking-tight text-3xl font-bold leading-tight mb-2" th:text="#{addSong.title}">
                 Add New Track</h1>
@@ -450,6 +450,6 @@
             </div>
         </form>
     </div>
-</main>
+</section>
 </body>
 </html>

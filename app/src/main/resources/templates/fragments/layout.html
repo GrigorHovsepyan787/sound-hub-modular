@@ -43,27 +43,120 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        #main-content {
+            transition: opacity 0.15s ease;
+        }
+
+        #main-content.swapping {
+            opacity: 0;
+        }
     </style>
 </head>
 <body class="font-sans antialiased bg-brand-dark">
 
 <div th:replace="~{fragments/navigation :: header}"></div>
 
-<main class="pt-16">
+<main id="main-content" class="pt-16">
     <th:block th:replace="${content}"></th:block>
 </main>
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-<div th:if="${currentAudio} != null" id="main-player-bar" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-t border-white/5 px-4 py-3">
-    <div th:replace="~{fragments/player :: player_content}"></div>
-</div>
+<div th:replace="~{fragments/player :: player}"></div>
 
 <script data-purpose="mobile-nav-toggle">
     const menuToggle = document.getElementById('mobile-menu-toggle');
-    menuToggle.addEventListener('click', () => {
-        alert('Mobile menu navigation triggered.');
-    });
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            alert('Mobile menu navigation triggered.');
+        });
+    }
+</script>
+
+<script data-purpose="spa-router">
+    (function () {
+        const mainContent = document.getElementById('main-content');
+
+        function runInlineScripts(container) {
+            container.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                    newScript.src = oldScript.src;
+                } else {
+                    newScript.textContent = oldScript.textContent;
+                }
+                document.head.appendChild(newScript).parentNode.removeChild(newScript);
+            });
+        }
+
+        async function navigateTo(url) {
+            mainContent.classList.add('swapping');
+            try {
+                const res = await fetch(url, {
+                    headers: {'X-Requested-With': 'XMLHttpRequest'}
+                });
+                if (!res.ok) {
+                    window.location.href = url;
+                    return;
+                }
+                const html = await res.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const section = doc.querySelector('section');
+                if (!section) {
+                    window.location.href = url;
+                    return;
+                }
+                await new Promise(r => setTimeout(r, 150));
+                mainContent.innerHTML = section.innerHTML;
+                mainContent.classList.remove('swapping');
+                window.history.pushState({url}, doc.title, url);
+                document.title = doc.title;
+                runInlineScripts(mainContent);
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            } catch (err) {
+                window.location.href = url;
+            }
+        }
+
+        document.addEventListener('click', e => {
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href');
+            if (!href
+                || href.startsWith('http')
+                || href.startsWith('#')
+                || href.includes('lang=')
+                || href.includes('/loginPage')
+                || href.includes('/registerPage')
+                || href.includes('/user/profile')
+                || link.target === '_blank') return;
+            e.preventDefault();
+            navigateTo(href);
+        });
+
+        document.addEventListener('change', e => {
+            const select = e.target.closest('select[name]');
+            if (!select) return;
+            const form = select.closest('form');
+            if (!form) return;
+
+            if (form.method && form.method.toLowerCase() !== 'get') return;
+
+            const formData = new FormData(form);
+            formData.set(select.name, select.value);
+            const params = new URLSearchParams(formData).toString();
+            const action = form.getAttribute('action') || window.location.pathname;
+            navigateTo(`${action}?${params}`);
+        });
+
+        window.addEventListener('popstate', e => {
+            if (e.state && e.state.url) navigateTo(e.state.url);
+        });
+
+        history.replaceState({url: location.href}, document.title, location.href);
+    })();
 </script>
 </body>
 </html>
