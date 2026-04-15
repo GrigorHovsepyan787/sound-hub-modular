@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
@@ -62,16 +63,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void save(RegisterRequest request, MultipartFile multipartFile, Locale locale) {
+    public String save(RegisterRequest request, MultipartFile multipartFile, Locale locale, BindingResult bindingResult) {
 
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+            return "redirect:/registerPage?msg=Username already exists!";
         }
-
+        if (bindingResult.hasErrors()) {
+            return "registerPage";
+        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
+            return "redirect:/registerPage?msg=Email already exists";
         }
-
         User user = registerRequestMapper.toEntity(request);
 
         user.setVerificationCode(generateVerificationCode());
@@ -82,6 +84,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         sendVerificationEmailSafe(user, locale);
+
+        return "redirect:/verify?email=" + request.getEmail();
     }
 
     @Override

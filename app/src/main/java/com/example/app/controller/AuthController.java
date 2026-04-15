@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Locale;
-
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
@@ -61,20 +59,12 @@ public class AuthController {
     public String register(@Valid @ModelAttribute("registerRequest") RegisterRequest registeredUser,
                            BindingResult bindingResult,
                            @RequestParam("pic") MultipartFile multipartfile) {
-        Locale locale = LocaleContextHolder.getLocale();
-        if (userService.findByUsername(registeredUser.getUsername()).isPresent()) {
-            return "redirect:/registerPage?msg=Username already exists!";
-        }
-        if(bindingResult.hasErrors()) {
-            return "registerPage";
-        }
         registeredUser.setPassword(passwordEncoder.encode(registeredUser.getPassword()));
-        userService.save(registeredUser, multipartfile, locale);
-        return "redirect:/verify?email=" + registeredUser.getEmail();
+        return userService.save(registeredUser, multipartfile, LocaleContextHolder.getLocale(), bindingResult);
     }
 
     @PostMapping("/verify")
-    public String verify(@RequestParam("email") String email, @RequestParam("verificationCode")  String verificationCode) {
+    public String verify(@RequestParam("email") String email, @RequestParam("verificationCode") String verificationCode) {
         return userService.verifyUser(email, verificationCode);
     }
 }
