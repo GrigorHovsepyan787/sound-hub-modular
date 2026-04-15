@@ -28,4 +28,10 @@ public interface SongService {
     void registerPlay(Long songId);
 
     Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable);
+
+    List<SongDto> getTop5SongsOfArtistByPlayCount(Long artistId);
+
+    List<SongDto> getTop5SongsOfBandByPlayCount(Long artistId);
+
+    List<SongDto> getSongsByAlbumId(Long albumId);
 }

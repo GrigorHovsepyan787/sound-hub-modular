@@ -58,8 +58,10 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         log.info("Deleting song ID: {}", id);
+        songPlayRepository.deleteBySongId(id);
         songRepository.deleteById(id);
     }
 
@@ -131,9 +133,33 @@ public class SongServiceImpl implements SongService {
     public Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.last30Days();
         return songPlayRepository.findTopSongsForPeriod(
-                month.start(),
-                month.end(),
-                pageable)
+                        month.start(),
+                        month.end(),
+                        pageable)
                 .map(songPopularityMapper::toDto);
+    }
+
+    @Override
+    public List<SongDto> getTop5SongsOfArtistByPlayCount(Long artistId) {
+        return songRepository.findTop5ByArtistIdOrderByPlayCountDesc(artistId)
+                .stream()
+                .map(songMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<SongDto> getTop5SongsOfBandByPlayCount(Long artistId) {
+        return songRepository.findTop5ByBandIdOrderByPlayCountDesc(artistId)
+                .stream()
+                .map(songMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<SongDto> getSongsByAlbumId(Long albumId) {
+        return songRepository.findByAlbumId(albumId)
+                .stream()
+                .map(songMapper::toDto)
+                .toList();
     }
 }

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/layout :: layout(~{::title}, ~{::main})}">
-
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
     <title th:text="#{songs.pageTitle}">Songs Directory - SoundHub</title>
 </head>
 
 <body>
-<main class="pt-24 pb-12">
+<section class="pt-24 pb-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
@@ -83,27 +82,30 @@
                         </th>
                         <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 hidden md:table-cell">
 
-                            <form method="get" th:action="@{/songs}" class="flex items-center gap-2">
-
+                            <div class="flex items-center gap-2">
                                 <span th:text="#{songs.table.genre}">Genre</span>
 
-                                <select name="genre" onchange="this.form.submit()" class="text-xs bg-transparent border border-slate-300 dark:border-slate-700 rounded px-1 py-[2px]">
+                                <select id="genreFilter"
+                                        class="text-xs bg-transparent border border-slate-300 dark:border-slate-700 rounded px-1 py-[2px]"
+                                        th:data-sort="${currentSort}"
+                                        th:data-size="${songs.size}">
+
                                     <option value=""
                                             th:selected="${selectedGenre == null or #strings.isEmpty(selectedGenre)}">
                                         All
                                     </option>
+
                                     <option th:each="g : ${genres}"
                                             th:value="${g}"
                                             th:text="${g}"
                                             th:selected="${selectedGenre != null and #strings.equals(g.toString(), selectedGenre)}">
                                     </option>
                                 </select>
+                            </div>
 
-                                <input type="hidden" name="sort" th:value="${currentSort}"/>
-                                <input type="hidden" name="size" th:value="${songs.size}"/>
-                                <input type="hidden" name="page" value="0"/>
-
-                            </form>
+                            <input type="hidden" name="sort" th:value="${currentSort}"/>
+                            <input type="hidden" name="size" th:value="${songs.size}"/>
+                            <input type="hidden" name="page" value="0"/>
 
                         </th>
                         <th class="py-4 px-6 text-xs font-bold uppercase tracking-wider text-slate-400 text-right"
@@ -113,7 +115,7 @@
                         <th class="py-4 px-4"></th>
                     </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tbody id="songsTableBody" class="divide-y divide-slate-100 dark:divide-slate-800">
                     <tr th:each="song : ${songs.content}"
                         class="group hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer">
 
@@ -122,18 +124,17 @@
                                     th:data-id="${song.id}"
                                     th:data-title="${song.title}"
                                     th:data-performer="${song.performer}"
-                                    th:attr="onclick=|playSong('${song.songUrl}', this)|"
+                                    th:data-url="${song.songUrl}"
+                                    data-play-btn
                                     class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent
-                            group-hover:bg-primary group-hover:text-white transition-all text-slate-400">
-                                ▶
+                            group-hover:bg-brand-accent group-hover:text-white transition-all text-slate-400">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
                             </button>
                         </td>
 
                         <td class="py-4 px-6">
                             <span class="block font-semibold text-slate-900 dark:text-white"
                                   th:text="${song.title}"></span>
-                            <span class="text-[10px] text-slate-400 font-mono"
-                                  th:text="${song.playCount} + ' ' + #{songs.plays}"></span>
                             <div class="md:hidden" th:if="${song.bandId == null && song.artistId != null}">
                                 <a th:href="@{/artists/preview(id=${song.artistId})}"
                                    class="text-xs text-slate-500 hover:underline"
@@ -180,222 +181,86 @@
             </div>
         </div>
 
-        <div id="playerBar"
-             class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 p-4 transform translate-y-full transition-transform duration-300 z-50">
-            <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-
-                <div class="flex items-center gap-3 w-1/3">
-                    <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary">
-                        <i class="fa-solid fa-music"></i>
-                    </div>
-                    <div class="overflow-hidden">
-                        <p id="nowPlayingTitle" class="font-bold text-slate-900 dark:text-white truncate"
-                           th:text="#{songs.player.selectSong}">Select a
-                            song</p>
-                        <p id="nowPlayingArtist" class="text-xs text-slate-500 dark:text-slate-400 truncate">Artist</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col items-center w-1/3 gap-2">
-                    <div class="flex items-center gap-6">
-                        <button onclick="playPrev()"
-                                class="text-slate-400 hover:text-primary transition-colors active:scale-90">
-                            <i class="fa-solid fa-backward-step"></i>
-                        </button>
-
-                        <button id="masterPlayBtn"
-                                class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
-                            <i class="fa-solid fa-play ml-1"></i>
-                        </button>
-
-                        <button onclick="playNext()"
-                                class="text-slate-400 hover:text-primary transition-colors active:scale-90">
-                            <i class="fa-solid fa-forward-step"></i>
-                        </button>
-                    </div>
-
-                    <div class="w-full flex items-center gap-3 text-[10px] font-mono text-slate-400">
-                        <span id="currentTime">0:00</span>
-                        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1"
-                               class="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary">
-                        <span id="totalTime">0:00</span>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-end gap-3 w-1/3">
-
-                    <style>
-                        .vol-bars {
-                            display: flex;
-                            align-items: center;
-                            gap: 2px;
-                            height: 18px;
-                        }
-
-                        .vol-bar {
-                            width: 3px;
-                            border-radius: 2px;
-                            background: #94a3b8;
-                            transition: height 0.12s cubic-bezier(.4, 0, .2, 1), background 0.2s;
-                        }
-
-                        #volumeControl {
-                            -webkit-appearance: none;
-                            appearance: none;
-                            width: 88px;
-                            height: 3px;
-                            border-radius: 2px;
-                            outline: none;
-                            border: none;
-                            cursor: pointer;
-                        }
-
-                        #volumeControl::-webkit-slider-thumb {
-                            -webkit-appearance: none;
-                            width: 13px;
-                            height: 13px;
-                            border-radius: 50%;
-                            background: white;
-                            cursor: pointer;
-                            transition: transform 0.15s cubic-bezier(.4, 0, .2, 1);
-                            box-shadow: 0 0 0 2px #1e293b;
-                        }
-
-                        #volumeControl:hover::-webkit-slider-thumb {
-                            transform: scale(1.3);
-                        }
-                    </style>
-
-                    <div class="vol-bars" id="waveform">
-                        <div class="vol-bar" style="height:4px"></div>
-                        <div class="vol-bar" style="height:8px"></div>
-                        <div class="vol-bar" style="height:13px"></div>
-                        <div class="vol-bar" style="height:9px"></div>
-                        <div class="vol-bar" style="height:5px"></div>
-                        <div class="vol-bar" style="height:11px"></div>
-                        <div class="vol-bar" style="height:7px"></div>
-                    </div>
-
-                    <input type="range" id="volumeControl" min="0" max="100" value="50">
-
-                    <span id="volumePercent" class="text-[10px] font-mono text-slate-400 w-8 text-right">50%</span>
-
-                    <script>
-                        const slider = document.getElementById('volumeControl');
-                        const label = document.getElementById('volumePercent');
-                        const bars = document.querySelectorAll('.vol-bar');
-                        const baseH = [4, 8, 13, 9, 5, 11, 7];
-
-                        function update(val) {
-                            const pct = val / 100;
-                            label.textContent = val + '%';
-                            slider.style.background = `linear-gradient(to right, ${val === 0 ? '#475569' : '#7c3aed'} ${val}%, #334155 ${val}%)`;
-                            bars.forEach((bar, i) => {
-                                bar.style.height = (val === 0 ? 2 : Math.max(2, Math.round(baseH[i] * pct * 1.4 + 1))) + 'px';
-                                bar.style.background = val === 0 ? '#475569' : `rgba(124,58,237,${0.45 + pct * 0.55})`;
-                            });
-                        }
-
-                        slider.addEventListener('input', e => update(+e.target.value));
-                        update(50);
-                    </script>
-                </div>
-            </div>
-        </div>
-
-        <audio id="audioPlayer"></audio>
-
         <script>
-            const player = document.getElementById("audioPlayer");
-            const playerBar = document.getElementById("playerBar");
-            const masterPlayBtn = document.getElementById("masterPlayBtn");
-            const progressBar = document.getElementById("progressBar");
-            const volumeControl = document.getElementById("volumeControl");
-            const volumePercent = document.getElementById("volumePercent");
+            (function () {
+                const buttons = Array.from(document.querySelectorAll('[data-play-btn]'));
+                const songs = buttons.map(btn => ({
+                    id: btn.dataset.id,
+                    title: btn.dataset.title,
+                    performer: btn.dataset.performer,
+                    url: btn.dataset.url,
+                }));
+                document.dispatchEvent(new CustomEvent('soundhub:register', {detail: {songs}}));
 
-            let currentSongIndex = -1;
-            const allSongs = Array.from(document.querySelectorAll('button[data-title]'));
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.dispatchEvent(new CustomEvent('soundhub:play', {
+                            detail: {
+                                id: btn.dataset.id,
+                                title: btn.dataset.title,
+                                performer: btn.dataset.performer,
+                                url: btn.dataset.url,
+                                songs: songs,
+                            }
+                        }));
+                    });
+                });
+            })();
+            document.getElementById('genreFilter').addEventListener('change', async function () {
+                const genre = this.value;
+                const sort = this.dataset.sort;
+                const size = this.dataset.size;
 
-            let counted = false;
+                const url = `/songs?page=0&size=${size}&sort=${sort}&genre=${genre}`;
 
-            function playSong(url, element) {
-                currentSongIndex = allSongs.indexOf(element);
+                try {
+                    const res = await fetch(url);
+                    const html = await res.text();
 
-                counted = false;
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
 
-                const songId = element.getAttribute('data-id');   // ADD
-                fetch(`/songs/play?id=${songId}`, {redirect: 'manual'});   // ADD
+                    const newBody = doc.querySelector('#songsTableBody');
+                    const currentBody = document.querySelector('#songsTableBody');
 
-                playerBar.classList.remove('translate-y-full');
-                document.getElementById("nowPlayingTitle").innerText = element.getAttribute('data-title');
-                document.getElementById("nowPlayingArtist").innerText = element.getAttribute('data-performer');
+                    currentBody.innerHTML = newBody.innerHTML;
 
-                player.src = url;
-                player.play();
-                masterPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            }
+                    bindPlayButtons();
 
-            progressBar.addEventListener('input', () => {
-                const seekTime = (progressBar.value / 100) * player.duration;
-                player.currentTime = seekTime;
-            });
-
-            volumeControl.addEventListener('input', () => {
-                player.volume = volumeControl.value / 100;
-                volumePercent.innerText = `${volumeControl.value}%`;
-
-                const icon = document.querySelector('.fa-volume-low, .fa-volume-high, .fa-volume-xmark');
-                if (volumeControl.value == 0) {
-                    icon.className = "fa-solid fa-volume-xmark text-slate-400";
-                } else if (volumeControl.value < 50) {
-                    icon.className = "fa-solid fa-volume-low text-slate-400";
-                } else {
-                    icon.className = "fa-solid fa-volume-high text-slate-400";
+                } catch (e) {
+                    console.error('Filter failed:', e);
                 }
             });
 
-            function playNext() {
-                if (currentSongIndex < allSongs.length - 1) {
-                    const nextBtn = allSongs[currentSongIndex + 1];
-                    nextBtn.click();
-                }
+
+            function bindPlayButtons() {
+                const buttons = Array.from(document.querySelectorAll('[data-play-btn]'));
+
+                const songs = buttons.map(btn => ({
+                    id: btn.dataset.id,
+                    title: btn.dataset.title,
+                    performer: btn.dataset.performer,
+                    url: btn.dataset.url,
+                }));
+
+                document.dispatchEvent(new CustomEvent('soundhub:register', {detail: {songs}}));
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.dispatchEvent(new CustomEvent('soundhub:play', {
+                            detail: {
+                                id: btn.dataset.id,
+                                title: btn.dataset.title,
+                                performer: btn.dataset.performer,
+                                url: btn.dataset.url,
+                                songs: songs,
+                            }
+                        }));
+                    });
+                });
             }
 
-            function playPrev() {
-                if (currentSongIndex > 0) {
-                    const prevBtn = allSongs[currentSongIndex - 1];
-                    prevBtn.click();
-                }
-            }
-
-            player.addEventListener('ended', playNext);
-
-            masterPlayBtn.addEventListener('click', () => {
-                if (player.src) {
-                    if (player.paused) {
-                        player.play();
-                        masterPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                    } else {
-                        player.pause();
-                        masterPlayBtn.innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
-                    }
-                }
-            });
-
-            player.addEventListener('timeupdate', () => {
-                if (!isNaN(player.duration)) {
-                    const progress = (player.currentTime / player.duration) * 100;
-                    progressBar.value = progress;
-                    document.getElementById("currentTime").innerText = formatTime(player.currentTime);
-                    document.getElementById("totalTime").innerText = formatTime(player.duration);
-                }
-            });
-
-            function formatTime(seconds) {
-                const min = Math.floor(seconds / 60);
-                const sec = Math.floor(seconds % 60);
-                return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-            }
+            bindPlayButtons();
         </script>
 
         <div class="flex justify-center mt-6">
@@ -424,6 +289,6 @@
             </ul>
         </div>
     </div>
-</main>
+</section>
 </body>
 </html>

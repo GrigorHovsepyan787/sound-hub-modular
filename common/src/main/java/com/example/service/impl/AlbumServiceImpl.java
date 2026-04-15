@@ -1,11 +1,13 @@
 package com.example.service.impl;
 
+import com.example.mapper.SongMapper;
 import com.example.model.Album;
 import com.example.projection.AlbumPopularity;
 import com.example.repository.AlbumRepository;
 import com.example.repository.ArtistRepository;
 import com.example.repository.BandRepository;
 import com.example.repository.SongPlayRepository;
+import com.example.repository.SongRepository;
 import com.example.service.AlbumService;
 import com.example.storage.StorageService;
 import com.example.util.DateRange;
@@ -31,6 +33,8 @@ public class AlbumServiceImpl implements AlbumService {
     private final BandRepository bandRepository;
     private final ArtistRepository artistRepository;
     private final SongPlayRepository songPlayRepository;
+    private final SongRepository songRepository;
+    private final SongMapper songMapper;
     @Value("${album.default-image}")
     private String defaultImageUrl;
 

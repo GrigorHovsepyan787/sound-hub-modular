@@ -4,14 +4,17 @@
 <header th:fragment="header" class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-            <div class="flex items-center gap-2" data-purpose="brand-logo">
+            <a th:href="@{/}" class="flex items-center gap-2" data-purpose="brand-logo">
                 <div class="w-8 h-8 bg-brand-accent rounded-lg flex items-center justify-center">
                     <i class="fa-solid fa-waveform text-white"></i>
                 </div>
-                <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">SoundHub</span>
-            </div>
+                <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                    SoundHub
+                </span>
+            </a>
             <nav class="hidden md:flex space-x-8" data-purpose="main-navigation">
-                <a class="text-sm font-medium hover:text-brand-accent transition-colors" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+                <a class="text-sm font-medium hover:text-brand-accent transition-colors" th:href="@{/}"
+                   th:text="#{navigation.home}">Home</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
                    href="/artists" th:text="#{navigation.artists}">Artists</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
@@ -23,10 +26,14 @@
             </nav>
             <th:block th:if="${currentUser} == null">
                 <div class="hidden md:flex items-center space-x-4" data-purpose="auth-actions">
-                    <a th:href="@{/loginPage}" class="px-5 py-2 text-sm font-medium border border-gray-700 rounded-full hover:bg-white/5 transition-all" th:text="#{navigation.login}">
+                    <a th:href="@{/loginPage}"
+                       class="px-5 py-2 text-sm font-medium border border-gray-700 rounded-full hover:bg-white/5 transition-all"
+                       th:text="#{navigation.login}">
                         Login
                     </a>
-                    <a th:href="@{/registerPage}" class="px-5 py-2 text-sm font-medium bg-brand-accent hover:bg-brand-accentHover text-white rounded-full shadow-lg shadow-brand-accent/20 transition-all" th:text="#{navigation.register}">
+                    <a th:href="@{/registerPage}"
+                       class="px-5 py-2 text-sm font-medium bg-brand-accent hover:bg-brand-accentHover text-white rounded-full shadow-lg shadow-brand-accent/20 transition-all"
+                       th:text="#{navigation.register}">
                         Register
                     </a>
                 </div>
@@ -36,10 +43,12 @@
                 <th:block th:if="${currentUser} != null">
                     <div class="flex items-center gap-3 cursor-pointer group">
                         <a th:href="@{/user/profile}">
-                        <img width="50px" th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
-                             th:src="${currentUser.pictureUrl}" alt="User picture">
-                        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
-                             th:src="@{/images/img.png}" alt="User picture">
+                            <img width="50px"
+                                 th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
+                                 th:src="${currentUser.pictureUrl}" alt="User picture">
+                            <img width="50px"
+                                 th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
+                                 th:src="@{/images/img.png}" alt="User picture">
                         </a>
                         <span class="text-sm font-medium" th:text="#{navigation.welcome}">Welcome, </span>
                         <span class="text-brand-accent" th:text="${currentUser.getName()}"></span>
@@ -53,9 +62,17 @@
                         <i class="fa-solid fa-chevron-down text-[10px]"></i>
                     </button>
                     <div class="absolute right-0 mt-2 w-32 bg-brand-surface border border-white/10 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-1">
-                        <a class="block px-4 py-2 text-xs hover:bg-white/5" href="?lang=en">English</a>
-                        <a class="block px-4 py-2 text-xs hover:bg-white/5" href="?lang=ru">Русский</a>
-                        <a class="block px-4 py-2 text-xs hover:bg-white/5" href="?lang=hy">Հայերեն</a>
+                        <a class="block px-4 py-2 text-xs hover:bg-white/5"
+                           href="?lang=en"
+                           onclick="event.preventDefault(); const p = new URLSearchParams(window.location.search); p.set('lang','en'); window.location.href = window.location.pathname + '?' + p.toString();">English</a>
+
+                        <a class="block px-4 py-2 text-xs hover:bg-white/5"
+                           href="?lang=ru"
+                           onclick="event.preventDefault(); const p = new URLSearchParams(window.location.search); p.set('lang','ru'); window.location.href = window.location.pathname + '?' + p.toString();">Русский</a>
+
+                        <a class="block px-4 py-2 text-xs hover:bg-white/5"
+                           href="?lang=hy"
+                           onclick="event.preventDefault(); const p = new URLSearchParams(window.location.search); p.set('lang','hy'); window.location.href = window.location.pathname + '?' + p.toString();">Հայերեն</a>
                     </div>
                     <div class="md:hidden flex items-center">
                         <button class="text-gray-400 hover:text-white focus:outline-none" id="mobile-menu-toggle">
