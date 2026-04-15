@@ -8,6 +8,7 @@ import com.example.projection.SongPopularity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -129,4 +130,8 @@ public interface SongPlayRepository extends JpaRepository<SongPlay, Long> {
             @Param("end") LocalDateTime end,
             Pageable pageable
     );
+
+    @Modifying
+    @Query("DELETE FROM SongPlay sp WHERE sp.song.id = :songId")
+    void deleteBySongId(@Param("songId") Long songId);
 }

@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface SongRepository extends JpaRepository<Song, Long>, JpaSpecificationExecutor<Song> {
 
     Page<Song> findAll(Specification<Song> spec, Pageable pageable);
@@ -22,4 +24,15 @@ public interface SongRepository extends JpaRepository<Song, Long>, JpaSpecificat
     void incrementPlayCount(@Param("id") Long id);
 
     Page<Song> findByGenre(Genre genre, Pageable pageable);
+
+    List<Song> findByArtistId(Long artistId);
+
+    List<Song> findTop5ByArtistIdOrderByPlayCountDesc(Long artistId);
+
+    List<Song> findTop5ByBandIdOrderByPlayCountDesc(Long bandId);
+
+    List<Song> findByAlbumId(Long albumId);
+
+
+
 }
