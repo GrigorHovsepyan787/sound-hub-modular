@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -141,16 +140,6 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public List<SongDto> findByArtistId(Long artistId) {
-        return songRepository.findByArtistId(artistId)
-                .stream()
-                .sorted(Comparator.comparingInt(Song::getPlayCount).reversed())
-                .limit(5)
-                .map(songMapper::toDto)
-                .toList();
-    }
-
-    @Override
     public List<SongDto> getTop5SongsOfArtistByPlayCount(Long artistId) {
         return songRepository.findTop5ByArtistIdOrderByPlayCountDesc(artistId)
                 .stream()
@@ -171,6 +160,6 @@ public class SongServiceImpl implements SongService {
         return songRepository.findByAlbumId(albumId)
                 .stream()
                 .map(songMapper::toDto)
-                 .toList();
+                .toList();
     }
 }

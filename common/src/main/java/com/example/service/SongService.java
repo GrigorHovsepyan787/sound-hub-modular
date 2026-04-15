@@ -29,8 +29,6 @@ public interface SongService {
 
     Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable);
 
-    List<SongDto> findByArtistId(Long artistId);
-
     List<SongDto> getTop5SongsOfArtistByPlayCount(Long artistId);
 
     List<SongDto> getTop5SongsOfBandByPlayCount(Long artistId);
