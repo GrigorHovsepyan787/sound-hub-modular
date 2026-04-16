@@ -1,28 +1,35 @@
 package com.example.service.impl;
 
+import com.example.dto.AdminDashboardStats;
 import com.example.dto.RegisterRequest;
 import com.example.dto.UserSearchCriteria;
 import com.example.mapper.RegisterRequestMapper;
 import com.example.model.User;
 import com.example.model.UserStatus;
+import com.example.repository.ArtistRepository;
+import com.example.repository.BandRepository;
+import com.example.repository.SongPlayRepository;
 import com.example.repository.UserRepository;
 import com.example.service.SendMailService;
 import com.example.service.UserService;
 import com.example.service.specification.UserSpecification;
 import com.example.storage.StorageService;
+import com.example.util.DateRange;
+import com.example.util.DateRangeUtils;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
@@ -31,9 +38,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-
+    private final ArtistRepository artistRepository;
     private final UserRepository userRepository;
     private final StorageService storageService;
+    private final BandRepository bandRepository;
+    private final SongPlayRepository songPlayRepository;
+    private final Clock clock = Clock.systemDefaultZone();
     private final SendMailService sendMailService;
     private final RegisterRequestMapper registerRequestMapper;
     private final SecureRandom secureRandom = new SecureRandom();
@@ -142,6 +152,47 @@ public class UserServiceImpl implements UserService {
         return "redirect:/loginPage?msg=Verification successful!";
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public AdminDashboardStats getAdminDashboardStats() {
+        DateRange dateRange = DateRangeUtils.monthlyRange(clock);
+        long totalListening = songPlayRepository.count();
+        long totalUsers = userRepository.count();
+        long totalArtists = artistRepository.count() + bandRepository.count();
+        LocalDateTime currentStart = dateRange.currentStart();
+        LocalDateTime currentEnd = dateRange.currentEnd();
+        LocalDateTime previousStart = dateRange.previousStart();
+        LocalDateTime previousEnd = dateRange.previousEnd();
+
+        long currentListening = songPlayRepository.countByPlayedAtBetween(currentStart, currentEnd);
+        long previousListening = songPlayRepository.countByPlayedAtBetween(previousStart, previousEnd);
+        double listeningGrowth = calculateGrowth(currentListening, previousListening);
+
+        long currentUsers = userRepository.countByRegistrationDateBetween(currentStart, currentEnd);
+        long previousUsers = userRepository.countByRegistrationDateBetween(previousStart, previousEnd);
+        double usersGrowth = calculateGrowth(currentUsers, previousUsers);
+
+        long currentArtists = artistRepository.countByCreatedAtBetween(currentStart, currentEnd)
+                + bandRepository.countByCreatedAtBetween(currentStart, currentEnd);
+        long previousArtists = artistRepository.countByCreatedAtBetween(previousStart, previousEnd)
+                + bandRepository.countByCreatedAtBetween(previousStart, previousEnd);
+        double artistsGrowth = calculateGrowth(currentArtists, previousArtists);
+
+        return new AdminDashboardStats(totalListening, totalUsers, totalArtists, listeningGrowth, usersGrowth, artistsGrowth);
+    }
+
+    private void sendVerificationEmailSafe(User user, Locale locale) {
+        try {
+            sendMailService.sendVerificationMail(
+                    user.getEmail(),
+                    user.getVerificationCode(),
+                    locale
+            );
+        } catch (MessagingException e) {
+            log.error("Error while sending verification mail to {}", user.getEmail(), e);
+        }
+    }
+
     private String generateVerificationCode() {
         int code = VERIFICATION_CODE_MIN + secureRandom.nextInt(VERIFICATION_CODE_RANGE);
         return String.valueOf(code);
@@ -161,15 +212,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void sendVerificationEmailSafe(User user, Locale locale) {
-        try {
-            sendMailService.sendVerificationMail(
-                    user.getEmail(),
-                    user.getVerificationCode(),
-                    locale
-            );
-        } catch (MessagingException e) {
-            log.error("Error while sending verification mail to {}", user.getEmail(), e);
+    private double calculateGrowth(long current, long previous) {
+        if (previous == 0) {
+            return current == 0 ? 0 : 100;
         }
+
+        double growth =
+                ((double) (current - previous) / previous) * 100;
+
+        return Math.round(growth * 10.0) / 10.0;
     }
 }

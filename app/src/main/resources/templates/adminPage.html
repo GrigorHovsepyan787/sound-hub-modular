@@ -48,10 +48,7 @@
                             <span class="truncate">logout</span>
                         </a>
                         <img width="50px"
-                             th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
                              th:src="${currentUser.pictureUrl}" alt="User picture">
-                        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
-                             th:src="@{/images/img.png}" alt="User picture">
                     </div>
                 </header>
                 <div class="flex flex-wrap justify-between items-center gap-3 px-4 mb-6">
@@ -70,9 +67,10 @@
                                 Streams</p>
                             <span class="material-symbols-outlined text-primary text-xl">play_circle</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalListening}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
+                            <p th:text="${listeningGrowth}"></p><p>%</p>
                         </div>
                     </div>
                     <div class="flex min-w-[158px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -81,9 +79,10 @@
                                 Users</p>
                             <span class="material-symbols-outlined text-primary text-xl">person</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalUsers}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
+                            <p th:text="${usersGrowth}"></p><p>%</p>
                         </div>
                     </div>
                     <div class="flex min-w-[158px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -92,9 +91,10 @@
                                 Artists</p>
                             <span class="material-symbols-outlined text-primary text-xl">mic</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalArtists}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
+                            <p th:text="${artistsGrowth}"></p><p>%</p>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.AdminDashboardStats;
 import com.example.dto.RegisterRequest;
 import com.example.dto.UserSearchCriteria;
 import com.example.model.User;
@@ -24,4 +25,6 @@ public interface UserService {
     Optional<User> findByUsername(String username);
 
     String verifyUser(String email, String code);
+
+    AdminDashboardStats getAdminDashboardStats();
 }

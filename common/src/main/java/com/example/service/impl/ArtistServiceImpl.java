@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ public class ArtistServiceImpl implements ArtistService {
     private final SongPlayRepository songPlayRepository;
     private static final String DEFAULT_ARTIST_IMAGE =
             "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/ArtistDefault.png";
+    private final Clock clock = Clock.systemDefaultZone();
 
     @Override
     public Page<Artist> findAll(Pageable pageable) {
@@ -134,11 +136,11 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Page<ArtistPopularity> getTopArtistPopularityLastMonth(Pageable pageable) {
-        DateRange month = DateRangeUtils.last30Days();
+        DateRange month = DateRangeUtils.monthlyRange(clock);
 
         return songPlayRepository.findTopArtistsForPeriod(
-                month.start(),
-                month.end(),
+                month.currentStart(),
+                month.currentEnd(),
                 pageable);
     }
 }

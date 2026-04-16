@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface BandRepository extends JpaRepository<Band, Long>, JpaSpecificationExecutor<Band> {
@@ -19,4 +20,6 @@ public interface BandRepository extends JpaRepository<Band, Long>, JpaSpecificat
 
     @Query("SELECT b FROM Band b LEFT JOIN FETCH b.artists WHERE b.id = :id")
     Optional<Band> findByIdWithArtists(@Param("id") Long id);
+
+    long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

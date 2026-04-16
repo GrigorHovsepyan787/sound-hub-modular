@@ -21,7 +21,13 @@ public class AdminController {
     private final UserService userService;
 
     @GetMapping("/admin/home")
-    public String home() {
+    public String home(ModelMap modelMap) {
+        modelMap.addAttribute("totalListening", userService.getAdminDashboardStats().totalListening());
+        modelMap.addAttribute("listeningGrowth", userService.getAdminDashboardStats().listeningGrowthPercent());
+        modelMap.addAttribute("totalUsers", userService.getAdminDashboardStats().totalUsers());
+        modelMap.addAttribute("usersGrowth", userService.getAdminDashboardStats().usersGrowthPercent());
+        modelMap.addAttribute("totalArtists", userService.getAdminDashboardStats().totalArtists());
+        modelMap.addAttribute("artistsGrowth", userService.getAdminDashboardStats().artistsGrowthPercent());
         return "adminPage";
     }
 

@@ -1,0 +1,32 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="17" author="grigor">
+        <createIndex
+                indexName="idx_song_plays_played_at"
+                tableName="song_plays">
+            <column name="played_at"/>
+        </createIndex>
+
+        <createIndex
+                indexName="idx_user_registration_date"
+                tableName="user">
+            <column name="registration_date"/>
+        </createIndex>
+
+        <createIndex
+                indexName="idx_artist_created_at"
+                tableName="artist">
+            <column name="created_at"/>
+        </createIndex>
+
+        <createIndex
+                indexName="idx_band_created_at"
+                tableName="band">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -30,6 +31,7 @@ public class BandServiceImpl implements BandService {
     private final SongPlayRepository songPlayRepository;
     private static final String DEFAULT_BAND_IMAGE =
             "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/BandDefault.png";
+    private final Clock clock = Clock.systemDefaultZone();
 
     @Override
     public Page<Band> findAll(Pageable pageable) {
@@ -116,11 +118,11 @@ public class BandServiceImpl implements BandService {
 
     @Override
     public Page<BandPopularity> getTopBandPopularityLastMonth(Pageable pageable) {
-        DateRange month = DateRangeUtils.last30Days();
+        DateRange month = DateRangeUtils.monthlyRange(clock);
 
         return songPlayRepository.findTopBandsForPeriod(
-                month.start(),
-                month.end(),
+                month.currentStart(),
+                month.currentEnd(),
                 pageable);
     }
 }

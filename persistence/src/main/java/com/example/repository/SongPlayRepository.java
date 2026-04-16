@@ -134,4 +134,6 @@ public interface SongPlayRepository extends JpaRepository<SongPlay, Long> {
     @Modifying
     @Query("DELETE FROM SongPlay sp WHERE sp.song.id = :songId")
     void deleteBySongId(@Param("songId") Long songId);
+
+    long countByPlayedAtBetween(LocalDateTime start, LocalDateTime end);
 }
