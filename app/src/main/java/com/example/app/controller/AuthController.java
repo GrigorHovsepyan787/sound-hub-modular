@@ -1,14 +1,17 @@
 package com.example.app.controller;
 
 import com.example.app.service.security.SpringUser;
-import com.example.model.User;
+import com.example.dto.RegisterRequest;
 import com.example.model.UserType;
 import com.example.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,17 +44,27 @@ public class AuthController {
 
     @GetMapping("/registerPage")
     public String registerPage(@RequestParam(required = false) String msg, ModelMap modelMap) {
+        userService.isRegisterRequestPresent(modelMap);
         modelMap.addAttribute("msg", msg);
         return "registerPage";
     }
 
+    @GetMapping("/verify")
+    public String verifyPage(@RequestParam("email") String email, ModelMap modelMap) {
+        modelMap.addAttribute("email", email);
+        return "verifyPage";
+    }
+
     @PostMapping("/register")
-    public String register(@ModelAttribute User registeredUser, @RequestParam("pic") MultipartFile multipartfile) {
-        if (userService.findByUsername(registeredUser.getUsername()).isPresent()) {
-            return "redirect:/registerPage?msg=Username already exists!";
-        }
+    public String register(@Valid @ModelAttribute("registerRequest") RegisterRequest registeredUser,
+                           BindingResult bindingResult,
+                           @RequestParam("pic") MultipartFile multipartfile) {
         registeredUser.setPassword(passwordEncoder.encode(registeredUser.getPassword()));
-        userService.save(registeredUser, multipartfile);
-        return "redirect:/loginPage?msg=Registration successful, pls login!";
+        return userService.save(registeredUser, multipartfile, LocaleContextHolder.getLocale(), bindingResult);
+    }
+
+    @PostMapping("/verify")
+    public String verify(@RequestParam("email") String email, @RequestParam("verificationCode") String verificationCode) {
+        return userService.verifyUser(email, verificationCode);
     }
 }
