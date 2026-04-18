@@ -44,11 +44,14 @@
                     </div>
                     <div class="flex flex-1 justify-end gap-8">
                         <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
-                           th:href="@{/logout}">
-                            <span class="truncate">logout</span>
+                           th:href="@{/}">
+                            <span class="truncate">Main Page</span>
                         </a>
-                        <img width="50px"
-                             th:src="${currentUser.pictureUrl}" alt="User picture">
+                        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
+                           th:href="@{/logout}">
+                            <span class="truncate">Logout</span>
+                        </a>
+                        <img width="50px" th:src="${currentUser.pictureUrl}" alt="User picture">
                     </div>
                 </header>
                 <div class="flex flex-wrap justify-between items-center gap-3 px-4 mb-6">
@@ -67,10 +70,12 @@
                                 Streams</p>
                             <span class="material-symbols-outlined text-primary text-xl">play_circle</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalListening}"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"
+                           th:text="${totalListening}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
-                            <p th:text="${listeningGrowth}"></p><p>%</p>
+                            <p th:text="${listeningGrowth}"></p>
+                            <p>%</p>
                         </div>
                     </div>
                     <div class="flex min-w-[158px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -79,10 +84,12 @@
                                 Users</p>
                             <span class="material-symbols-outlined text-primary text-xl">person</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalUsers}"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"
+                           th:text="${totalUsers}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
-                            <p th:text="${usersGrowth}"></p><p>%</p>
+                            <p th:text="${usersGrowth}"></p>
+                            <p>%</p>
                         </div>
                     </div>
                     <div class="flex min-w-[158px] flex-1 flex-col gap-3 rounded-xl p-6 bg-white dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -91,21 +98,24 @@
                                 Artists</p>
                             <span class="material-symbols-outlined text-primary text-xl">mic</span>
                         </div>
-                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight" th:text="${totalArtists}"></p>
+                        <p class="text-slate-900 dark:text-slate-100 tracking-light text-3xl font-bold leading-tight"
+                           th:text="${totalArtists}"></p>
                         <div class="flex items-center gap-1 text-green-500 dark:text-green-400 text-sm font-medium leading-normal bg-green-500/10 dark:bg-green-400/10 w-fit px-2 py-0.5 rounded-full">
                             <span class="material-symbols-outlined text-xs">trending_up</span>
-                            <p th:text="${artistsGrowth}"></p><p>%</p>
+                            <p th:text="${artistsGrowth}"></p>
+                            <p>%</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between px-4 pb-4 pt-2">
                     <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]">
-                        Most Played Tracks</h2>
-                    <button class="text-primary text-sm font-medium hover:underline">View All</button>
+                        Most Played Tracks Of Month</h2>
+                    <a class="text-primary text-sm font-medium hover:underline"
+                       th:href="@{/admin/home(size=10)}">Expand</a>
                 </div>
                 <div class="px-4 pb-8 @container">
-                    <div class="flex overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/30 shadow-sm">
-                        <table class="flex-1 w-full text-left border-collapse">
+                    <div class="flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/30 shadow-sm">
+                        <table class="w-full text-left border-collapse">
                             <thead>
                             <tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800">
                                 <th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
@@ -118,23 +128,49 @@
                                     Total Streams
                                 </th>
                                 <th class="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                                    Trend
+                                    Genre
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                                <td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-medium"></td>
-                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm"></td>
-                                <td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold"></td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-1 text-green-500 dark:text-green-400">
-                                        <span class="material-symbols-outlined text-sm"></span>
-                                    </div>
-                                </td>
+                            <tr class="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                                th:each="song : ${songs}">
+                                <td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-medium"
+                                    th:text="${song.song.title}"></td>
+
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm"
+                                    th:if="${song.song.artistId != null}"
+                                    th:text="${song.song.artistNickname}"></td>
+
+                                <td class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm"
+                                    th:if="${song.song.bandId != null}"
+                                    th:text="${song.song.bandName}"></td>
+
+                                <td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold"
+                                    th:text="${song.song.playCount}"></td>
+
+                                <td class="px-6 py-4 text-slate-900 dark:text-slate-100 text-sm font-semibold"
+                                    th:text="${song.song.genre}"></td>
                             </tr>
                             </tbody>
                         </table>
+                        <div class="flex items-center justify-between px-6 py-3 border-t border-slate-200 dark:border-slate-800"
+                             th:if="${songs.size == 10}">
+                            <div class="flex gap-2">
+                                <a th:if="${songs.hasPrevious()}"
+                                   th:href="@{/admin/home(page=${songs.number - 1})}">
+                                    <button class="px-3 py-1 rounded border border-slate-300 hover:bg-slate-100">
+                                        Previous
+                                    </button>
+                                </a>
+                                <a th:if="${songs.hasNext()}"
+                                   th:href="@{/admin/home(page=${songs.number + 1})}">
+                                    <button class="px-3 py-1 rounded border border-slate-300 hover:bg-slate-100">
+                                        Next
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -35,8 +35,6 @@ public class AlbumServiceImpl implements AlbumService {
     private final ArtistRepository artistRepository;
     private final SongPlayRepository songPlayRepository;
     private final Clock clock = Clock.systemDefaultZone();
-    private final SongRepository songRepository;
-    private final SongMapper songMapper;
     @Value("${album.default-image}")
     private String defaultImageUrl;
 
@@ -120,6 +118,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Page<Album> findByBandIsNotNull(Pageable pageable) {
         return albumRepository.findByBandIsNotNull(pageable);
+    }
+
+    @Override
+    public void delete(Long id) {
+            albumRepository.deleteById(id);
     }
 }
 

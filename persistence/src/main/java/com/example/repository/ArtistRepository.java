@@ -15,5 +15,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Long>, JpaSpecif
 
     Page<Artist> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
+    Page<Artist> findByNicknameContainingIgnoreCase(String name, Pageable pageable);
+
     long countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 }

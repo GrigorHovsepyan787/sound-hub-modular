@@ -53,6 +53,12 @@ public class AlbumController {
         return "addAlbum";
     }
 
+    @GetMapping("/albums/delete")
+    public String deleteAlbum(@RequestParam("id") Long id) {
+        albumService.delete(id);
+        return "redirect:/albums";
+    }
+
     @GetMapping("/albums/update")
     public String updateAlbum(ModelMap modelMap,
                               @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,

@@ -3,6 +3,7 @@ package com.example.app.controller;
 
 import com.example.dto.UserSearchCriteria;
 import com.example.model.User;
+import com.example.service.SongService;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,15 +20,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AdminController {
 
     private final UserService userService;
+    private final SongService songService;
 
     @GetMapping("/admin/home")
-    public String home(ModelMap modelMap) {
+    public String home(ModelMap modelMap,
+                       @PageableDefault(size = 5) Pageable pageable) {
         modelMap.addAttribute("totalListening", userService.getAdminDashboardStats().totalListening());
         modelMap.addAttribute("listeningGrowth", userService.getAdminDashboardStats().listeningGrowthPercent());
         modelMap.addAttribute("totalUsers", userService.getAdminDashboardStats().totalUsers());
         modelMap.addAttribute("usersGrowth", userService.getAdminDashboardStats().usersGrowthPercent());
         modelMap.addAttribute("totalArtists", userService.getAdminDashboardStats().totalArtists());
         modelMap.addAttribute("artistsGrowth", userService.getAdminDashboardStats().artistsGrowthPercent());
+        modelMap.addAttribute("songs", songService.getTopSongPopularityLastMonth(pageable));
+
         return "adminPage";
     }
 
