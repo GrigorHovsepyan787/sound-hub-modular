@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http){
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
@@ -29,6 +29,18 @@ public class WebSecurityConfig {
                                         "/verify",
                                         "/images/**").permitAll()
                                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                                .requestMatchers(
+                                        "/songs/add",
+                                        "/songs/delete",
+                                        "/bands/delete",
+                                        "/bands/edit",
+                                        "/bands/add",
+                                        "/artists/add",
+                                        "/artists/delete",
+                                        "/artists/edit",
+                                        "/albums/delete",
+                                        "/albums/update",
+                                        "/albums/add").hasAnyAuthority("ADMIN", "MODERATOR")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form ->
