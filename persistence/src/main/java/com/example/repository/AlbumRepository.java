@@ -12,4 +12,6 @@ public interface AlbumRepository extends JpaRepository<Album, Long> {
     Page<Album> findByArtistIsNotNull(Pageable pageable);
 
     Page<Album> findByBandIsNotNull(Pageable pageable);
+
+    Page<Album> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }

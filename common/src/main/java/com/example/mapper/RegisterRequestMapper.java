@@ -1,6 +1,5 @@
 package com.example.mapper;
 
-
 import com.example.dto.RegisterRequest;
 import com.example.model.User;
 import org.mapstruct.Mapper;

@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Clock;
 import java.util.List;
 
 @Service
@@ -33,8 +34,7 @@ public class AlbumServiceImpl implements AlbumService {
     private final BandRepository bandRepository;
     private final ArtistRepository artistRepository;
     private final SongPlayRepository songPlayRepository;
-    private final SongRepository songRepository;
-    private final SongMapper songMapper;
+    private final Clock clock = Clock.systemDefaultZone();
     @Value("${album.default-image}")
     private String defaultImageUrl;
 
@@ -102,11 +102,11 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Page<AlbumPopularity> getTopAlbumPopularityLastMonth(Pageable pageable) {
-        DateRange month = DateRangeUtils.last30Days();
+        DateRange month = DateRangeUtils.monthlyRange(clock);
 
         return songPlayRepository.findTopAlbumsForPeriod(
-                month.start(),
-                month.end(),
+                month.currentStart(),
+                month.currentEnd(),
                 pageable);
     }
 
@@ -118,6 +118,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Page<Album> findByBandIsNotNull(Pageable pageable) {
         return albumRepository.findByBandIsNotNull(pageable);
+    }
+
+    @Override
+    public void delete(Long id) {
+            albumRepository.deleteById(id);
     }
 }
 

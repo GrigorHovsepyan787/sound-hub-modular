@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Modifying
     Page<User> findAll(Specification<User> spec, Pageable pageable);
+
+    long countByRegistrationDateBetween(LocalDateTime start, LocalDateTime end);
 
     Optional<User> findByEmail(String email);
 }

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
-<header th:fragment="header" class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body th:fragment="header">
+<header class="fixed top-0 w-full z-50 glass-header" data-purpose="sticky-header">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <a th:href="@{/}" class="flex items-center gap-2" data-purpose="brand-logo">
@@ -38,17 +39,29 @@
                     </a>
                 </div>
             </th:block>
-
             <div class="hidden md:flex items-center space-x-6" data-purpose="user-actions">
                 <th:block th:if="${currentUser} != null">
+                    <div class="relative">
+                        <form onsubmit="return false;" style="position: relative;">
+                            <input type="text" name="query" id="searchInput"
+                                   th:placeholder="#{navigation.search}"
+                                   autocomplete="off"
+                                   class="px-3 py-1 bg-gray-800 text-white rounded"/>
+                        </form>
+
+                        <div id="searchResults"
+                             style="position:absolute; top:100%; left:0; width:100%;
+                             background:#111827; color:white; z-index:9999;
+                             border-radius:8px; overflow:hidden;">
+                        </div>
+                    </div>
                     <div class="flex items-center gap-3 cursor-pointer group">
                         <a th:href="@{/user/profile}">
-                            <img width="50px"
-                                 th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
-                                 th:src="${currentUser.pictureUrl}" alt="User picture">
-                            <img width="50px"
-                                 th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
-                                 th:src="@{/images/img.png}" alt="User picture">
+                            <img width="50px" th:src="${currentUser.pictureUrl}" alt="User picture">
+                        </a>
+                        <a th:href="@{/admin/home}" sec:authorize="hasAuthority('ADMIN')"
+                           class="px-5 py-2 text-sm font-medium bg-brand-accent hover:bg-brand-accentHover text-white rounded-full shadow-lg shadow-brand-accent/20 transition-all">
+                            Admin Dashboard
                         </a>
                         <span class="text-sm font-medium" th:text="#{navigation.welcome}">Welcome, </span>
                         <span class="text-brand-accent" th:text="${currentUser.getName()}"></span>
@@ -84,5 +97,97 @@
         </div>
     </div>
 </header>
+<aside class="fixed left-0 top-16 bottom-0 w-20 lg:flex flex-col border-r border-white/5 z-40" data-purpose="sidebar-nav" th:if="${currentUser} != null">
+    <div class="flex flex-col h-full p-4 gap-4">
+
+        <div class="flex-1 bg-brand-surface/30 rounded-xl flex flex-col overflow-hidden">
+            <div class="p-4 flex items-center flex-col gap-4 !justify-center">
+                <a class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all" title="Add Playlist" th:href="@{/playlists/add}">
+                    <i class="fa-solid fa-plus text-lg"></i>
+                </a>
+            </div>
+            <div class="flex-1 overflow-y-auto sidebar-scroll px-2 py-2">
+                <div class="space-y-1">
+                    <a class="flex items-center gap-3 rounded-lg hover:bg-white/5 group transition-colors justify-center !p-1 justify-center" th:each="playlist : ${playlists}" th:href="@{/playlists/preview(id=${playlist.id})}">
+                        <img th:src="${playlist.pictureUrl}" alt="playlist image">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+<script>
+    const input = document.getElementById("searchInput");
+    const results = document.getElementById("searchResults");
+
+    let timeout = null;
+
+    input.addEventListener("input", function () {
+        const query = this.value;
+        clearTimeout(timeout);
+        if (query.length < 2) {
+            hideDropdown();
+            return;
+        }
+        timeout = setTimeout(() => {
+            showLoading();
+            fetch(`/search/fragment?query=${encodeURIComponent(query)}`)
+                .then(res => res.text())
+                .then(html => {
+                    results.innerHTML = html;
+                    results.classList.remove("hidden");
+                })
+                .catch(() => {
+                    results.innerHTML = `
+                    <div class="px-3 py-2 text-sm text-red-400">
+                        Error while searching
+                    </div>
+                `;
+                });
+
+        }, 300);
+    });
+
+    function handleSearchNavigation() {
+        hideDropdown();
+
+        const input = document.getElementById("searchInput");
+
+        if (input) {
+            input.blur();
+            input.value = "";
+        }
+    }
+
+    function hideDropdown() {
+        results.classList.add("hidden");
+        results.innerHTML = "";
+    }
+
+    function showLoading() {
+        results.innerHTML = `
+        <div class="flex items-center gap-2 px-3 py-2 text-sm text-gray-400">
+            <div class="animate-spin h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
+            <span>Searching...</span>
+        </div>
+    `;
+        results.classList.remove("hidden");
+    }
+
+    document.addEventListener("click", function (event) {
+        const searchContainer = input.closest(".relative");
+
+        if (!searchContainer.contains(event.target)) {
+            handleSearchNavigation();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            hideDropdown();
+            input.blur();
+        }
+    });
+</script>
 </body>
 </html>

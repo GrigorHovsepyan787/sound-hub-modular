@@ -24,4 +24,6 @@ public interface AlbumService {
     Page<Album> findByArtistIsNotNull(Pageable pageable);
 
     Page<Album> findByBandIsNotNull(Pageable pageable);
+
+    void delete(Long id);
 }

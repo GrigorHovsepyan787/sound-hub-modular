@@ -49,19 +49,19 @@
     </div>
     <div class="flex flex-1 justify-end gap-8">
         <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
+           th:href="@{/}">
+            <span class="truncate">Main Page</span>
+        </a>
+        <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
            th:href="@{/logout}">
-            <span class="truncate">logout</span>
+            <span class="truncate">Logout</span>
         </a>
         <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
            th:href="@{/admin/home}">
             <span class="material-symbols-outlined text-sm">group</span>
             <span class="truncate">Dashboard</span>
         </a>
-        <img width="50px"
-             th:if="${currentUser.pictureUrl != null && !currentUser.pictureUrl.equals('')}"
-             th:src="${currentUser.pictureUrl}" alt="User picture">
-        <img width="50px" th:if="${currentUser.pictureUrl == null || currentUser.pictureUrl.equals('')}"
-             th:src="@{/images/img.png}" alt="User picture">
+        <img width="50px" th:src="${currentUser.pictureUrl}" alt="User picture">
     </div>
 </header>
 <main class="flex-1 flex flex-col w-full max-w-[1200px] mx-auto px-6 py-8">
@@ -134,11 +134,7 @@
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">
-                            <img width="50px"
-                                 th:if="${user.pictureUrl != null && !user.pictureUrl.equals('')}"
-                                 th:src="${user.pictureUrl}" alt="User picture">
-                            <img width="50px" th:if="${user.pictureUrl == null || user.pictureUrl.equals('')}"
-                                 th:src="@{/images/img.png}" alt="User picture">
+                            <img width="50px" th:src="${user.pictureUrl}" alt="User picture">
                         </div>
                         <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.name}"></span>
                         <span class="font-medium text-slate-900 dark:text-slate-100" th:text="${user.surname}"></span>
