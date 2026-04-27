@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -41,6 +42,7 @@ public class SongServiceImpl implements SongService {
     private final SongPopularityMapper songPopularityMapper;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
+    private final Clock clock = Clock.systemDefaultZone();
 
     @Override
     public Page<SongDto> findAll(Pageable pageable) {
@@ -131,10 +133,10 @@ public class SongServiceImpl implements SongService {
     }
 
     public Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable) {
-        DateRange month = DateRangeUtils.last30Days();
+        DateRange month = DateRangeUtils.monthlyRange(clock);
         return songPlayRepository.findTopSongsForPeriod(
-                        month.start(),
-                        month.end(),
+                        month.currentStart(),
+                        month.currentEnd(),
                         pageable)
                 .map(songPopularityMapper::toDto);
     }

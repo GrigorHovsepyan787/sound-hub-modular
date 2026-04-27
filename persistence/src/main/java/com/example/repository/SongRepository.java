@@ -33,6 +33,6 @@ public interface SongRepository extends JpaRepository<Song, Long>, JpaSpecificat
 
     List<Song> findByAlbumId(Long albumId);
 
-
+    Page<Song> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 
 }

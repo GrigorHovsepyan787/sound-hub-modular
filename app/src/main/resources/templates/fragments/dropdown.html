@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="dropdown"
+     style="background:#111827; border-radius:8px; overflow:hidden;">
+
+    <ul style="list-style:none; margin:0; padding:0;">
+
+        <li th:if="${result.songs.isEmpty()
+             and result.artists.isEmpty()
+             and result.albums.isEmpty()
+             and result.bands.content.isEmpty()}"
+            style="padding:10px 12px; font-size:14px; color:#9ca3af; text-align:center;"
+            th:text="#{search.nothingFound}">
+            Nothing found
+        </li>
+
+        <li th:if="${!result.songs.isEmpty()}"
+            style="padding:6px 10px; font-size:12px; color:#9ca3af;" th:text="#{search.songs}">
+            Songs
+        </li>
+
+        <li th:each="song : ${result.songs}">
+            <button type="button"
+                    onclick="hideDropdown()"
+                    th:data-id="${song.id}"
+                    th:data-title="${song.title}"
+                    th:data-performer="${song.performer}"
+                    th:data-url="${song.songUrl}"
+                    data-play-btn
+                    class="w-full flex items-center gap-3 px-3 py-2
+                   hover:bg-brand-accent hover:text-white
+                   transition-all text-slate-400 text-left">
+                <i class="fa-solid fa-play text-sm"></i>
+                <span class="truncate"
+                      th:text="${song.title}">
+        </span>
+            </button>
+        </li>
+
+        <li th:if="${!result.artists.isEmpty()}"
+            style="padding:6px 10px; font-size:12px; color:#9ca3af;" th:text="#{search.artists}">
+            Artists
+        </li>
+
+        <li th:each="artist : ${result.artists}">
+            <a th:text="${artist.nickname}"
+               onclick="hideDropdown()"
+               th:href="@{/artists/preview(id=${artist.id})}"
+               style="display:block; padding:8px 12px; color:white;">
+            </a>
+        </li>
+
+        <li th:if="${!result.albums.isEmpty()}"
+            style="padding:6px 10px; font-size:12px; color:#9ca3af;" th:text="#{search.albums}">
+            Albums
+        </li>
+
+        <li th:each="album : ${result.albums}">
+            <a th:text="${album.title}"
+               onclick="hideDropdown()"
+               th:href="@{/albums/preview(id=${album.id})}"
+               style="display:block; padding:8px 12px; color:white;">
+            </a>
+        </li>
+
+        <li th:if="${!result.bands.isEmpty()}"
+            style="padding:6px 10px; font-size:12px; color:#9ca3af;" th:text="#{search.bands}">
+            Bands
+        </li>
+
+        <li th:each="band : ${result.bands.content}">
+            <a th:text="${band.name}"
+               th:href="@{/bands/preview(id=${band.id})}"
+               onclick="hideDropdown()"
+               style="display:block; padding:8px 12px; color:white;">
+            </a>
+        </li>
+
+    </ul>
+</div>
+<script>
+    function hideDropdown() {
+        document.getElementById("searchResults").classList.add("hidden");
+    }
+</script>
+</body>
+</html>
