@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -82,6 +85,16 @@ public class SongController {
     public String registerPlay(@RequestParam("id") Long id) {
         songService.registerPlay(id);
         return "redirect:/songs";
+    }
+
+    @GetMapping("/songs/search")
+    @ResponseBody
+    public List<SongDto> search(@RequestParam(defaultValue = "") String q,
+                                @RequestParam(defaultValue = "10") int limit) {
+        if (q.isBlank()) {
+            return songService.findTopByPlayCount(limit);
+        }
+        return songService.searchByTitle(q, limit);
     }
 
     @InitBinder

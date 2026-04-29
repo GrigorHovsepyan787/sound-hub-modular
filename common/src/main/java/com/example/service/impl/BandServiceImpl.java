@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class BandServiceImpl implements BandService {
     private final BandRepository bandRepository;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
-    private static final String DEFAULT_BAND_IMAGE =
-            "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/BandDefault.png";
+    @Value("${band.default-image}")
+    private String defaultImageUrl;
     private final Clock clock = Clock.systemDefaultZone();
 
     @Override
@@ -50,7 +51,7 @@ public class BandServiceImpl implements BandService {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = storageService.upload(multipartFile, "band-images");
         } else {
-            imageUrl = DEFAULT_BAND_IMAGE;
+            imageUrl = defaultImageUrl;
         }
         band.setPictureUrl(imageUrl);
 
