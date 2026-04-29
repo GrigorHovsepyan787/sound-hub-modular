@@ -134,8 +134,9 @@
                         </td>
 
                         <td class="py-4 px-6">
-                            <span class="block font-semibold text-slate-900 dark:text-white"
-                                  th:text="${song.title}"></span>
+                            <a class="block font-semibold text-slate-900 dark:text-white"
+                               th:text="${song.title}"
+                               th:href="@{/songs/preview(id=${song.id})}"></a>
                             <div class="md:hidden" th:if="${song.bandId == null && song.artistId != null}">
                                 <a th:href="@{/artists/preview(id=${song.artistId})}"
                                    class="text-xs text-slate-500 hover:underline"

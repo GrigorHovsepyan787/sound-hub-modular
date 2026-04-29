@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,9 +41,12 @@ public class SongComment {
 
     private LocalDateTime createdAt;
 
-    private Integer rating;
+    private int rating = 0;
 
-    private Boolean deleted;
+    private boolean deleted = false;
+
+    @Version
+    private Long version;
 
     @PrePersist
     public void onCreate() {

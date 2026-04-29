@@ -36,7 +36,7 @@ public class AlbumCommentReaction {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Integer value;
+    private short value;
 
     private LocalDateTime createdAt;
 
