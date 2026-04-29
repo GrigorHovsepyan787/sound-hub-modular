@@ -33,6 +33,10 @@ public interface SongRepository extends JpaRepository<Song, Long>, JpaSpecificat
 
     List<Song> findByAlbumId(Long albumId);
 
-    Page<Song> findByTitleContainingIgnoreCase(String title, Pageable pageable);
+    @Query("SELECT s FROM Song s ORDER BY s.playCount DESC")
+    List<Song> findTopByPlayCount(Pageable pageable);
+
+    @Query("SELECT s FROM Song s WHERE LOWER(s.title) LIKE LOWER(CONCAT('%', :title, '%'))")
+    Page<Song> findByTitleContainingIgnoreCase(@Param("title") String title, Pageable pageable);
 
 }

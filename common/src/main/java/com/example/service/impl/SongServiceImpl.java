@@ -21,6 +21,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -158,8 +160,25 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    public List<SongDto> findTopByPlayCount(int limit) {
+        return songRepository.findTopByPlayCount(PageRequest.of(0, limit))
+                .stream()
+                .map(songMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<SongDto> getSongsByAlbumId(Long albumId) {
         return songRepository.findByAlbumId(albumId)
+                .stream()
+                .map(songMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<SongDto> searchByTitle(String query, int limit) {
+        log.info("Searching songs by title: '{}', limit: {}", query, limit);
+        return songRepository.findByTitleContainingIgnoreCase(query, PageRequest.of(0, limit))
                 .stream()
                 .map(songMapper::toDto)
                 .toList();

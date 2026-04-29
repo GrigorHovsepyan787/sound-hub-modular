@@ -33,5 +33,10 @@ public interface SongService {
 
     List<SongDto> getTop5SongsOfBandByPlayCount(Long artistId);
 
+    List<SongDto> findTopByPlayCount(int limit);
+
     List<SongDto> getSongsByAlbumId(Long albumId);
+
+    List<SongDto> searchByTitle(String query, int limit);
+
 }
