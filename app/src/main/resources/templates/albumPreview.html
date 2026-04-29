@@ -139,7 +139,7 @@
             </div>
         </div>
         <section class="mt-16 pb-12 border-t border-white/10 pt-10" data-purpose="comments-section">
-            <h3 class="text-2xl font-bold text-white mb-8">Comments <span th:text="${comments.size}" class="text-2xl font-bold text-white mb-8"></span> </h3>
+            <h3 class="text-2xl font-bold text-white mb-8" th:text="#{albumPreview.comments}">Comments <span th:text="${comments.size}" class="text-2xl font-bold text-white mb-8"></span> </h3>
             <div class="flex gap-4 mb-10">
                 <img alt="User Avatar" class="w-10 h-10 rounded-full object-cover shrink-0"
                      th:src="${currentUser.pictureUrl}"/>
@@ -153,14 +153,15 @@
                                       th:field="*{content}"
                                       rows="3"
                                       class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none min-h-[100px]"
-                                      placeholder="Share your thoughts on this album...">
+                                      th:placeholder="#{albumPreview.content}">
                             </textarea>
                         </label>
                         <p class="text-red-500 text-sm mt-1"
                            th:if="${#fields.hasErrors('content')}"
                            th:errors="*{content}"></p>
                         <div class="flex justify-end">
-                            <button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold px-6 py-2 rounded-full transition-colors">
+                            <button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold px-6 py-2 rounded-full transition-colors"
+                                    th:text="#{albumPreview.post}">
                                 Post Comment
                             </button>
                         </div>
@@ -206,7 +207,8 @@
                                 <span th:text="${comment.rating}"></span>
                             </form>
                             <p class="text-gray-500 text-sm italic"
-                               th:if="${comment.deleted}">
+                               th:if="${comment.deleted}"
+                               th:text="#{albumPreview.deleted}">
                                 Comment deleted
                             </p>
                             <div sec:authorize="hasAuthority('ADMIN') or hasAuthority('MODERATOR')">
@@ -233,7 +235,8 @@
                         id=${album.id},
                         page=${comments.number}-1)}">
                         <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                th:disabled="${!comments.hasPrevious()}">
+                                th:disabled="${!comments.hasPrevious()}"
+                                th:text="#{albumPreview.previous}">
                             Previous
                         </button>
                     </a>
@@ -241,7 +244,8 @@
                         id=${album.id},
                         page=${comments.number}+1)}">
                         <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:bg-background-dark hover:text-slate-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                th:disabled="${!comments.hasNext()}">
+                                th:disabled="${!comments.hasNext()}"
+                                th:text="#{albumPreview.next}">
                             Next
                         </button>
                     </a>
