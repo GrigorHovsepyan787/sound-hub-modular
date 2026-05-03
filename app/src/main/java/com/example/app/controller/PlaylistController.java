@@ -36,12 +36,7 @@ public class PlaylistController {
         List<Playlist> playlists = playlistService.findAll(sort);
 
         modelMap.addAttribute("playlists", playlists);
-        modelMap.addAttribute("currentSort",
-                sort.stream()
-                        .findFirst()
-                        .map(order -> order.getProperty() + "," + order.getDirection().name().toLowerCase())
-                        .orElse("createdDate,desc")
-        );
+        modelMap.addAttribute("currentSort", playlistService.resolveCurrentSort(sort));
 
         return "playlists";
     }

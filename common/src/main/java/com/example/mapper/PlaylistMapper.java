@@ -8,7 +8,5 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {SongMapper.class, UserMapper.class})
 public interface PlaylistMapper {
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "publicFlag", source = "publicFlag")
     PlaylistDto toDto(Playlist playlist);
 }

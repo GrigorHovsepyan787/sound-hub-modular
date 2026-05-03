@@ -176,8 +176,13 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public List<SongDto> searchByTitle(String query, int limit) {
-        log.info("Searching songs by title: '{}', limit: {}", query, limit);
+    public List<SongDto> searchSongs(String query, int limit) {
+        if (query == null || query.isBlank()) {
+            return findTopByPlayCount(limit);
+        }
+
+        log.info("Searching songs. query='{}', limit={}", query, limit);
+
         return songRepository.findByTitleContainingIgnoreCase(query, PageRequest.of(0, limit))
                 .stream()
                 .map(songMapper::toDto)

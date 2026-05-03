@@ -2,7 +2,6 @@ package com.example.service.impl;
 
 import com.example.dto.PlaylistDto;
 import com.example.mapper.PlaylistMapper;
-import com.example.mapper.SongMapper;
 import com.example.model.Playlist;
 import com.example.model.Song;
 import com.example.model.User;
@@ -29,11 +28,11 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     private final PlaylistRepository playlistRepository;
     private final StorageService storageService;
-    @Value("${playlist.default-image}")
-    private String defaultImageUrl;
     private final PlaylistMapper playlistMapper;
     private final SongRepository songRepository;
-    private final SongMapper songMapper;
+
+    @Value("${playlist.default-image}")
+    private String defaultImageUrl;
 
     @Override
     public List<Playlist> findAll(Sort sort) {
@@ -141,5 +140,13 @@ public class PlaylistServiceImpl implements PlaylistService {
             playlistRepository.save(playlist);
             log.info("Removed song {} from playlist {}", songId, playlistId);
         }
+    }
+
+    @Override
+    public String resolveCurrentSort(Sort sort) {
+        return sort.stream()
+                .findFirst()
+                .map(order -> order.getProperty() + "," + order.getDirection().name().toLowerCase())
+                .orElse("createdDate,desc");
     }
 }

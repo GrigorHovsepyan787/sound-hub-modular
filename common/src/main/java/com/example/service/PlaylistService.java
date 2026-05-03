@@ -27,4 +27,6 @@ public interface PlaylistService {
     void addSong(Long playlistId, Long songId);
 
     void removeSong(Long playlistId, Long songId);
+
+    String resolveCurrentSort(Sort sort);
 }

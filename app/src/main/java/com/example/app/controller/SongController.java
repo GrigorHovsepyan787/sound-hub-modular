@@ -91,10 +91,7 @@ public class SongController {
     @ResponseBody
     public List<SongDto> search(@RequestParam(defaultValue = "") String q,
                                 @RequestParam(defaultValue = "10") int limit) {
-        if (q.isBlank()) {
-            return songService.findTopByPlayCount(limit);
-        }
-        return songService.searchByTitle(q, limit);
+        return songService.searchSongs(q, limit);
     }
 
     @InitBinder
