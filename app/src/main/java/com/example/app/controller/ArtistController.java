@@ -1,6 +1,10 @@
 package com.example.app.controller;
 
+import com.example.dto.ArtistDto;
+import com.example.dto.BandDto;
+import com.example.dto.SongDto;
 import com.example.model.Artist;
+import com.example.model.Song;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
 import com.example.service.SongService;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,13 +34,13 @@ public class ArtistController {
 
     @GetMapping("/artists")
     public String artists(ModelMap modelMap,
-                        @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
-                        Pageable pageable) {
+                          @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
+                          Pageable pageable) {
 
-        Page<Artist> artists = artistService.findAll(pageable);
+        Page<ArtistDto> artists = artistService.findAll(pageable);
 
         modelMap.addAttribute("artists", artists);
-        modelMap.addAttribute("pageNumbers", artistService.getPageNumbers(artists));
+        modelMap.addAttribute("pageNumbers", getPageNumbers(artists));
         modelMap.addAttribute("currentSort",
                 pageable.getSort().stream()
                         .findFirst()
@@ -47,10 +52,10 @@ public class ArtistController {
     }
 
     @PostMapping("/artists")
-    public String addArtist(@ModelAttribute Artist artist,
+    public String addArtist(@ModelAttribute ArtistDto artistDto,
                             @RequestParam(value = "bandIds", required = false) List<Long> bandIds,
                             @RequestParam("artistImage") MultipartFile artistImage) {
-        artistService.save(artist, artistImage, bandIds);
+        artistService.save(artistDto, artistImage, bandIds);
         return "redirect:/artists";
     }
 
@@ -69,10 +74,11 @@ public class ArtistController {
     }
 
     @PostMapping("/artists/edit")
-    public String editArtist(@ModelAttribute Artist editedArtist,
+    public String editArtist(@RequestParam("id") Long id,
+                             @ModelAttribute ArtistDto artistDto,
                              @RequestParam(value = "bandIds", required = false) List<Long> bandIds,
                              @RequestParam("artistImage") MultipartFile artistImage) {
-        artistService.update(editedArtist, artistImage, bandIds);
+        artistService.update(id, artistDto, artistImage, bandIds);
         return "redirect:/artists";
     }
 
@@ -87,5 +93,13 @@ public class ArtistController {
         modelMap.addAttribute("artist", artistService.getArtistById(id));
         modelMap.addAttribute("songs", songService.getTop5SongsOfArtistByPlayCount(id));
         return "artistPreview";
+    }
+
+    private List<Integer> getPageNumbers(Page<?> page) {
+        int totalPages = page.getTotalPages();
+        if (totalPages == 0) {
+            return List.of();
+        }
+        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }

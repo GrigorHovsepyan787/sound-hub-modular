@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.model.Artist;
+import com.example.dto.ArtistDto;
 import com.example.projection.ArtistPopularity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,21 +10,19 @@ import java.util.List;
 
 public interface ArtistService {
 
-    Page<Artist> findAll(Pageable pageable);
+    Page<ArtistDto> findAll(Pageable pageable);
 
-    List<Artist> findAll();
+    List<ArtistDto> findAll();
 
-    Artist save(Artist artist, MultipartFile multipartFile, List<Long> bandIds);
+    ArtistDto save(ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds);
 
-    Artist update(Artist editedArtist, MultipartFile multipartFile, List<Long> bandIds);
+    ArtistDto update(Long id, ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds);
 
     void delete(Long id);
 
-    Artist getArtistById(Long id);
+    ArtistDto getArtistById(Long id);
 
-    List<Integer> getPageNumbers(Page<Artist> artists);
-
-    Page<Artist> getArtistsByName(String name, Pageable pageable);
+    Page<ArtistDto> getArtistsByName(String name, Pageable pageable);
 
     Page<ArtistPopularity> getTopArtistPopularityLastMonth(Pageable pageable);
 }
