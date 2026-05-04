@@ -45,7 +45,7 @@ public class AlbumCommentReactionServiceImpl implements AlbumCommentReactionServ
                 return;
             }
             reaction.setValue(request.getValue());
-            comment.setRating(comment.getRating() - oldValue + reaction.getValue());
+            comment.updateReaction(oldValue,  request.getValue());
             log.info("Existing album comment reaction was edited successfully. reactionId={} by userId={}",
                     reaction.getId(), user.getId());
         } else {

@@ -45,7 +45,7 @@ public class SongCommentReactionServiceImpl implements SongCommentReactionServic
                 return;
             }
             reaction.setValue(request.getValue());
-            comment.setRating(comment.getRating() - oldValue + reaction.getValue());
+            comment.updateReaction(oldValue, reaction.getValue());
             log.info("Existing song comment reaction was edited successfully. reactionId={} by userId={}",
                     reaction.getId(), user.getId());
         } else {

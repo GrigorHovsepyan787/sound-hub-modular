@@ -15,7 +15,6 @@ import software.amazon.awssdk.annotations.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class SongCommentReactionRequest {
     @NotNull
     private Long commentId;
