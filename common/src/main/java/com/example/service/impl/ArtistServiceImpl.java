@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,8 @@ public class ArtistServiceImpl implements ArtistService {
     private final BandRepository bandRepository;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
-    private static final String DEFAULT_ARTIST_IMAGE =
-            "https://soundhub7.s3.eu-north-1.amazonaws.com/assets/ArtistDefault.png";
+    @Value("${artist.default-image}")
+    private String defaultImageUrl;
     private final Clock clock = Clock.systemDefaultZone();
 
     @Override
@@ -55,7 +56,7 @@ public class ArtistServiceImpl implements ArtistService {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = storageService.upload(multipartFile, "artist-images");
         } else {
-            imageUrl = DEFAULT_ARTIST_IMAGE;
+            imageUrl = defaultImageUrl;
         }
         artist.setPictureUrl(imageUrl);
 

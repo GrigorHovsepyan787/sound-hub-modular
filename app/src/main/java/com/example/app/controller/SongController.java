@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -140,6 +143,13 @@ public class SongController {
                              @AuthenticationPrincipal SpringUser currentUser,
                              RedirectAttributes redirectAttributes) {
         return songCommentService.save(request, currentUser.getUser(), bindingResult, redirectAttributes);
+    }
+
+    @GetMapping("/songs/search")
+    @ResponseBody
+    public List<SongDto> search(@RequestParam(defaultValue = "") String q,
+                                @RequestParam(defaultValue = "10") int limit) {
+        return songService.searchSongs(q, limit);
     }
 
     @InitBinder

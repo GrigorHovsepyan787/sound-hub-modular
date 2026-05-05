@@ -24,6 +24,8 @@
                    href="/albums" th:text="#{navigation.albums}">Albums</a>
                 <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
                    href="/songs" th:text="#{navigation.songs}">Songs</a>
+                <a class="text-sm font-medium text-gray-400 hover:text-brand-accent transition-colors"
+                   href="/playlists" th:text="#{navigation.my_playlists}">My Playlists</a>
             </nav>
             <th:block th:if="${currentUser} == null">
                 <div class="hidden md:flex items-center space-x-4" data-purpose="auth-actions">
