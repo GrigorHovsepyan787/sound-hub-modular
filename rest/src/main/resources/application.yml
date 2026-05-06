@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: rest
+  datasource:
+    url: jdbc:mysql://localhost:3306/sound-hub
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:rootroot}
+  jpa:
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  profiles:
+    active:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: soundhubnoreply@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: eu-north-1
+    bucket: soundhub7
+    folders:
+      band-images: band-images
+      user-images: user-images
+      artist-images: artist-images
+      album-images: album-images
+      songs: songs
+
+server:
+  port: 8081
+
+album:
+  default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/AlbumDefault.png
+band:
+  default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/BandDefault.png
+artist:
+  default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/ArtistDefault.png
+playlist:
+  default-image: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/PlaylistDefault.png
+
+hero-banner:
+  image-url: https://soundhub7.s3.eu-north-1.amazonaws.com/assets/hero_banner.jpg
