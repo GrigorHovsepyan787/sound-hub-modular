@@ -27,7 +27,8 @@ public class WebSecurityConfig {
                                         "/static/css/**",
                                         "/js/**",
                                         "/verify",
-                                        "/images/**").permitAll()
+                                        "/images/**",
+                                        "/songs/search").permitAll()
                                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                                 .requestMatchers(
                                         "/songs/add",

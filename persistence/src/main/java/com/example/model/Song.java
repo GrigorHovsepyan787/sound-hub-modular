@@ -62,7 +62,7 @@ public class Song {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL)
     private List<SongPlay> plays;
 
     @Override

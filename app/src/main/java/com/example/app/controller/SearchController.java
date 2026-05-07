@@ -21,7 +21,6 @@ public class SearchController {
                                  @PageableDefault(size = 3) Pageable pageable,
                                  ModelMap modelMap) {
         modelMap.addAttribute("result", searchService.search(query, pageable));
-        System.out.println(searchService.search(query, pageable));
         return "fragments/dropdown :: dropdown";
     }
 }

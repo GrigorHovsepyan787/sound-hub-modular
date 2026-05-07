@@ -33,6 +33,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -164,19 +165,22 @@ public class UserServiceImpl implements UserService {
         LocalDateTime previousStart = dateRange.previousStart();
         LocalDateTime previousEnd = dateRange.previousEnd();
 
-        long currentListening = songPlayRepository.countByPlayedAtBetween(currentStart, currentEnd);
-        long previousListening = songPlayRepository.countByPlayedAtBetween(previousStart, previousEnd);
-        double listeningGrowth = calculateGrowth(currentListening, previousListening);
+        double listeningGrowth = calculateGrowthForPeriod(
+                () -> songPlayRepository.countByPlayedAtBetween(currentStart, currentEnd),
+                () -> songPlayRepository.countByPlayedAtBetween(previousStart, previousEnd)
+        );
 
-        long currentUsers = userRepository.countByRegistrationDateBetween(currentStart, currentEnd);
-        long previousUsers = userRepository.countByRegistrationDateBetween(previousStart, previousEnd);
-        double usersGrowth = calculateGrowth(currentUsers, previousUsers);
+        double usersGrowth = calculateGrowthForPeriod(
+                () -> userRepository.countByRegistrationDateBetween(currentStart, currentEnd),
+                () -> userRepository.countByRegistrationDateBetween(previousStart, previousEnd)
+        );
 
-        long currentArtists = artistRepository.countByCreatedAtBetween(currentStart, currentEnd)
-                + bandRepository.countByCreatedAtBetween(currentStart, currentEnd);
-        long previousArtists = artistRepository.countByCreatedAtBetween(previousStart, previousEnd)
-                + bandRepository.countByCreatedAtBetween(previousStart, previousEnd);
-        double artistsGrowth = calculateGrowth(currentArtists, previousArtists);
+        double artistsGrowth = calculateGrowthForPeriod(
+                () -> artistRepository.countByCreatedAtBetween(currentStart, currentEnd)
+                        + bandRepository.countByCreatedAtBetween(currentStart, currentEnd),
+                () -> artistRepository.countByCreatedAtBetween(previousStart, previousEnd)
+                        + bandRepository.countByCreatedAtBetween(previousStart, previousEnd)
+        );
 
         return new AdminDashboardStats(totalListening, totalUsers, totalArtists, listeningGrowth, usersGrowth, artistsGrowth);
     }
@@ -210,6 +214,12 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setPictureUrl(DEFAULT_USER_IMAGE_URL);
         }
+    }
+
+    private double calculateGrowthForPeriod(LongSupplier currentSupplier, LongSupplier previousSupplier) {
+        long current = currentSupplier.getAsLong();
+        long previous = previousSupplier.getAsLong();
+        return calculateGrowth(current, previous);
     }
 
     private double calculateGrowth(long current, long previous) {
