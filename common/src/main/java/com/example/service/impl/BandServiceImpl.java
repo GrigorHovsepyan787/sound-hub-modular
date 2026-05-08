@@ -119,4 +119,14 @@ public class BandServiceImpl implements BandService {
                 month.currentEnd(),
                 pageable);
     }
+
+    @Override
+    public List<Integer> getPageNumbers(Page<?> page) {
+        int totalPages = page.getTotalPages();
+        log.info("Total pages: {}", totalPages);
+        if (totalPages == 0) {
+            return List.of();
+        }
+        return IntStream.rangeClosed(1, totalPages).boxed().toList();
+    }
 }

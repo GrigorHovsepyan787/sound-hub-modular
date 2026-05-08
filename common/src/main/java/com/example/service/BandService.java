@@ -27,4 +27,6 @@ public interface BandService {
     BandDto getBandByIdForArtists(Long id);
 
     Page<BandPopularity> getTopBandPopularityLastMonth(Pageable pageable);
+
+    List<Integer> getPageNumbers(Page<?> page);
 }

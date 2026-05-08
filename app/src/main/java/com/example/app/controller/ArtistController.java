@@ -40,7 +40,7 @@ public class ArtistController {
         Page<ArtistDto> artists = artistService.findAll(pageable);
 
         modelMap.addAttribute("artists", artists);
-        modelMap.addAttribute("pageNumbers", getPageNumbers(artists));
+        modelMap.addAttribute("pageNumbers", artistService.getPageNumbers(artists));
         modelMap.addAttribute("currentSort",
                 pageable.getSort().stream()
                         .findFirst()
@@ -93,13 +93,5 @@ public class ArtistController {
         modelMap.addAttribute("artist", artistService.getArtistById(id));
         modelMap.addAttribute("songs", songService.getTop5SongsOfArtistByPlayCount(id));
         return "artistPreview";
-    }
-
-    private List<Integer> getPageNumbers(Page<?> page) {
-        int totalPages = page.getTotalPages();
-        if (totalPages == 0) {
-            return List.of();
-        }
-        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }

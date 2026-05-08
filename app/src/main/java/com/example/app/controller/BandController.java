@@ -35,7 +35,7 @@ public class BandController {
         Page<BandDto> bands = bandService.findAll(pageable);
 
         modelMap.addAttribute("bands", bands);
-        modelMap.addAttribute("pageNumbers", getPageNumbers(bands));
+        modelMap.addAttribute("pageNumbers", bandService.getPageNumbers(bands));
         modelMap.addAttribute("currentSort",
                 pageable.getSort().stream()
                         .findFirst()
@@ -85,13 +85,5 @@ public class BandController {
         modelMap.addAttribute("band", band);
         modelMap.addAttribute("songs", songs);
         return "bandPreview";
-    }
-
-    private List<Integer> getPageNumbers(Page<?> page) {
-        int totalPages = page.getTotalPages();
-        if (totalPages == 0) {
-            return List.of();
-        }
-        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }

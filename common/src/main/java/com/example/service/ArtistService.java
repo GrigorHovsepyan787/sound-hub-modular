@@ -25,4 +25,6 @@ public interface ArtistService {
     Page<ArtistDto> getArtistsByName(String name, Pageable pageable);
 
     Page<ArtistPopularity> getTopArtistPopularityLastMonth(Pageable pageable);
+
+    List<Integer> getPageNumbers(Page<?> page);
 }

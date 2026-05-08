@@ -26,6 +26,7 @@ import java.time.Clock;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -130,5 +131,15 @@ public class ArtistServiceImpl implements ArtistService {
                 month.currentStart(),
                 month.currentEnd(),
                 pageable);
+    }
+
+    @Override
+    public List<Integer> getPageNumbers(Page<?> page) {
+        int totalPages = page.getTotalPages();
+        log.info("Total pages: {}", totalPages);
+        if (totalPages == 0) {
+            return List.of();
+        }
+        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }
