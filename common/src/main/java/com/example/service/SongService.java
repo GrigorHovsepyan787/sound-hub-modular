@@ -13,15 +13,13 @@ import java.util.List;
 public interface SongService {
     Page<SongDto> findAll(Pageable pageable);
 
-    Song save(Song song, MultipartFile multipartFile);
+    SongDto save(SongDto songDto, MultipartFile multipartFile);
 
     void delete(Long id);
 
-    Song getSongById(Long id);
+    SongDto getSongById(Long id);
 
     List<Integer> getPageNumbers(Page<SongDto> songs);
-
-    Page<SongDto> findByGenre(Genre genre, Pageable pageable);
 
     Page<SongDto> findSongsByGenre(Genre genre, Pageable pageable);
 

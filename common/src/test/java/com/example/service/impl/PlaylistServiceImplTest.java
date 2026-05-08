@@ -41,99 +41,144 @@ class PlaylistServiceImplTest {
     @InjectMocks private PlaylistServiceImpl playlistService;
 
     @Test
-    void findAll_happyPath_returnsSortedList() {
+    void findAll_happyPath_returnsMappedDtoList() {
         Sort sort = Sort.by("name");
-        List<Playlist> playlists = List.of(new Playlist());
-        when(playlistRepository.findAll(sort)).thenReturn(playlists);
+        Playlist playlist = new Playlist();
+        PlaylistDto dto = new PlaylistDto();
+        when(playlistRepository.findAll(sort)).thenReturn(List.of(playlist));
+        when(playlistMapper.toDto(playlist)).thenReturn(dto);
 
-        List<Playlist> result = playlistService.findAll(sort);
+        List<PlaylistDto> result = playlistService.findAll(sort);
 
-        assertThat(result).isEqualTo(playlists);
+        assertThat(result).containsExactly(dto);
+        verify(playlistMapper).toDto(playlist);
     }
 
     @Test
-    void create_withFileAndSongIds_uploadsImageAndSetsSongs() {
+    void findAll_emptyRepository_returnsEmptyList() {
+        Sort sort = Sort.unsorted();
+        when(playlistRepository.findAll(sort)).thenReturn(List.of());
+
+        List<PlaylistDto> result = playlistService.findAll(sort);
+
+        assertThat(result).isEmpty();
+        verify(playlistMapper, never()).toDto(any());
+    }
+
+    @Test
+    void create_withFileAndSongIds_uploadsImageAndSetsSongsOnEntity() {
+        PlaylistDto playlistDto = new PlaylistDto();
         Playlist playlist = new Playlist();
-        MultipartFile file = mock(MultipartFile.class);
+        Playlist saved = new Playlist();
+        PlaylistDto savedDto = new PlaylistDto();
         Song song = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+
         when(file.isEmpty()).thenReturn(false);
+        when(playlistMapper.toEntity(playlistDto)).thenReturn(playlist);
         when(storageService.upload(file, "playlist-images")).thenReturn("http://img.url");
         when(songRepository.findAllById(List.of(1L, 2L))).thenReturn(List.of(song));
-        when(playlistRepository.save(playlist)).thenReturn(playlist);
+        when(playlistRepository.save(playlist)).thenReturn(saved);
+        when(playlistMapper.toDto(saved)).thenReturn(savedDto);
 
-        Playlist result = playlistService.create(playlist, file, List.of(1L, 2L));
+        PlaylistDto result = playlistService.create(playlistDto, file, List.of(1L, 2L), user);
 
         assertThat(playlist.getPictureUrl()).isEqualTo("http://img.url");
         assertThat(playlist.getSongs()).containsExactly(song);
-        assertThat(result).isEqualTo(playlist);
+        assertThat(playlist.getUser()).isEqualTo(user);
+        assertThat(result).isEqualTo(savedDto);
     }
 
     @Test
-    void create_withNullFile_usesDefaultImage() {
+    void create_withNullFile_usesDefaultImageAndDoesNotUpload() {
+        PlaylistDto playlistDto = new PlaylistDto();
         Playlist playlist = new Playlist();
+        User user = new User();
+
+        when(playlistMapper.toEntity(playlistDto)).thenReturn(playlist);
         when(songRepository.findAllById(List.of())).thenReturn(List.of());
         when(playlistRepository.save(playlist)).thenReturn(playlist);
+        when(playlistMapper.toDto(playlist)).thenReturn(new PlaylistDto());
 
-        playlistService.create(playlist, null, null);
+        playlistService.create(playlistDto, null, null, user);
 
         verify(storageService, never()).upload(any(), any());
     }
 
     @Test
-    void create_withNullSongIds_usesEmptyList() {
+    void create_withEmptyFile_usesDefaultImageAndDoesNotUpload() {
+        PlaylistDto playlistDto = new PlaylistDto();
         Playlist playlist = new Playlist();
+        MultipartFile file = mock(MultipartFile.class);
+        User user = new User();
+
+        when(file.isEmpty()).thenReturn(true);
+        when(playlistMapper.toEntity(playlistDto)).thenReturn(playlist);
         when(songRepository.findAllById(List.of())).thenReturn(List.of());
         when(playlistRepository.save(playlist)).thenReturn(playlist);
+        when(playlistMapper.toDto(playlist)).thenReturn(new PlaylistDto());
 
-        playlistService.create(playlist, null, null);
+        playlistService.create(playlistDto, file, null, user);
+
+        verify(storageService, never()).upload(any(), any());
+    }
+
+    @Test
+    void create_withNullSongIds_usesEmptyListForSongLookup() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        Playlist playlist = new Playlist();
+        User user = new User();
+
+        when(playlistMapper.toEntity(playlistDto)).thenReturn(playlist);
+        when(songRepository.findAllById(List.of())).thenReturn(List.of());
+        when(playlistRepository.save(playlist)).thenReturn(playlist);
+        when(playlistMapper.toDto(playlist)).thenReturn(new PlaylistDto());
+
+        playlistService.create(playlistDto, null, null, user);
 
         verify(songRepository).findAllById(List.of());
     }
 
     @Test
-    void update_withFile_updatesFieldsAndImage() {
+    void update_withFile_updatesFieldsAndUploadsImage() {
+        PlaylistDto playlistDto = PlaylistDto.builder().name("New Name").publicFlag(true).build();
         Playlist existing = new Playlist();
-        existing.setId(1L);
-        Playlist edited = new Playlist();
-        edited.setId(1L);
-        edited.setName("New Name");
-        edited.setPublicFlag(true);
         MultipartFile file = mock(MultipartFile.class);
+        PlaylistDto updatedDto = new PlaylistDto();
 
         when(file.isEmpty()).thenReturn(false);
         when(playlistRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(storageService.upload(file, "playlist-images")).thenReturn("http://new-img.url");
         when(playlistRepository.save(existing)).thenReturn(existing);
+        when(playlistMapper.toDto(existing)).thenReturn(updatedDto);
 
-        Playlist result = playlistService.update(edited, file);
+        PlaylistDto result = playlistService.update(1L, playlistDto, file);
 
-        assertThat(existing.getName()).isEqualTo("New Name");
-        assertThat(existing.isPublicFlag()).isTrue();
+        verify(playlistMapper).updateEntityFromDto(playlistDto, existing);
         assertThat(existing.getPictureUrl()).isEqualTo("http://new-img.url");
-        assertThat(result).isEqualTo(existing);
+        assertThat(result).isEqualTo(updatedDto);
     }
 
     @Test
     void update_withNullFile_doesNotUploadImage() {
+        PlaylistDto playlistDto = new PlaylistDto();
         Playlist existing = new Playlist();
-        existing.setId(1L);
-        Playlist edited = new Playlist();
-        edited.setId(1L);
+
         when(playlistRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(playlistRepository.save(existing)).thenReturn(existing);
+        when(playlistMapper.toDto(existing)).thenReturn(new PlaylistDto());
 
-        playlistService.update(edited, null);
+        playlistService.update(1L, playlistDto, null);
 
         verify(storageService, never()).upload(any(), any());
     }
 
     @Test
     void update_playlistNotFound_throwsEntityNotFoundException() {
-        Playlist edited = new Playlist();
-        edited.setId(99L);
         when(playlistRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> playlistService.update(edited, null))
+        assertThatThrownBy(() -> playlistService.update(99L, new PlaylistDto(), null))
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
@@ -178,7 +223,7 @@ class PlaylistServiceImplTest {
         verify(playlistRepository).save(argThat(p ->
                 "Favorite Songs".equals(p.getName()) &&
                         p.getUser() == user &&
-                        p.getIsDefault()
+                        Boolean.TRUE.equals(p.getIsDefault())
         ));
     }
 
@@ -203,7 +248,7 @@ class PlaylistServiceImplTest {
     }
 
     @Test
-    void setVisibility_happyPath_updatesPublicFlag() {
+    void setVisibility_happyPath_updatesPublicFlagAndFlushes() {
         Playlist playlist = new Playlist();
         when(playlistRepository.findById(1L)).thenReturn(Optional.of(playlist));
 
@@ -254,8 +299,7 @@ class PlaylistServiceImplTest {
 
     @Test
     void addSong_playlistNotFound_throwsEntityNotFoundException() {
-        when(playlistRepository.findByIdWithSongs(99L))
-                .thenThrow(new EntityNotFoundException("Playlist not found: 99"));
+        when(playlistRepository.findByIdWithSongs(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> playlistService.addSong(99L, 1L))
                 .isInstanceOf(EntityNotFoundException.class);
@@ -302,8 +346,7 @@ class PlaylistServiceImplTest {
 
     @Test
     void removeSong_playlistNotFound_throwsEntityNotFoundException() {
-        when(playlistRepository.findByIdWithSongs(99L))
-                .thenThrow(new EntityNotFoundException("Playlist not found: 99"));
+        when(playlistRepository.findByIdWithSongs(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> playlistService.removeSong(99L, 1L))
                 .isInstanceOf(EntityNotFoundException.class);

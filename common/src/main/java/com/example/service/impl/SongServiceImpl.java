@@ -4,6 +4,9 @@ import com.example.dto.SongDto;
 import com.example.dto.SongPopularityDto;
 import com.example.mapper.SongMapper;
 import com.example.mapper.SongPopularityMapper;
+import com.example.model.Album;
+import com.example.model.Artist;
+import com.example.model.Band;
 import com.example.model.Genre;
 import com.example.model.Song;
 import com.example.model.SongComment;
@@ -57,11 +60,37 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Song save(Song song, MultipartFile multipartFile) {
-        String songUrl = storageService.upload(multipartFile, "songs");
-        song.setSongUrl(songUrl);
+    public SongDto save(SongDto songDto, MultipartFile multipartFile) {
+        Song song = songMapper.toEntity(songDto);
+        song.setSongUrl(storageService.upload(multipartFile, "songs"));
         song.setDuration(getDuration(multipartFile));
-        return songRepository.save(song);
+
+        if (songDto.getArtistId() != null) {
+            Artist artist = new Artist();
+            artist.setId(songDto.getArtistId());
+            song.setArtist(artist);
+        } else {
+            song.setArtist(null);
+        }
+
+        if (songDto.getBandId() != null) {
+            Band band = new Band();
+            band.setId(songDto.getBandId());
+            song.setBand(band);
+        } else {
+            song.setBand(null);
+        }
+
+        if (songDto.getAlbumId() != null) {
+            Album album = new Album();
+            album.setId(songDto.getAlbumId());
+            song.setAlbum(album);
+        } else {
+            song.setAlbum(null);
+        }
+
+        Song savedSong = songRepository.save(song);
+        return songMapper.toDto(savedSong);
     }
 
     @Override
@@ -73,9 +102,10 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
-    public Song getSongById(Long id) {
+    public SongDto getSongById(Long id) {
         log.info("Fetching song ID: {}", id);
         return songRepository.findById(id)
+                .map(songMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -92,12 +122,6 @@ public class SongServiceImpl implements SongService {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
                 .toList();
-    }
-
-    @Override
-    public Page<SongDto> findByGenre(Genre genre, Pageable pageable) {
-        return songRepository.findByGenre(genre, pageable)
-                .map(songMapper::toDto);
     }
 
     @Override

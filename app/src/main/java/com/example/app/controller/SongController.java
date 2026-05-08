@@ -68,10 +68,10 @@ public class SongController {
     }
 
     @PostMapping("/songs")
-    public String addSong(@ModelAttribute Song song,
+    public String addSong(@ModelAttribute SongDto songDto,
                           @RequestParam("songUrl") MultipartFile multipartFile,
                           RedirectAttributes redirectAttributes) {
-        songService.save(song, multipartFile);
+        songService.save(songDto, multipartFile);
         redirectAttributes.addFlashAttribute("success", "Song added successfully!");
         return "redirect:/songs";
     }
@@ -103,7 +103,7 @@ public class SongController {
                               @PageableDefault(sort = "rating", direction = Sort.Direction.DESC, size = 5) Pageable pageable) {
         modelMap.addAttribute("song", songService.getSongById(id));
         modelMap.addAttribute("comments", songCommentService.findAll(pageable, id));
-        modelMap.addAttribute("albumSongs", songService.getSongsByAlbumId(songService.getSongById(id).getAlbum().getId()));
+        modelMap.addAttribute("albumSongs", songService.getSongsByAlbumId(songService.getSongById(id).getAlbumId()));
         songCommentService.isSongCommentRequestPresent(modelMap);
         return "songPreview";
     }
