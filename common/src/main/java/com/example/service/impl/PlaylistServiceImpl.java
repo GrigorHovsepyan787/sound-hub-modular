@@ -35,12 +35,16 @@ public class PlaylistServiceImpl implements PlaylistService {
     private String defaultImageUrl;
 
     @Override
-    public List<Playlist> findAll(Sort sort) {
-        return playlistRepository.findAll(sort);
+    public List<PlaylistDto> findAll(Sort sort) {
+        return playlistRepository.findAll(sort)
+                .stream().map(playlistMapper::toDto).toList();
     }
 
     @Override
-    public Playlist create(Playlist playlist, MultipartFile multipartFile, List<Long> songIds) {
+    public PlaylistDto create(PlaylistDto playlistDto, MultipartFile multipartFile, List<Long> songIds, User user) {
+        Playlist playlist = playlistMapper.toEntity(playlistDto);
+        playlist.setUser(user);
+
         String imageUrl;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = storageService.upload(multipartFile, "playlist-images");
@@ -52,24 +56,25 @@ public class PlaylistServiceImpl implements PlaylistService {
         List<Long> ids = songIds != null ? songIds : Collections.emptyList();
         playlist.setSongs(songRepository.findAllById(ids));
 
-        return playlistRepository.save(playlist);
+        Playlist savedPlaylist = playlistRepository.save(playlist);
+        log.info("Created playlist '{}' for user '{}'", savedPlaylist.getName(), user.getUsername());
+        return playlistMapper.toDto(savedPlaylist);
     }
 
     @Override
-    public Playlist update(Playlist editedPlaylist, MultipartFile multipartFile) {
-        Playlist existingPlaylist = playlistRepository.findById(editedPlaylist.getId())
+    public PlaylistDto update(Long id, PlaylistDto playlistDto, MultipartFile multipartFile) {
+        Playlist existingPlaylist = playlistRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        existingPlaylist.setName(editedPlaylist.getName());
-        existingPlaylist.setPublicFlag(editedPlaylist.isPublicFlag());
+        playlistMapper.updateEntityFromDto(playlistDto, existingPlaylist);
 
         if (multipartFile != null && !multipartFile.isEmpty()) {
             String imageUrl = storageService.upload(multipartFile, "playlist-images");
             existingPlaylist.setPictureUrl(imageUrl);
-            log.info("Image updated for playlist ID: {}", editedPlaylist.getId());
+            log.info("Image updated for playlist ID: {}", id);
         }
 
-        return playlistRepository.save(existingPlaylist);
+        return playlistMapper.toDto(playlistRepository.save(existingPlaylist));
     }
 
     @Override
@@ -89,8 +94,10 @@ public class PlaylistServiceImpl implements PlaylistService {
         favorites.setName("Favorite Songs");
         favorites.setUser(user);
         favorites.setIsDefault(true);
+        favorites.setPictureUrl(defaultImageUrl);
 
         playlistRepository.save(favorites);
+        log.info("Created default playlist for user '{}'", user.getUsername());
     }
 
     @Override

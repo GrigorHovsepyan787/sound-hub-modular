@@ -61,24 +61,217 @@ class SongServiceImplTest {
         Page<SongDto> result = songService.findAll(pageable);
 
         assertThat(result.getContent()).containsExactly(dto);
+        verify(songRepository).findAll(pageable);
+        verify(songMapper).toDto(song);
     }
 
     @Test
-    void save_happyPath_uploadsFileAndSaves() throws Exception {
-        Song song = new Song();
+    void findAll_emptyRepository_returnsEmptyPage() {
+        Pageable pageable = PageRequest.of(0, 10);
+        when(songRepository.findAll(pageable)).thenReturn(new PageImpl<>(List.of()));
+
+        Page<SongDto> result = songService.findAll(pageable);
+
+        assertThat(result.getContent()).isEmpty();
+        verify(songMapper, never()).toDto(any());
+    }
+
+    @Test
+    void save_happyPath_uploadsFileAndPersistsMappedEntity() throws Exception {
+        SongDto dto = SongDto.builder()
+                .title("Test Song")
+                .artistId(1L)
+                .bandId(2L)
+                .albumId(3L)
+                .build();
+        Song entity = new Song();
+        Song saved = new Song();
+        SongDto savedDto = new SongDto();
         MultipartFile file = mock(MultipartFile.class);
+
         when(file.getOriginalFilename()).thenReturn("test.mp3");
-        doThrow(new IOException("test")).when(file).transferTo(any(File.class));
-        when(storageService.upload(file, "songs")).thenReturn("http://song.url");
-        when(songRepository.save(song)).thenReturn(song);
+        doThrow(new IOException("no real file")).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("http://cdn/song.mp3");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(saved);
+        when(songMapper.toDto(saved)).thenReturn(savedDto);
 
-        Song result = songService.save(song, file);
+        SongDto result = songService.save(dto, file);
 
-        assertThat(song.getSongUrl()).isEqualTo("http://song.url");
-        assertThat(song.getDuration()).isEqualTo(0);
-        assertThat(result).isEqualTo(song);
+        assertThat(result).isEqualTo(savedDto);
+        assertThat(entity.getSongUrl()).isEqualTo("http://cdn/song.mp3");
+        assertThat(entity.getDuration()).isEqualTo(0); // IOException forces fallback
         verify(storageService).upload(file, "songs");
-        verify(songRepository).save(song);
+        verify(songMapper).toEntity(dto);
+        verify(songRepository).save(entity);
+        verify(songMapper).toDto(saved);
+    }
+
+    @Test
+    void save_withArtistId_setsArtistOnEntity() throws Exception {
+        SongDto dto = SongDto.builder().artistId(10L).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getArtist()).isNotNull();
+        assertThat(entity.getArtist().getId()).isEqualTo(10L);
+    }
+
+    @Test
+    void save_withNullArtistId_doesNotSetArtist() throws Exception {
+        SongDto dto = SongDto.builder().artistId(null).albumId(1L).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getArtist()).isNull();
+    }
+
+    @Test
+    void save_withBandId_setsBandOnEntity() throws Exception {
+        SongDto dto = SongDto.builder().bandId(20L).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getBand()).isNotNull();
+        assertThat(entity.getBand().getId()).isEqualTo(20L);
+    }
+
+    @Test
+    void save_withNullBandId_doesNotSetBand() throws Exception {
+        SongDto dto = SongDto.builder().bandId(null).albumId(1L).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getBand()).isNull();
+    }
+
+    @Test
+    void save_withAlbumId_setsAlbumOnEntity() throws Exception {
+        SongDto dto = SongDto.builder().albumId(30L).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getAlbum()).isNotNull();
+        assertThat(entity.getAlbum().getId()).isEqualTo(30L);
+    }
+
+    @Test
+    void save_withNullAlbumId_doesNotSetAlbum() throws Exception {
+        SongDto dto = SongDto.builder().albumId(null).build();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getAlbum()).isNull();
+    }
+
+    @Test
+    void save_storageUploadCalledWithCorrectBucket() throws Exception {
+        SongDto dto = new SongDto();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        verify(storageService).upload(eq(file), eq("songs"));
+    }
+
+    @Test
+    void save_duractionExtractionFails_defaultsToZero() throws Exception {
+        SongDto dto = new SongDto();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("bad.mp3");
+        doThrow(new IOException("disk error")).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("url");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+        when(songRepository.save(entity)).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(entity.getDuration()).isEqualTo(0);
+    }
+
+    @Test
+    void save_songUrlSetOnEntityBeforePersist() throws Exception {
+        SongDto dto = new SongDto();
+        Song entity = new Song();
+        MultipartFile file = mock(MultipartFile.class);
+
+        when(file.getOriginalFilename()).thenReturn("track.mp3");
+        doThrow(new IOException()).when(file).transferTo(any(File.class));
+        when(storageService.upload(file, "songs")).thenReturn("https://cdn/song.mp3");
+        when(songMapper.toEntity(dto)).thenReturn(entity);
+
+        ArgumentCaptor<Song> savedCaptor = ArgumentCaptor.forClass(Song.class);
+        when(songRepository.save(savedCaptor.capture())).thenReturn(entity);
+        when(songMapper.toDto(entity)).thenReturn(new SongDto());
+
+        songService.save(dto, file);
+
+        assertThat(savedCaptor.getValue().getSongUrl()).isEqualTo("https://cdn/song.mp3");
     }
 
     @Test
@@ -90,13 +283,27 @@ class SongServiceImplTest {
     }
 
     @Test
-    void getSongById_exists_returnsSong() {
+    void delete_playRepositoryCalledBeforeSongRepository() {
+        // Verifies ordering: plays must go first to avoid FK violation
+        var order = org.mockito.Mockito.inOrder(songPlayRepository, songRepository);
+
+        songService.delete(5L);
+
+        order.verify(songPlayRepository).deleteBySongId(5L);
+        order.verify(songRepository).deleteById(5L);
+    }
+
+    @Test
+    void getSongById_exists_returnsMappedDto() {
         Song song = new Song();
+        SongDto dto = new SongDto();
         when(songRepository.findById(1L)).thenReturn(Optional.of(song));
+        when(songMapper.toDto(song)).thenReturn(dto);
 
-        Song result = songService.getSongById(1L);
+        SongDto result = songService.getSongById(1L);
 
-        assertThat(result).isEqualTo(song);
+        assertThat(result).isEqualTo(dto);
+        verify(songMapper).toDto(song);
     }
 
     @Test
@@ -128,16 +335,13 @@ class SongServiceImplTest {
     }
 
     @Test
-    void findByGenre_happyPath_returnsMappedPage() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Song song = new Song();
-        SongDto dto = new SongDto();
-        when(songRepository.findByGenre(Genre.ROCK, pageable)).thenReturn(new PageImpl<>(List.of(song)));
-        when(songMapper.toDto(song)).thenReturn(dto);
+    void getPageNumbers_withOnePage_returnsSingleElement() {
+        Page<SongDto> page = mock(Page.class);
+        when(page.getTotalPages()).thenReturn(1);
 
-        Page<SongDto> result = songService.findByGenre(Genre.ROCK, pageable);
+        List<Integer> result = songService.getPageNumbers(page);
 
-        assertThat(result.getContent()).containsExactly(dto);
+        assertThat(result).containsExactly(1);
     }
 
     @Test
@@ -145,16 +349,18 @@ class SongServiceImplTest {
         Pageable pageable = PageRequest.of(0, 5);
         Song song = new Song();
         SongDto dto = new SongDto();
-        when(songRepository.findByGenre(Genre.POP, pageable)).thenReturn(new PageImpl<>(List.of(song)));
+        when(songRepository.findByGenre(Genre.ROCK, pageable)).thenReturn(new PageImpl<>(List.of(song)));
         when(songMapper.toDto(song)).thenReturn(dto);
 
-        Page<SongDto> result = songService.findSongsByGenre(Genre.POP, pageable);
+        Page<SongDto> result = songService.findSongsByGenre(Genre.ROCK, pageable);
 
         assertThat(result.getContent()).containsExactly(dto);
+        verify(songRepository).findByGenre(Genre.ROCK, pageable);
+        verify(songRepository, never()).findAll(any(Pageable.class));
     }
 
     @Test
-    void findSongsByGenre_withNullGenre_returnsAll() {
+    void findSongsByGenre_withNullGenre_returnsAllSongs() {
         Pageable pageable = PageRequest.of(0, 5);
         Song song = new Song();
         SongDto dto = new SongDto();
@@ -188,6 +394,22 @@ class SongServiceImplTest {
 
         assertThatThrownBy(() -> songService.registerPlay(99L))
                 .isInstanceOf(EntityNotFoundException.class);
+
+        verify(songPlayRepository, never()).save(any());
+        verify(songRepository, never()).incrementPlayCount(any());
+    }
+
+    @Test
+    void registerPlay_playedAtIsSet() {
+        Song song = new Song();
+        song.setId(1L);
+        when(songRepository.findById(1L)).thenReturn(Optional.of(song));
+
+        songService.registerPlay(1L);
+
+        ArgumentCaptor<SongPlay> captor = ArgumentCaptor.forClass(SongPlay.class);
+        verify(songPlayRepository).save(captor.capture());
+        assertThat(captor.getValue().getPlayedAt()).isNotNull();
     }
 
     @Test
@@ -202,6 +424,7 @@ class SongServiceImplTest {
         Page<SongPopularityDto> result = songService.getTopSongPopularityLastMonth(pageable);
 
         assertThat(result.getContent()).containsExactly(dto);
+        verify(songPopularityMapper).toDto(popularity);
     }
 
     @Test
@@ -217,6 +440,16 @@ class SongServiceImplTest {
     }
 
     @Test
+    void getTop5SongsOfArtistByPlayCount_noSongs_returnsEmptyList() {
+        when(songRepository.findTop5ByArtistIdOrderByPlayCountDesc(999L)).thenReturn(List.of());
+
+        List<SongDto> result = songService.getTop5SongsOfArtistByPlayCount(999L);
+
+        assertThat(result).isEmpty();
+        verify(songMapper, never()).toDto(any());
+    }
+
+    @Test
     void getTop5SongsOfBandByPlayCount_happyPath_returnsMappedList() {
         Song song = new Song();
         SongDto dto = new SongDto();
@@ -229,6 +462,15 @@ class SongServiceImplTest {
     }
 
     @Test
+    void getTop5SongsOfBandByPlayCount_noSongs_returnsEmptyList() {
+        when(songRepository.findTop5ByBandIdOrderByPlayCountDesc(999L)).thenReturn(List.of());
+
+        List<SongDto> result = songService.getTop5SongsOfBandByPlayCount(999L);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
     void findTopByPlayCount_happyPath_returnsMappedList() {
         Song song = new Song();
         SongDto dto = new SongDto();
@@ -238,6 +480,16 @@ class SongServiceImplTest {
         List<SongDto> result = songService.findTopByPlayCount(5);
 
         assertThat(result).containsExactly(dto);
+        verify(songRepository).findTopByPlayCount(PageRequest.of(0, 5));
+    }
+
+    @Test
+    void findTopByPlayCount_usesCorrectPageRequest() {
+        when(songRepository.findTopByPlayCount(PageRequest.of(0, 3))).thenReturn(List.of());
+
+        songService.findTopByPlayCount(3);
+
+        verify(songRepository).findTopByPlayCount(PageRequest.of(0, 3));
     }
 
     @Test
@@ -253,6 +505,16 @@ class SongServiceImplTest {
     }
 
     @Test
+    void getSongsByAlbumId_noSongs_returnsEmptyList() {
+        when(songRepository.findByAlbumId(99L)).thenReturn(List.of());
+
+        List<SongDto> result = songService.getSongsByAlbumId(99L);
+
+        assertThat(result).isEmpty();
+        verify(songMapper, never()).toDto(any());
+    }
+
+    @Test
     void searchSongs_withValidQuery_searchesByTitle() {
         Song song = new Song();
         SongDto dto = new SongDto();
@@ -263,6 +525,7 @@ class SongServiceImplTest {
         List<SongDto> result = songService.searchSongs("rock", 10);
 
         assertThat(result).containsExactly(dto);
+        verify(songRepository).findByTitleContainingIgnoreCase("rock", PageRequest.of(0, 10));
     }
 
     @Test
@@ -289,5 +552,25 @@ class SongServiceImplTest {
 
         assertThat(result).containsExactly(dto);
         verify(songRepository, never()).findByTitleContainingIgnoreCase(any(), any());
+    }
+
+    @Test
+    void searchSongs_queryIsCaseInsensitive() {
+        when(songRepository.findByTitleContainingIgnoreCase("ROCK", PageRequest.of(0, 10)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        songService.searchSongs("ROCK", 10);
+
+        verify(songRepository).findByTitleContainingIgnoreCase(eq("ROCK"), any());
+    }
+
+    @Test
+    void searchSongs_limitsResultsCorrectly() {
+        when(songRepository.findByTitleContainingIgnoreCase("jazz", PageRequest.of(0, 3)))
+                .thenReturn(new PageImpl<>(List.of()));
+
+        songService.searchSongs("jazz", 3);
+
+        verify(songRepository).findByTitleContainingIgnoreCase(any(), eq(PageRequest.of(0, 3)));
     }
 }

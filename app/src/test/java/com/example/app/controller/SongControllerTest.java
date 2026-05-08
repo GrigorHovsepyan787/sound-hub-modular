@@ -6,6 +6,8 @@ import com.example.model.Song;
 import com.example.service.AlbumService;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
+import com.example.service.SongCommentReactionService;
+import com.example.service.SongCommentService;
 import com.example.service.SongService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +54,12 @@ class SongControllerTest {
 
     @InjectMocks
     private SongController songController;
+
+    @Mock
+    private SongCommentService songCommentService;
+
+    @Mock
+    private SongCommentReactionService songCommentReactionService;
 
     @Test
     void songs_withGenreAndPageable_returnsSongsViewWithAllModelAttributes() {
@@ -138,26 +146,26 @@ class SongControllerTest {
 
     @Test
     void addSong_validInput_savesSongAndRedirectsWithFlashAttribute() {
-        Song song = new Song();
+        SongDto songDto = new SongDto(); // FIX
         MultipartFile multipartFile = mock(MultipartFile.class);
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        
-        String view = songController.addSong(song, multipartFile, redirectAttributes);
+
+        String view = songController.addSong(songDto, multipartFile, redirectAttributes);
 
         assertEquals("redirect:/songs", view);
-        verify(songService).save(song, multipartFile);
+        verify(songService).save(songDto, multipartFile); // FIX
         verify(redirectAttributes).addFlashAttribute("success", "Song added successfully!");
     }
 
     @Test
     void addSong_serviceCalledWithCorrectArguments() {
-        Song song = new Song();
+        SongDto songDto = new SongDto(); // FIX
         MultipartFile multipartFile = mock(MultipartFile.class);
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
-        
-        songController.addSong(song, multipartFile, redirectAttributes);
 
-        verify(songService).save(eq(song), eq(multipartFile));
+        songController.addSong(songDto, multipartFile, redirectAttributes);
+
+        verify(songService).save(eq(songDto), eq(multipartFile)); // FIX
     }
 
     @Test
