@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.dto.AlbumDto;
+import com.example.dto.SaveAlbumDto;
 import com.example.model.Album;
 import com.example.projection.AlbumPopularity;
 import org.springframework.data.domain.Page;
@@ -13,9 +15,15 @@ public interface AlbumService {
 
     List<Album> findAll();
 
+    Page<AlbumDto> findAllDto(Pageable pageable);
+
     void save(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 
+    AlbumDto saveDto(SaveAlbumDto saveAlbumDto);
+
     Album findAlbumById(Long id);
+
+    AlbumDto findAlbumDtoById(Long id);
 
     void update(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 
@@ -26,4 +34,6 @@ public interface AlbumService {
     Page<Album> findByBandIsNotNull(Pageable pageable);
 
     void delete(Long id);
+
+    AlbumDto updateAlbumDto(SaveAlbumDto dto, Long id);
 }

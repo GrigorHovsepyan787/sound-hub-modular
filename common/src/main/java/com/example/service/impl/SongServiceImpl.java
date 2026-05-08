@@ -9,7 +9,9 @@ import com.example.model.Artist;
 import com.example.model.Band;
 import com.example.model.Genre;
 import com.example.model.Song;
+import com.example.model.SongComment;
 import com.example.model.SongPlay;
+import com.example.repository.SongCommentRepository;
 import com.example.repository.SongPlayRepository;
 import com.example.repository.SongRepository;
 import com.example.service.SongService;
@@ -47,6 +49,7 @@ public class SongServiceImpl implements SongService {
     private final SongPopularityMapper songPopularityMapper;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
+    private final SongCommentRepository songCommentRepository;
     private final Clock clock = Clock.systemDefaultZone();
 
     @Override
@@ -197,6 +200,18 @@ public class SongServiceImpl implements SongService {
                 .stream()
                 .map(songMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public SongDto getSongDtoById(Long id) {
+        SongDto dto = songMapper.toDto(songRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+        List<Long> commentIds = songCommentRepository
+                .findBySongId(id)
+                .stream()
+                .map(SongComment::getId)
+                .toList();
+        dto.setCommentIds(commentIds);
+        return dto;
     }
 
     @Override

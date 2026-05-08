@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -21,6 +23,7 @@ public class SongDto {
     private LocalDate uploadDate;
     private String songUrl;
     private String pictureUrl;
+    private List<Long> commentIds;
 
     private Long artistId;
     private String artistFullName;

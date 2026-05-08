@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
+import com.example.dto.AlbumCommentDto;
 import com.example.dto.AlbumCommentRequest;
+import com.example.mapper.AlbumCommentMapper;
 import com.example.mapper.AlbumCommentRequestMapper;
 import com.example.model.Album;
 import com.example.model.AlbumComment;
@@ -27,27 +29,25 @@ public class AlbumCommentServiceImpl implements AlbumCommentService {
     private final AlbumCommentRepository albumCommentRepository;
     private final AlbumRepository albumRepository;
     private final AlbumCommentRequestMapper albumCommentRequestMapper;
+    private final AlbumCommentMapper albumCommentMapper;
 
     @Override
-    public Page<AlbumComment> findAll(Pageable pageable) {
-        return albumCommentRepository.findAll(pageable);
+    public Page<AlbumComment> findAll(Pageable pageable, Long  albumId) {
+        return albumCommentRepository.findByAlbumId(albumId, pageable);
     }
 
     @Override
-    public String save(AlbumCommentRequest request, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(
-                    "org.springframework.validation.BindingResult.albumCommentRequest",
-                    bindingResult
-            );
+    public Page<AlbumCommentDto> findAllDto(Pageable pageable, Long albumId) {
+        return findAll(pageable, albumId).map(albumCommentMapper::toDto);
+    }
 
-            redirectAttributes.addFlashAttribute(
-                    "albumCommentRequest",
-                    request
-            );
+    @Override
+    public AlbumCommentDto getAlbumComment(Long id) {
+        return albumCommentMapper.toDto(albumCommentRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+    }
 
-            return "redirect:/albums/preview?id=" + request.getAlbumId();
-        }
+    @Override
+    public AlbumCommentDto createAlbumComment(AlbumCommentRequest request, User user) {
         log.info("Attempting to create album comment for albumId={} by user={}",
                 request.getAlbumId(),
                 user.getUsername());
@@ -62,6 +62,24 @@ public class AlbumCommentServiceImpl implements AlbumCommentService {
         log.info("Album comment successfully created. albumId={}, user={}",
                 album.getId(),
                 user.getUsername());
+        return albumCommentMapper.toDto(albumComment);
+    }
+
+    @Override
+    public String save(AlbumCommentRequest request, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.albumCommentRequest",
+                    bindingResult
+            );
+
+            redirectAttributes.addFlashAttribute(
+                    "albumCommentRequest",
+                    request
+            );
+            return "redirect:/albums/preview?id=" + request.getAlbumId();
+        }
+        createAlbumComment(request, user);
         return "redirect:/albums/preview?id=" + request.getAlbumId();
     }
 
