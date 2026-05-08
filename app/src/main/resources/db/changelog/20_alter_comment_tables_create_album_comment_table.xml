@@ -1,0 +1,252 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20" author="grigor">
+        <dropTable tableName="comment"/>
+        <dropTable tableName="comment_reaction"/>
+
+        <createTable tableName="song_comment">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="song_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rating" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="song_comment_reaction">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="comment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="value" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="album_comment">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="album_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rating" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="deleted" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <createTable tableName="album_comment_reaction">
+
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="comment_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="value" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="song_comment"
+                baseColumnNames="user_id"
+                referencedTableName="user"
+                referencedColumnNames="id"
+                constraintName="fk_song_comment_user"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="song_comment"
+                baseColumnNames="song_id"
+                referencedTableName="song"
+                referencedColumnNames="id"
+                constraintName="fk_song_comment_song"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="song_comment_reaction"
+                baseColumnNames="comment_id"
+                referencedTableName="song_comment"
+                referencedColumnNames="id"
+                constraintName="fk_song_reaction_comment"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="song_comment_reaction"
+                baseColumnNames="user_id"
+                referencedTableName="user"
+                referencedColumnNames="id"
+                constraintName="fk_song_reaction_user"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="album_comment"
+                baseColumnNames="user_id"
+                referencedTableName="user"
+                referencedColumnNames="id"
+                constraintName="fk_album_comment_user"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="album_comment"
+                baseColumnNames="album_id"
+                referencedTableName="album"
+                referencedColumnNames="id"
+                constraintName="fk_album_comment_album"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="album_comment_reaction"
+                baseColumnNames="comment_id"
+                referencedTableName="album_comment"
+                referencedColumnNames="id"
+                constraintName="fk_album_reaction_comment"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="album_comment_reaction"
+                baseColumnNames="user_id"
+                referencedTableName="user"
+                referencedColumnNames="id"
+                constraintName="fk_album_reaction_user"
+                onDelete="CASCADE"/>
+
+        <addUniqueConstraint
+                tableName="song_comment_reaction"
+                columnNames="comment_id, user_id"
+                constraintName="uq_song_comment_user"/>
+
+        <addUniqueConstraint
+                tableName="album_comment_reaction"
+                columnNames="comment_id, user_id"
+                constraintName="uq_album_comment_user"/>
+
+        <createIndex
+                tableName="song_comment"
+                indexName="idx_song_comment_song_rating">
+
+            <column name="song_id"/>
+            <column name="rating"/>
+
+        </createIndex>
+
+        <createIndex
+                tableName="album_comment"
+                indexName="idx_album_comment_album_rating">
+
+            <column name="album_id"/>
+            <column name="rating"/>
+
+        </createIndex>
+
+        <createIndex
+                tableName="song_comment"
+                indexName="idx_song_comment_created_at">
+
+            <column name="created_at"/>
+
+        </createIndex>
+
+        <createIndex
+                tableName="song_comment_reaction"
+                indexName="idx_song_reaction_comment">
+
+            <column name="comment_id"/>
+
+        </createIndex>
+
+        <createIndex
+                tableName="song_comment"
+                indexName="idx_song_comment_deleted">
+
+            <column name="deleted"/>
+
+        </createIndex>
+
+        <sql>
+            ALTER TABLE song_comment_reaction
+                ADD CONSTRAINT chk_song_reaction_value
+                    CHECK (value IN (-1, 1));
+        </sql>
+
+        <sql>
+            ALTER TABLE album_comment_reaction
+                ADD CONSTRAINT chk_album_reaction_value
+                    CHECK (value IN (-1, 1));
+        </sql>
+
+    </changeSet>
+</databaseChangeLog>

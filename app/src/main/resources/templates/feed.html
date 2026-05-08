@@ -221,18 +221,20 @@
                                     th:data-id="${song.song.id}"
                                     th:data-title="${song.song.title}"
                                     th:data-performer="${song.song.performer}"
-                                    th:attr="onclick=|playSong('${song.song.songUrl}', this)|"
+                                    th:data-url="${song.song.songUrl}"
+                                    data-play-btn
                                     class="w-10 h-10 flex items-center justify-center rounded-full bg-transparent
-                            group-hover:bg-primary group-hover:text-white transition-all text-slate-400">
-                                <i
-                                        class="fa-solid fa-play"></i>
+                            group-hover:bg-brand-accent group-hover:text-white transition-all text-slate-400">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
                             </button></span>
                             <div class="flex items-center gap-4 overflow-hidden">
                                 <img alt="Track thumbnail" class="w-10 h-10 rounded shadow-md flex-shrink-0"
                                      th:src="${song.song.pictureUrl}"/>
-                                <span class="font-semibold truncate" th:text="${song.song.title}"></span>
+                                <a class="font-semibold truncate" th:text="${song.song.title}"
+                                   th:href="@{/songs/preview(id=${song.song.id})}"></a>
                             </div>
-                            <a th:if="${song.song.artistId != null}" th:href="@{/artists/preview(id=${song.song.artistId})}">
+                            <a th:if="${song.song.artistId != null}"
+                               th:href="@{/artists/preview(id=${song.song.artistId})}">
                             <span class="hidden md:block text-gray-400 truncate"
                                   th:text="${song.song.performer}"></span>
                             </a>
@@ -244,12 +246,68 @@
                                 <i class="fa-solid fa-headphones text-[10px]"></i>
                                 <span class="text-xs" th:text="${song.song.playCount}"></span>
                             </div>
-                            <span class="text-right text-gray-400 text-sm" th:text="${song.song.durationFormatted}"></span>
+                            <span class="text-right text-gray-400 text-sm"
+                                  th:text="${song.song.durationFormatted}"></span>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+        <script>
+            (function () {
+                const buttons = Array.from(document.querySelectorAll('[data-play-btn]'));
+                const songs = buttons.map(btn => ({
+                    id: btn.dataset.id,
+                    title: btn.dataset.title,
+                    performer: btn.dataset.performer,
+                    url: btn.dataset.url,
+                }));
+                document.dispatchEvent(new CustomEvent('soundhub:register', {detail: {songs}}));
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.dispatchEvent(new CustomEvent('soundhub:play', {
+                            detail: {
+                                id: btn.dataset.id,
+                                title: btn.dataset.title,
+                                performer: btn.dataset.performer,
+                                url: btn.dataset.url,
+                                songs: songs,
+                            }
+                        }));
+                    });
+                });
+            })();
+
+            function bindPlayButtons() {
+                const buttons = Array.from(document.querySelectorAll('[data-play-btn]'));
+
+                const songs = buttons.map(btn => ({
+                    id: btn.dataset.id,
+                    title: btn.dataset.title,
+                    performer: btn.dataset.performer,
+                    url: btn.dataset.url,
+                }));
+
+                document.dispatchEvent(new CustomEvent('soundhub:register', {detail: {songs}}));
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.dispatchEvent(new CustomEvent('soundhub:play', {
+                            detail: {
+                                id: btn.dataset.id,
+                                title: btn.dataset.title,
+                                performer: btn.dataset.performer,
+                                url: btn.dataset.url,
+                                songs: songs,
+                            }
+                        }));
+                    });
+                });
+            }
+
+            bindPlayButtons();
+        </script>
     </section>
 </th:block>
 </body>

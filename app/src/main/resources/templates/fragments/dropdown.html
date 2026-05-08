@@ -22,21 +22,11 @@
         </li>
 
         <li th:each="song : ${result.songs}">
-            <button type="button"
-                    onclick="hideDropdown()"
-                    th:data-id="${song.id}"
-                    th:data-title="${song.title}"
-                    th:data-performer="${song.performer}"
-                    th:data-url="${song.songUrl}"
-                    data-play-btn
-                    class="w-full flex items-center gap-3 px-3 py-2
-                   hover:bg-brand-accent hover:text-white
-                   transition-all text-slate-400 text-left">
-                <i class="fa-solid fa-play text-sm"></i>
-                <span class="truncate"
-                      th:text="${song.title}">
-        </span>
-            </button>
+            <a class="truncate"
+               th:text="${song.title}"
+               th:href="@{/songs/preview(id=${song.id})}"
+               style="display:block; padding:8px 12px; color:white;">
+            </a>
         </li>
 
         <li th:if="${!result.artists.isEmpty()}"
