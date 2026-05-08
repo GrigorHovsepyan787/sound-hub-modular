@@ -21,6 +21,7 @@
         <module>persistence</module>
         <module>common</module>
         <module>app</module>
+        <module>rest</module>
     </modules>
 
     <dependencies>

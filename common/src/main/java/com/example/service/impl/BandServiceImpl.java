@@ -1,5 +1,7 @@
 package com.example.service.impl;
 
+import com.example.dto.BandDto;
+import com.example.mapper.BandMapper;
 import com.example.model.Band;
 import com.example.projection.BandPopularity;
 import com.example.repository.BandRepository;
@@ -20,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Clock;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,23 +31,28 @@ public class BandServiceImpl implements BandService {
     private final BandRepository bandRepository;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
+    private final BandMapper bandMapper;
+    private final Clock clock = Clock.systemDefaultZone();
     @Value("${band.default-image}")
     private String defaultImageUrl;
-    private final Clock clock = Clock.systemDefaultZone();
 
     @Override
-    public Page<Band> findAll(Pageable pageable) {
+    public Page<BandDto> findAll(Pageable pageable) {
         log.info("Fetching bands, page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
-        return bandRepository.findAll(pageable);
+        return bandRepository.findAll(pageable)
+                .map(bandMapper::toDto);
     }
 
     @Override
-    public List<Band> findAll() {
-        return bandRepository.findAll();
+    public List<BandDto> findAll() {
+        return bandRepository.findAll()
+                .stream().map(bandMapper::toDto).toList();
     }
 
     @Override
-    public Band create(Band band, MultipartFile multipartFile) {
+    public BandDto create(BandDto bandDto, MultipartFile multipartFile) {
+        Band band = bandMapper.toEntity(bandDto);
+
         String imageUrl;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = storageService.upload(multipartFile, "band-images");
@@ -55,23 +61,22 @@ public class BandServiceImpl implements BandService {
         }
         band.setPictureUrl(imageUrl);
 
-        return bandRepository.save(band);
+        return bandMapper.toDto(bandRepository.save(band));
     }
 
     @Override
-    public Band update(Band editedBand, MultipartFile bandImage) {
-        Band existingBand = bandRepository.findById(editedBand.getId())
+    public BandDto update(Long id, BandDto bandDto, MultipartFile bandImage) {
+        Band existingBand = bandRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        existingBand.setName(editedBand.getName());
-        existingBand.setBio(editedBand.getBio());
+        bandMapper.updateEntityFromDto(bandDto, existingBand);
 
         if (bandImage != null && !bandImage.isEmpty()) {
             String imageUrl = storageService.upload(bandImage, "band-images");
             existingBand.setPictureUrl(imageUrl);
-            log.info("Image updated for band ID: {}", editedBand.getId());
+            log.info("Image updated for band ID: {}", id);
         }
-        return bandRepository.save(existingBand);
+        return bandMapper.toDto(bandRepository.save(existingBand));
     }
 
     @Override
@@ -81,40 +86,27 @@ public class BandServiceImpl implements BandService {
     }
 
     @Override
-    public Band getBandById(Long id) {
+    public BandDto getBandById(Long id) {
         log.info("Fetching band ID: {}", id);
         return bandRepository.findById(id)
+                .map(bandMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public List<Integer> getPageNumbers(Page<Band> bands) {
-
-        int totalPages = bands.getTotalPages();
-        log.info("Total pages: {}", totalPages);
-
-        if (totalPages == 0) {
-            return List.of();
-        }
-
-        return IntStream.rangeClosed(1, totalPages)
-                .boxed()
-                .toList();
-    }
-
-    @Override
-    public Band getBandByIdForArtists(Long id) {
+    public BandDto getBandByIdForArtists(Long id) {
         log.info("Fetching band ID with artists: {}", id);
         return bandRepository.findByIdWithArtists(id)
+                .map(bandMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public Page<Band> getBandsByName(String name, Pageable pageable) {
+    public Page<BandDto> getBandsByName(String name, Pageable pageable) {
         if (StringUtils.isBlank(name)) {
-            return bandRepository.findAll(pageable);
+            return bandRepository.findAll(pageable).map(bandMapper::toDto);
         }
-        return bandRepository.findByNameContainingIgnoreCase(name, pageable);
+        return bandRepository.findByNameContainingIgnoreCase(name, pageable).map(bandMapper::toDto);
     }
 
     @Override
@@ -125,5 +117,15 @@ public class BandServiceImpl implements BandService {
                 month.currentStart(),
                 month.currentEnd(),
                 pageable);
+    }
+
+    @Override
+    public List<Integer> getPageNumbers(Page<?> page) {
+        int totalPages = page.getTotalPages();
+        log.info("Total pages: {}", totalPages);
+        if (totalPages == 0) {
+            return List.of();
+        }
+        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }
