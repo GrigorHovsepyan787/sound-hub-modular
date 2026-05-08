@@ -1,5 +1,7 @@
 package com.example.service.impl;
 
+import com.example.dto.ArtistDto;
+import com.example.mapper.ArtistMapper;
 import com.example.model.Artist;
 import com.example.model.Band;
 import com.example.projection.ArtistPopularity;
@@ -35,23 +37,27 @@ public class ArtistServiceImpl implements ArtistService {
     private final BandRepository bandRepository;
     private final StorageService storageService;
     private final SongPlayRepository songPlayRepository;
+    private final ArtistMapper artistMapper;
+    private final Clock clock = Clock.systemDefaultZone();
     @Value("${artist.default-image}")
     private String defaultImageUrl;
-    private final Clock clock = Clock.systemDefaultZone();
 
     @Override
-    public Page<Artist> findAll(Pageable pageable) {
+    public Page<ArtistDto> findAll(Pageable pageable) {
         log.info("Fetching artists, page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
-        return artistRepository.findAll(pageable);
+        return artistRepository.findAll(pageable).map(artistMapper::toDto);
     }
 
     @Override
-    public List<Artist> findAll() {
-        return artistRepository.findAll();
+    public List<ArtistDto> findAll() {
+        return artistRepository.findAll()
+                .stream().map(artistMapper::toDto).toList();
     }
 
     @Override
-    public Artist save(Artist artist, MultipartFile multipartFile, List<Long> bandIds) {
+    public ArtistDto save(ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds) {
+        Artist artist = artistMapper.toEntity(artistDto);
+
         String imageUrl;
         if (multipartFile != null && !multipartFile.isEmpty()) {
             imageUrl = storageService.upload(multipartFile, "artist-images");
@@ -68,24 +74,20 @@ public class ArtistServiceImpl implements ArtistService {
             artist.setBands(bands);
         }
 
-        return artistRepository.save(artist);
+        return artistMapper.toDto(artistRepository.save(artist));
     }
 
     @Override
-    public Artist update(Artist editedArtist, MultipartFile multipartFile, List<Long> bandIds) {
-        Artist existingArtist = artistRepository.findById(editedArtist.getId())
+    public ArtistDto update(Long id, ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds) {
+        Artist existingArtist = artistRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        existingArtist.setName(editedArtist.getName());
-        existingArtist.setSurname(editedArtist.getSurname());
-        existingArtist.setBio(editedArtist.getBio());
-        existingArtist.setNickname(editedArtist.getNickname());
-        existingArtist.setBirthDate(editedArtist.getBirthDate());
+        artistMapper.updateEntityFromDto(artistDto, existingArtist);
 
         existingArtist.getBands().clear();
         if (bandIds != null && !bandIds.isEmpty()) {
             Set<Band> managedBands = bandIds.stream()
-                    .map(id -> bandRepository.findById(id)
+                    .map(bandId -> bandRepository.findById(bandId)
                             .orElseThrow(EntityNotFoundException::new))
                     .collect(Collectors.toSet());
             existingArtist.getBands().addAll(managedBands);
@@ -94,9 +96,9 @@ public class ArtistServiceImpl implements ArtistService {
         if (multipartFile != null && !multipartFile.isEmpty()) {
             String imageUrl = storageService.upload(multipartFile, "artist-images");
             existingArtist.setPictureUrl(imageUrl);
-            log.info("Image updated for artist ID: {}", editedArtist.getId());
+            log.info("Image updated for artist ID: {}", id);
         }
-        return artistRepository.save(existingArtist);
+        return artistMapper.toDto(artistRepository.save(existingArtist));
     }
 
     @Override
@@ -106,33 +108,19 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
-    public Artist getArtistById(Long id) {
+    public ArtistDto getArtistById(Long id) {
         log.info("Fetching artist ID: {}", id);
         return artistRepository.findById(id)
+                .map(artistMapper::toDto)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public List<Integer> getPageNumbers(Page<Artist> artists) {
-
-        int totalPages = artists.getTotalPages();
-        log.info("Total pages: {}", totalPages);
-
-        if (totalPages == 0) {
-            return List.of();
-        }
-
-        return IntStream.rangeClosed(1, totalPages)
-                .boxed()
-                .toList();
-    }
-
-    @Override
-    public Page<Artist> getArtistsByName(String name, Pageable pageable) {
+    public Page<ArtistDto> getArtistsByName(String name, Pageable pageable) {
         if (StringUtils.isBlank(name)) {
-            return artistRepository.findAll(pageable);
+            return artistRepository.findAll(pageable).map(artistMapper::toDto);
         }
-        return artistRepository.findByNameContainingIgnoreCase(name, pageable);
+        return artistRepository.findByNameContainingIgnoreCase(name, pageable).map(artistMapper::toDto);
     }
 
     @Override
@@ -143,5 +131,15 @@ public class ArtistServiceImpl implements ArtistService {
                 month.currentStart(),
                 month.currentEnd(),
                 pageable);
+    }
+
+    @Override
+    public List<Integer> getPageNumbers(Page<?> page) {
+        int totalPages = page.getTotalPages();
+        log.info("Total pages: {}", totalPages);
+        if (totalPages == 0) {
+            return List.of();
+        }
+        return IntStream.rangeClosed(1, totalPages).boxed().toList();
     }
 }

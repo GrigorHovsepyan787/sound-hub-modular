@@ -52,4 +52,8 @@ public class SongComment {
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateReaction(short oldValue, short newValue) {
+        this.rating = this.rating - oldValue + newValue;
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.app.controller;
 
+import com.example.dto.BandDto;
 import com.example.dto.SongDto;
-import com.example.model.Band;
 import com.example.service.BandService;
 import com.example.service.SongService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class BandController {
                         @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
                         Pageable pageable) {
 
-        Page<Band> bands = bandService.findAll(pageable);
+        Page<BandDto> bands = bandService.findAll(pageable);
 
         modelMap.addAttribute("bands", bands);
         modelMap.addAttribute("pageNumbers", bandService.getPageNumbers(bands));
@@ -46,8 +47,8 @@ public class BandController {
     }
 
     @PostMapping("/bands")
-    public String addBand(@ModelAttribute Band band, @RequestParam("bandImage") MultipartFile bandImage) {
-        bandService.create(band, bandImage);
+    public String addBand(@ModelAttribute BandDto bandDto, @RequestParam("bandImage") MultipartFile bandImage) {
+        bandService.create(bandDto, bandImage);
         return "redirect:/bands";
     }
 
@@ -58,15 +59,16 @@ public class BandController {
 
     @GetMapping("/bands/edit")
     public String editBand(@RequestParam("id") Long id, ModelMap modelMap) {
-        Band band = bandService.getBandById(id);
+        BandDto band = bandService.getBandById(id);
         modelMap.addAttribute("band", band);
         return "editBand";
     }
 
     @PostMapping("/bands/edit")
-    public String editBand(@ModelAttribute Band editedBand,
+    public String editBand(@RequestParam("id") Long id,
+                           @ModelAttribute BandDto bandDto,
                            @RequestParam("bandImage") MultipartFile bandImage) {
-        bandService.update(editedBand, bandImage);
+        bandService.update(id, bandDto, bandImage);
         return "redirect:/bands";
     }
 
@@ -78,7 +80,7 @@ public class BandController {
 
     @GetMapping("/bands/preview")
     public String bandPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
-        Band band = bandService.getBandByIdForArtists(id);
+        BandDto band = bandService.getBandByIdForArtists(id);
         List<SongDto> songs = songService.getTop5SongsOfBandByPlayCount(id);
         modelMap.addAttribute("band", band);
         modelMap.addAttribute("songs", songs);
