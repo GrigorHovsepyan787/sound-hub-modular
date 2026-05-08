@@ -1,10 +1,7 @@
 package com.example.app.controller;
 
 import com.example.dto.ArtistDto;
-import com.example.dto.BandDto;
-import com.example.dto.SongDto;
 import com.example.model.Artist;
-import com.example.model.Song;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
 import com.example.service.SongService;
