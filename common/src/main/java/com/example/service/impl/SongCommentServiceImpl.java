@@ -29,8 +29,8 @@ public class SongCommentServiceImpl implements SongCommentService {
     private final SongCommentRequestMapper songCommentRequestMapper;
 
     @Override
-    public Page<SongComment> findAll(Pageable pageable) {
-        return songCommentRepository.findAll(pageable);
+    public Page<SongComment> findAll(Pageable pageable, Long songId) {
+        return songCommentRepository.findBySongId(songId, pageable);
     }
 
     @Override

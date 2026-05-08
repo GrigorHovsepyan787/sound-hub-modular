@@ -102,7 +102,7 @@ public class SongController {
                               @RequestParam("id") Long id,
                               @PageableDefault(sort = "rating", direction = Sort.Direction.DESC, size = 5) Pageable pageable) {
         modelMap.addAttribute("song", songService.getSongById(id));
-        modelMap.addAttribute("comments", songCommentService.findAll(pageable));
+        modelMap.addAttribute("comments", songCommentService.findAll(pageable, id));
         modelMap.addAttribute("albumSongs", songService.getSongsByAlbumId(songService.getSongById(id).getAlbum().getId()));
         songCommentService.isSongCommentRequestPresent(modelMap);
         return "songPreview";

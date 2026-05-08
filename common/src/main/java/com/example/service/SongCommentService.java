@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface SongCommentService {
-    Page<SongComment> findAll(Pageable pageable);
+    Page<SongComment> findAll(Pageable pageable, Long songId);
 
     String save(SongCommentRequest request, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 

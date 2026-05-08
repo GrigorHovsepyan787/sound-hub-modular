@@ -1,6 +1,5 @@
 package com.example.app.controller;
 
-
 import com.example.app.service.security.SpringUser;
 import com.example.dto.AlbumCommentReactionRequest;
 import com.example.dto.AlbumCommentRequest;
@@ -51,7 +50,7 @@ public class AlbumController {
                           @PageableDefault(sort = "rating", direction = Sort.Direction.DESC, size = 5) Pageable pageable) {
         modelMap.addAttribute("album", albumService.findAlbumById(id));
         modelMap.addAttribute("songs", songService.getSongsByAlbumId(id));
-        modelMap.addAttribute("comments", albumCommentService.findAll(pageable));
+        modelMap.addAttribute("comments", albumCommentService.findAll(pageable, id));
         albumCommentService.isAlbumCommentRequestPresent(modelMap);
         return "albumPreview";
     }
@@ -102,7 +101,7 @@ public class AlbumController {
 
     @GetMapping("/albums/comment/restore")
     public String restoreComment(@RequestParam("commentId") Long commentId,
-                                    @RequestParam("albumId") Long albumId) {
+                                 @RequestParam("albumId") Long albumId) {
         albumCommentService.setDeleted(commentId, false);
         return "redirect:/albums/preview?id=" + albumId;
     }

@@ -37,6 +37,13 @@ aws:
       album-images: album-images
       songs: songs
 
+swagger:
+  config: true
+
+jwt:
+  secret: f/zASDH8erhhe4BY59R+c6HOeLl/4uOHyHVf9CvPrpcF5eoS2XXvVA1ElY+3j+TqfWJX+Mdrx73BAfXtigFRdw==
+  expiration: 3600
+
 server:
   port: 8081
 
