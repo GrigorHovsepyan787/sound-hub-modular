@@ -42,7 +42,7 @@ public class SongEndpoint {
     @GetMapping
     public ResponseEntity<Page<SongDto>> getSongs(
             @RequestParam(required = false) Genre genre,
-            @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
+            @PageableDefault(size = 6, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable) {
         return ResponseEntity.ok(songService.findSongsByGenre(genre, pageable));
     }
@@ -81,13 +81,6 @@ public class SongEndpoint {
     @GetMapping("/{albumId}/comments")
     public Page<SongCommentDto> viewComments(@PageableDefault Pageable pageable, @PathVariable Long albumId) {
         return songCommentService.findAllDto(pageable, albumId);
-    }
-
-    @PostMapping(consumes = "multipart/form-data")
-    public ResponseEntity<SongDto> createSong(
-            @RequestPart("song") SongDto songDto,
-            @RequestPart("songFile") MultipartFile songFile) {
-        return ResponseEntity.status(201).body(songService.save(songDto, songFile));
     }
 
     @GetMapping("/comments/{id}")
