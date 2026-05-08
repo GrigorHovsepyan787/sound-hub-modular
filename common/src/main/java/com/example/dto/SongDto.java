@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -22,6 +24,7 @@ public class SongDto {
     private Long artistId;
     private String songUrl;
     private String pictureUrl;
+    private List<Long> commentIds;
 
     public String getDurationFormatted() {
         int minutes = duration / 60;

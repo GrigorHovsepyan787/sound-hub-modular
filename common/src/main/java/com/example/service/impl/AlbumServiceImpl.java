@@ -61,7 +61,19 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public Page<AlbumDto> findAllDto(Pageable pageable) {
         return albumRepository.findAll(pageable)
-                .map(albumMapper::toDto);
+                .map(album -> {
+                    AlbumDto dto = albumMapper.toDto(album);
+
+                    List<Long> commentIds = albumCommentRepository
+                            .findByAlbumId(album.getId())
+                            .stream()
+                            .map(AlbumComment::getId)
+                            .toList();
+
+                    dto.setCommentIds(commentIds);
+
+                    return dto;
+                });
     }
 
     @Override

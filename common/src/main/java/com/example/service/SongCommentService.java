@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.dto.SongCommentDto;
 import com.example.dto.SongCommentRequest;
 import com.example.model.SongComment;
 import com.example.model.User;
@@ -11,6 +12,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public interface SongCommentService {
     Page<SongComment> findAll(Pageable pageable, Long songId);
+
+    Page<SongCommentDto> findAllDto(Pageable pageable, Long songId);
+
+    SongCommentDto createSongComment(SongCommentRequest request, User user);
+
+    SongCommentDto getSongComment(Long id);
 
     String save(SongCommentRequest request, User user, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 

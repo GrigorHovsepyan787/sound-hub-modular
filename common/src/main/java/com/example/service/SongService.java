@@ -37,6 +37,8 @@ public interface SongService {
 
     List<SongDto> getSongsByAlbumId(Long albumId);
 
+    SongDto getSongDtoById(Long id);
+
     List<SongDto> searchSongs(String query, int limit);
 
 }

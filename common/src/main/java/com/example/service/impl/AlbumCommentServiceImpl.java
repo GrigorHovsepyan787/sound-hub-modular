@@ -38,7 +38,7 @@ public class AlbumCommentServiceImpl implements AlbumCommentService {
 
     @Override
     public Page<AlbumCommentDto> findAllDto(Pageable pageable, Long albumId) {
-        return albumCommentRepository.findByAlbumId(albumId, pageable).map(albumCommentMapper::toDto);
+        return findAll(pageable, albumId).map(albumCommentMapper::toDto);
     }
 
     @Override
