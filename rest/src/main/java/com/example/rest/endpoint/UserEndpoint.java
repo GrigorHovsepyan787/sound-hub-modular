@@ -11,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,16 +30,6 @@ public class UserEndpoint {
     private final JwtTokenUtil tokenUtil;
 
     private final RegisterRequestMapper userMapper;
-
-    @GetMapping("/test")
-    public String test() {
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        System.out.println("AUTH IN CONTROLLER = " + auth);
-
-        return "OK";
-    }
 
     @PostMapping("/auth")
     public ResponseEntity<TokenRegisterRequest> login(@RequestBody LoginRequest request) {
