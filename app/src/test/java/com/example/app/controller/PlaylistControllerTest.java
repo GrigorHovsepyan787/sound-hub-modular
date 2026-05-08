@@ -1,7 +1,6 @@
 package com.example.app.controller;
 
 import com.example.dto.PlaylistDto;
-import com.example.model.Playlist;
 import com.example.model.User;
 import com.example.service.PlaylistService;
 import com.example.service.SongService;
@@ -18,12 +17,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,143 +33,116 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PlaylistControllerTest {
 
-    @Mock
-    private PlaylistService playlistService;
+    @Mock private PlaylistService playlistService;
+    @Mock private SongService songService;
+    @Mock private UserService userService;
 
-    @Mock
-    private SongService songService;
-
-    @Mock
-    private UserService userService;
-
-    @InjectMocks
-    private PlaylistController playlistController;
+    @InjectMocks private PlaylistController playlistController;
 
     @Test
-    void playlists_withSort_returnsPlaylistsViewWithModelAttributes() {
+    void playlists_happyPath_addsPlaylistsAndSortToModel() {
         Sort sort = Sort.by(Sort.Direction.ASC, "name");
-        List<Playlist> playlistList = List.of(new Playlist(), new Playlist());
+        List<PlaylistDto> playlists = List.of(new PlaylistDto(), new PlaylistDto());
         ModelMap modelMap = new ModelMap();
 
-        when(playlistService.findAll(sort)).thenReturn(playlistList);
+        when(playlistService.findAll(sort)).thenReturn(playlists);
         when(playlistService.resolveCurrentSort(sort)).thenReturn("name,asc");
-        
+
         String view = playlistController.playlists(modelMap, sort);
 
         assertEquals("playlists", view);
-        assertEquals(playlistList, modelMap.get("playlists"));
+        assertEquals(playlists, modelMap.get("playlists"));
         assertEquals("name,asc", modelMap.get("currentSort"));
         verify(playlistService).findAll(sort);
         verify(playlistService).resolveCurrentSort(sort);
     }
 
     @Test
-    void playlists_withEmptyList_modelContainsEmptyPlaylists() {
+    void playlists_emptyList_addsEmptyListToModel() {
         Sort sort = Sort.unsorted();
         ModelMap modelMap = new ModelMap();
 
-        when(playlistService.findAll(sort)).thenReturn(Collections.emptyList());
-        when(playlistService.resolveCurrentSort(sort)).thenReturn("id,desc");
+        when(playlistService.findAll(sort)).thenReturn(List.of());
+        when(playlistService.resolveCurrentSort(sort)).thenReturn("");
 
         String view = playlistController.playlists(modelMap, sort);
 
         assertEquals("playlists", view);
-        assertEquals(Collections.emptyList(), modelMap.get("playlists"));
+        assertEquals(List.of(), modelMap.get("playlists"));
     }
 
     @Test
-    void playlists_unsortedSort_currentSortFallbackPopulated() {
-        Sort sort = Sort.unsorted();
-        ModelMap modelMap = new ModelMap();
-
-        when(playlistService.findAll(sort)).thenReturn(Collections.emptyList());
-        when(playlistService.resolveCurrentSort(sort)).thenReturn("id,desc");
-
-        playlistController.playlists(modelMap, sort);
-
-        assertEquals("id,desc", modelMap.get("currentSort"));
-    }
-
-    @Test
-    void addPlaylist_validUser_setsUserAndCreatesPlaylistAndRedirects() {
-        Playlist playlist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
+    void addPlaylist_authenticatedUser_createsPlaylistAndRedirects() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        MultipartFile file = mock(MultipartFile.class);
         UserDetails userDetails = mock(UserDetails.class);
         List<Long> songIds = List.of(1L, 2L);
         User user = new User();
 
-        when(userDetails.getUsername()).thenReturn("john");
-        when(userService.findByUsername("john")).thenReturn(Optional.of(user));
-        
-        String view = playlistController.addPlaylist(playlist, multipartFile, userDetails, songIds);
-        
-        assertEquals("redirect:/playlists", view);
-        assertEquals(user, playlist.getUser());
-        verify(userService).findByUsername("john");
-        verify(playlistService).create(playlist, multipartFile, songIds);
-    }
-
-    @Test
-    void addPlaylist_withNullSongIds_stillCreatesPlaylistAndRedirects() {
-        Playlist playlist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
-        UserDetails userDetails = mock(UserDetails.class);
-        User user = new User();
-
-        when(userDetails.getUsername()).thenReturn("jane");
-        when(userService.findByUsername("jane")).thenReturn(Optional.of(user));
-        
-        String view = playlistController.addPlaylist(playlist, multipartFile, userDetails, null);
-
-        assertEquals("redirect:/playlists", view);
-        verify(playlistService).create(eq(playlist), eq(multipartFile), eq(null));
-    }
-
-    @Test
-    void addPlaylist_userNotFound_throwsResponseStatusExceptionUnauthorized() {
-        Playlist playlist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
-        UserDetails userDetails = mock(UserDetails.class);
-
-        when(userDetails.getUsername()).thenReturn("ghost");
-        when(userService.findByUsername("ghost")).thenReturn(Optional.empty());
-
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
-                () -> playlistController.addPlaylist(playlist, multipartFile, userDetails, null));
-
-        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
-        verify(playlistService, never()).create(any(), any(), any());
-    }
-
-    @Test
-    void addPlaylist_playlistUserIsSetBeforeCreate() {
-        Playlist playlist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
-        UserDetails userDetails = mock(UserDetails.class);
-        User user = new User();
-
         when(userDetails.getUsername()).thenReturn("alice");
         when(userService.findByUsername("alice")).thenReturn(Optional.of(user));
-        
-        playlistController.addPlaylist(playlist, multipartFile, userDetails, List.of());
 
-        assertNotNull(playlist.getUser());
-        assertEquals(user, playlist.getUser());
+        String view = playlistController.addPlaylist(playlistDto, file, userDetails, songIds);
+
+        assertEquals("redirect:/playlists", view);
+        verify(userService).findByUsername("alice");
+        verify(playlistService).create(playlistDto, file, songIds, user);
     }
 
     @Test
-    void addPlaylist_getRequest_returnsAddPlaylistViewWithEmptyPlaylist() {
+    void addPlaylist_withNullSongIds_createsPlaylistWithNullSongIds() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        MultipartFile file = mock(MultipartFile.class);
+        UserDetails userDetails = mock(UserDetails.class);
+        User user = new User();
+
+        when(userDetails.getUsername()).thenReturn("bob");
+        when(userService.findByUsername("bob")).thenReturn(Optional.of(user));
+
+        String view = playlistController.addPlaylist(playlistDto, file, userDetails, null);
+
+        assertEquals("redirect:/playlists", view);
+        verify(playlistService).create(playlistDto, file, null, user);
+    }
+
+    @Test
+    void addPlaylist_userNotFound_throwsResponseStatusException() {
+        PlaylistDto playlistDto = new PlaylistDto();
+        MultipartFile file = mock(MultipartFile.class);
+        UserDetails userDetails = mock(UserDetails.class);
+
+        when(userDetails.getUsername()).thenReturn("unknown");
+        when(userService.findByUsername("unknown")).thenReturn(Optional.empty());
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+                () -> playlistController.addPlaylist(playlistDto, file, userDetails, List.of()));
+
+        assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusCode());
+        verify(playlistService, never()).create(any(), any(), any(), any());
+    }
+
+    @Test
+    void addPlaylist_getRequest_returnsAddPlaylistViewWithEmptyDto() {
         ModelMap modelMap = new ModelMap();
 
         String view = playlistController.addPlaylist(modelMap);
-        
+
         assertEquals("addPlaylist", view);
         assertNotNull(modelMap.get("playlist"));
-        assertInstanceOf(Playlist.class, modelMap.get("playlist"));
     }
 
     @Test
-    void editPlaylist_validId_returnsEditPlaylistViewWithPlaylistDto() {
+    void addPlaylist_getRequest_modelContainsFreshPlaylistDto() {
+        ModelMap modelMap = new ModelMap();
+
+        playlistController.addPlaylist(modelMap);
+
+        Object playlist = modelMap.get("playlist");
+        assertEquals(PlaylistDto.class, playlist.getClass());
+    }
+
+    @Test
+    void editPlaylist_getRequest_addsPlaylistDtoToModel() {
         Long id = 1L;
         PlaylistDto playlistDto = new PlaylistDto();
         ModelMap modelMap = new ModelMap();
@@ -187,60 +157,58 @@ class PlaylistControllerTest {
     }
 
     @Test
-    void editPlaylist_serviceReturnsNull_modelContainsNull() {
-        Long id = 99L;
+    void editPlaylist_getRequest_serviceCalledWithCorrectId() {
+        Long id = 42L;
         ModelMap modelMap = new ModelMap();
+        when(playlistService.getPlaylistById(42L)).thenReturn(new PlaylistDto());
 
-        when(playlistService.getPlaylistById(id)).thenReturn(null);
-        
-        String view = playlistController.editPlaylist(id, modelMap);
-        
-        assertEquals("editPlaylist", view);
-        assertEquals(null, modelMap.get("playlist"));
+        playlistController.editPlaylist(id, modelMap);
+
+        verify(playlistService).getPlaylistById(eq(42L));
     }
 
     @Test
-    void editPlaylist_validInput_updatesAndRedirectsToPlaylists() {
-        Playlist editedPlaylist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
+    void editPlaylist_postRequest_updatesAndRedirects() {
+        Long id = 1L;
+        PlaylistDto playlistDto = new PlaylistDto();
+        MultipartFile file = mock(MultipartFile.class);
 
-        String view = playlistController.editPlaylist(editedPlaylist, multipartFile);
-        
+        String view = playlistController.editPlaylist(id, playlistDto, file);
+
         assertEquals("redirect:/playlists", view);
-        verify(playlistService).update(editedPlaylist, multipartFile);
+        verify(playlistService).update(id, playlistDto, file);
     }
 
     @Test
-    void editPlaylist_serviceCalledWithCorrectArguments() {
-        Playlist editedPlaylist = new Playlist();
-        MultipartFile multipartFile = mock(MultipartFile.class);
-        
-        playlistController.editPlaylist(editedPlaylist, multipartFile);
+    void editPlaylist_postRequest_serviceCalledWithCorrectArguments() {
+        Long id = 7L;
+        PlaylistDto playlistDto = new PlaylistDto();
+        MultipartFile file = mock(MultipartFile.class);
 
-        verify(playlistService).update(eq(editedPlaylist), eq(multipartFile));
+        playlistController.editPlaylist(id, playlistDto, file);
+
+        verify(playlistService).update(eq(7L), eq(playlistDto), eq(file));
     }
 
     @Test
-    void deletePlaylist_validId_deletesAndRedirectsToPlaylists() {
+    void deletePlaylist_validId_deletesAndRedirects() {
         Long id = 1L;
 
         String view = playlistController.deletePlaylist(id);
-        
+
         assertEquals("redirect:/playlists", view);
         verify(playlistService).delete(id);
     }
 
     @Test
     void deletePlaylist_serviceCalledWithCorrectId() {
-        Long id = 55L;
+        playlistController.deletePlaylist(99L);
 
-        playlistController.deletePlaylist(id);
-
-        verify(playlistService).delete(eq(55L));
+        verify(playlistService).delete(eq(99L));
     }
 
     @Test
-    void playlistPreviewPage_validId_returnsPlaylistPreviewViewWithDto() {
+    void playlistPreviewPage_validId_addsPlaylistToModel() {
         Long id = 1L;
         PlaylistDto playlistDto = new PlaylistDto();
         ModelMap modelMap = new ModelMap();
@@ -255,108 +223,94 @@ class PlaylistControllerTest {
     }
 
     @Test
-    void playlistPreviewPage_serviceReturnsNull_modelContainsNull() {
-        Long id = 404L;
+    void playlistPreviewPage_serviceCalledWithCorrectId() {
+        Long id = 5L;
         ModelMap modelMap = new ModelMap();
+        when(playlistService.getPlaylistById(5L)).thenReturn(new PlaylistDto());
 
-        when(playlistService.getPlaylistById(id)).thenReturn(null);
-        
-        String view = playlistController.playlistPreviewPage(id, modelMap);
+        playlistController.playlistPreviewPage(id, modelMap);
 
-        assertEquals("playlistPreview", view);
-        assertEquals(null, modelMap.get("playlist"));
+        verify(playlistService).getPlaylistById(eq(5L));
     }
 
     @Test
-    void setVisibility_publicTrue_setsVisibilityAndRedirectsToPreview() {
-        Long id = 1L;
-        boolean isPublic = true;
-        
-        String view = playlistController.setVisibility(id, isPublic);
-        
-        assertEquals("redirect:/playlists/preview?id=" + id, view);
-        verify(playlistService).setVisibility(id, isPublic);
-    }
-
-    @Test
-    void setVisibility_publicFalse_setsVisibilityAndRedirectsToPreview() {
-        Long id = 2L;
-        boolean isPublic = false;
-        
-        String view = playlistController.setVisibility(id, isPublic);
-
-        assertEquals("redirect:/playlists/preview?id=2", view);
-        verify(playlistService).setVisibility(eq(2L), eq(false));
-    }
-
-    @Test
-    void setVisibility_redirectUrlContainsCorrectId() {
-        Long id = 99L;
+    void setVisibility_public_setsVisibilityAndRedirectsToPreview() {
+        Long id = 3L;
 
         String view = playlistController.setVisibility(id, true);
-        
-        assertEquals("redirect:/playlists/preview?id=99", view);
+
+        assertEquals("redirect:/playlists/preview?id=3", view);
+        verify(playlistService).setVisibility(3L, true);
+    }
+
+    @Test
+    void setVisibility_private_setsVisibilityAndRedirectsToPreview() {
+        Long id = 4L;
+
+        String view = playlistController.setVisibility(id, false);
+
+        assertEquals("redirect:/playlists/preview?id=4", view);
+        verify(playlistService).setVisibility(4L, false);
+    }
+
+    @Test
+    void setVisibility_serviceCalledWithCorrectArguments() {
+        playlistController.setVisibility(10L, true);
+
+        verify(playlistService).setVisibility(eq(10L), eq(true));
     }
 
     @Test
     void addSongToPlaylist_validIds_addsSongAndRedirectsToPreview() {
         Long playlistId = 1L;
-        Long songId = 10L;
-        
+        Long songId = 2L;
+
         String view = playlistController.addSongToPlaylist(playlistId, songId);
-        
-        assertEquals("redirect:/playlists/preview?id=" + playlistId, view);
+
+        assertEquals("redirect:/playlists/preview?id=1", view);
         verify(playlistService).addSong(playlistId, songId);
     }
 
     @Test
     void addSongToPlaylist_serviceCalledWithCorrectArguments() {
-        Long playlistId = 5L;
-        Long songId = 20L;
-        
-        playlistController.addSongToPlaylist(playlistId, songId);
-        
-        verify(playlistService).addSong(eq(5L), eq(20L));
+        playlistController.addSongToPlaylist(5L, 10L);
+
+        verify(playlistService).addSong(eq(5L), eq(10L));
     }
 
     @Test
-    void addSongToPlaylist_redirectUrlContainsCorrectPlaylistId() {
-        Long playlistId = 42L;
-        Long songId = 7L;
-        
-        String view = playlistController.addSongToPlaylist(playlistId, songId);
-        
-        assertEquals("redirect:/playlists/preview?id=42", view);
+    void addSongToPlaylist_redirectContainsPlaylistId() {
+        Long playlistId = 99L;
+
+        String view = playlistController.addSongToPlaylist(playlistId, 1L);
+
+        assertEquals("redirect:/playlists/preview?id=99", view);
     }
 
     @Test
     void removeSongFromPlaylist_validIds_removesSongAndRedirectsToPreview() {
         Long playlistId = 1L;
-        Long songId = 10L;
-        
+        Long songId = 2L;
+
         String view = playlistController.removeSongFromPlaylist(playlistId, songId);
-        
-        assertEquals("redirect:/playlists/preview?id=" + playlistId, view);
+
+        assertEquals("redirect:/playlists/preview?id=1", view);
         verify(playlistService).removeSong(playlistId, songId);
     }
 
     @Test
     void removeSongFromPlaylist_serviceCalledWithCorrectArguments() {
-        Long playlistId = 3L;
-        Long songId = 15L;
+        playlistController.removeSongFromPlaylist(7L, 3L);
 
-        playlistController.removeSongFromPlaylist(playlistId, songId);
-
-        verify(playlistService).removeSong(eq(3L), eq(15L));
+        verify(playlistService).removeSong(eq(7L), eq(3L));
     }
 
     @Test
-    void removeSongFromPlaylist_redirectUrlContainsCorrectPlaylistId() {
-        Long playlistId = 77L;
-        Long songId = 9L;
-        
-        String view = playlistController.removeSongFromPlaylist(playlistId, songId);
+    void removeSongFromPlaylist_redirectContainsPlaylistId() {
+        Long playlistId = 55L;
 
-        assertEquals("redirect:/playlists/preview?id=77", view);
+        String view = playlistController.removeSongFromPlaylist(playlistId, 1L);
+
+        assertEquals("redirect:/playlists/preview?id=55", view);
     }
 }

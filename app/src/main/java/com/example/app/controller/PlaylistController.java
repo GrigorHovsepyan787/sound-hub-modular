@@ -1,7 +1,6 @@
 package com.example.app.controller;
 
 import com.example.dto.PlaylistDto;
-import com.example.model.Playlist;
 import com.example.model.User;
 import com.example.service.PlaylistService;
 import com.example.service.SongService;
@@ -33,7 +32,7 @@ public class PlaylistController {
     @GetMapping("/playlists")
     public String playlists(ModelMap modelMap, Sort sort) {
 
-        List<Playlist> playlists = playlistService.findAll(sort);
+        List<PlaylistDto> playlists = playlistService.findAll(sort);
 
         modelMap.addAttribute("playlists", playlists);
         modelMap.addAttribute("currentSort", playlistService.resolveCurrentSort(sort));
@@ -42,21 +41,20 @@ public class PlaylistController {
     }
 
     @PostMapping("/playlists")
-    public String addPlaylist(@ModelAttribute Playlist playlist,
+    public String addPlaylist(@ModelAttribute PlaylistDto playlistDto,
                               @RequestParam("playlistImage") MultipartFile multipartFile,
                               @AuthenticationPrincipal UserDetails userDetails,
                               @RequestParam(value = "songIds", required = false) List<Long> songIds) {
         User user = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
-        playlist.setUser(user);
-        playlistService.create(playlist, multipartFile, songIds);
+        playlistService.create(playlistDto, multipartFile, songIds, user);
         return "redirect:/playlists";
     }
 
     @GetMapping("/playlists/add")
     public String addPlaylist(ModelMap modelMap) {
-        modelMap.addAttribute("playlist", new Playlist());
+        modelMap.addAttribute("playlist", new PlaylistDto());
         return "addPlaylist";
     }
 
@@ -68,9 +66,10 @@ public class PlaylistController {
     }
 
     @PostMapping("/playlists/edit")
-    public String editPlaylist(@ModelAttribute Playlist editedPlaylist,
+    public String editPlaylist(@RequestParam("id") Long id,
+                               @ModelAttribute PlaylistDto playlistDto,
                                @RequestParam("playlistImage") MultipartFile multipartFile) {
-        playlistService.update(editedPlaylist, multipartFile);
+        playlistService.update(id, playlistDto, multipartFile);
         return "redirect:/playlists";
     }
 
@@ -84,7 +83,6 @@ public class PlaylistController {
     public String playlistPreviewPage(@RequestParam("id") Long id, ModelMap modelMap) {
         PlaylistDto playlistDto = playlistService.getPlaylistById(id);
         modelMap.addAttribute("playlist", playlistDto);
-
         return "playlistPreview";
     }
 

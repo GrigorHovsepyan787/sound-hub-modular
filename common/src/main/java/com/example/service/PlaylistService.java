@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface PlaylistService {
 
-    List<Playlist> findAll(Sort sort);
+    List<PlaylistDto> findAll(Sort sort);
 
-    Playlist create(Playlist playlist, MultipartFile multipartFile, List<Long> songIds);
+    PlaylistDto create(PlaylistDto playlistDto, MultipartFile multipartFile, List<Long> songIds, User user);
 
-    Playlist update(Playlist editedPlaylist, MultipartFile multipartFile);
+    PlaylistDto update(Long id, PlaylistDto playlistDto, MultipartFile multipartFile);
 
     void delete(Long id);
 
