@@ -38,7 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = tokenUtil.getUsernameFromToken(authToken);
             } catch (Exception e) {
-                log.error("Cannot get username from token", e);
+                httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                return;
             }
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
