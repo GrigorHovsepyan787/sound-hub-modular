@@ -64,8 +64,6 @@ class AlbumControllerTest {
     @InjectMocks
     private AlbumController albumController;
 
-    // ── albums (GET /albums) ──────────────────────────────────────────────────
-
     @Test
     void albums_validPageable_returnsAlbumsViewWithPageInModel() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "releaseDate"));
@@ -94,8 +92,6 @@ class AlbumControllerTest {
         assertEquals("albums", view);
         assertEquals(emptyPage, modelMap.get("albums"));
     }
-
-    // ── preview (GET /albums/preview) ─────────────────────────────────────────
 
     @Test
     void preview_validId_returnsAlbumPreviewViewWithAlbumAndSongs() {
@@ -153,8 +149,6 @@ class AlbumControllerTest {
         verify(songService).getSongsByAlbumId(eq(7L));
     }
 
-    // ── addAlbum (GET /albums/add) ────────────────────────────────────────────
-
     @Test
     void addAlbum_withBandNameAndArtistName_returnsAddAlbumViewWithModel() {
         Pageable pageable = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "id"));
@@ -209,8 +203,6 @@ class AlbumControllerTest {
         assertTrue(!now.isBefore(before) && !now.isAfter(after));
     }
 
-    // ── deleteAlbum (GET /albums/delete) ─────────────────────────────────────
-
     @Test
     void deleteAlbum_validId_redirectsToAlbums() {
         Long id = 1L;
@@ -229,8 +221,6 @@ class AlbumControllerTest {
 
         verify(albumService).delete(eq(99L));
     }
-
-    // ── updateAlbum (GET /albums/update) ─────────────────────────────────────
 
     @Test
     void updateAlbum_validId_returnsEditAlbumViewWithAllModelAttributes() {
@@ -310,8 +300,6 @@ class AlbumControllerTest {
         verify(albumService).findAlbumById(eq(42L));
     }
 
-    // ── addAlbum (POST /albums/add) ───────────────────────────────────────────
-
     @Test
     void addAlbum_post_withBandIdAndArtistId_redirectsToAlbums() {
         Album album = new Album();
@@ -359,8 +347,6 @@ class AlbumControllerTest {
         assertEquals("redirect:/albums", view);
         verify(albumService).save(eq(album), eq(multipartFile), eq(5L), isNull());
     }
-
-    // ── updateAlbum (POST /albums/update) ────────────────────────────────────
 
     @Test
     void updateAlbum_post_withBandIdAndArtistId_redirectsToAlbums() {
@@ -410,8 +396,6 @@ class AlbumControllerTest {
         verify(albumService).update(eq(album), eq(multipartFile), isNull(), eq(8L));
     }
 
-    // ── comment delete / softDelete / restore ─────────────────────────────────
-
     @Test
     void deleteComment_redirectsToAlbumPreview() {
         Long commentId = 10L;
@@ -445,8 +429,6 @@ class AlbumControllerTest {
         verify(albumCommentService).setDeleted(commentId, false);
     }
 
-    // ── addComment (POST /albums/comment/add) ────────────────────────────────
-
     @Test
     void addComment_validRequest_delegatesToCommentService() {
         AlbumCommentRequest request = mock(AlbumCommentRequest.class);
@@ -463,8 +445,6 @@ class AlbumControllerTest {
         assertEquals("redirect:/albums/preview?id=1", view);
         verify(albumCommentService).save(request, user, bindingResult, redirectAttributes);
     }
-
-    // ── rateComment (POST /albums/comment/rate) ──────────────────────────────
 
     @Test
     void rateComment_validRequest_redirectsToAlbumPreview() {
