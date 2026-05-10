@@ -19,7 +19,7 @@ public interface AlbumService {
 
     void save(Album album, MultipartFile multipartFile, Long bandId, Long artistId);
 
-    AlbumDto saveDto(SaveAlbumDto saveAlbumDto);
+    AlbumDto saveDto(SaveAlbumDto saveAlbumDto, MultipartFile multipartFile);
 
     Album findAlbumById(Long id);
 
@@ -35,5 +35,5 @@ public interface AlbumService {
 
     void delete(Long id);
 
-    AlbumDto updateAlbumDto(SaveAlbumDto dto, Long id);
+    AlbumDto updateAlbumDto(SaveAlbumDto dto, Long id, MultipartFile multipartFile);
 }

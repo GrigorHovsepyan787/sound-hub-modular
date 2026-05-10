@@ -56,9 +56,6 @@
                 <div class="relative group mb-8">
                     <div class="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity rounded-full"></div>
                     <img width="250px" th:src="${currentUser.pictureUrl}" alt="User picture">
-                    <button class="absolute bottom-6 right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors">
-                        <span class="material-symbols-outlined text-sm">edit</span>
-                    </button>
                 </div>
                 <div class="flex flex-col gap-1">
                     <a class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary text-white text-sm font-semibold leading-normal shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors gap-2"
@@ -69,42 +66,6 @@
                         th:text="${currentUser.getName}">
                     </h1>
                     <p class="text-primary text-lg font-medium" th:text="${currentUser.getUsername}"></p>
-                </div>
-            </section>
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
-                    <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
-                    <div class="relative z-10">
-                        <div class="size-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined text-red-500 text-3xl font-fill">favorite</span>
-                        </div>
-                        <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2"
-                            th:text="#{profile.favorite}">Favorite Songs</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8"
-                           th:text="#{profile.access}">Access all your
-                            liked tracks, top played melodies, and saved gems in one place.</p>
-                    </div>
-                    <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
-                        <span th:text="#{profile.viewFavorite}">View Favorites</span>
-                        <span class="material-symbols-outlined">arrow_forward</span>
-                    </button>
-                </div>
-                <div class="group relative overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-8 shadow-xl border border-slate-200 dark:border-accent-dark flex flex-col justify-between transition-all hover:border-primary/50">
-                    <div class="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full group-hover:scale-110 transition-transform"></div>
-                    <div class="relative z-10">
-                        <div class="size-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                            <span class="material-symbols-outlined text-primary text-3xl">library_music</span>
-                        </div>
-                        <h3 class="text-slate-900 dark:text-white text-2xl font-bold mb-2"
-                            th:text="#{profile.playlists}">My Playlists</h3>
-                        <p class="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-8"
-                           th:text="#{profile.playlist}">Manage and
-                            listen to your custom collections, shared albums, and personalized radio stations.</p>
-                    </div>
-                    <button class="relative z-10 w-full md:w-fit flex items-center justify-center gap-2 rounded-full py-4 px-8 bg-slate-900 dark:bg-accent-dark text-white font-bold hover:bg-slate-800 dark:hover:bg-primary transition-colors">
-                        <span th:text="#{profile.playlistManage}">Manage Playlists</span>
-                        <span class="material-symbols-outlined">playlist_add</span>
-                    </button>
                 </div>
             </section>
         </main>

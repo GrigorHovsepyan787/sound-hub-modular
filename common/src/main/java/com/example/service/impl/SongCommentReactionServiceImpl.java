@@ -26,6 +26,7 @@ public class SongCommentReactionServiceImpl implements SongCommentReactionServic
     private final SongCommentReactionRepository songCommentReactionRepository;
 
     @Override
+    @Transactional
     public void saveCommentReaction(SongCommentReactionRequest request, User user) {
         log.info("Attempting to create song comment reaction for commentId={} by user={}",
                 request.getCommentId(),
