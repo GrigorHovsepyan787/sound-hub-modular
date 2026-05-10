@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.dto.PlaylistDto;
-import com.example.model.Playlist;
 import com.example.model.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
