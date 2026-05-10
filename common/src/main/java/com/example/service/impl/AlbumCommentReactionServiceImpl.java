@@ -26,6 +26,7 @@ public class AlbumCommentReactionServiceImpl implements AlbumCommentReactionServ
     private final AlbumCommentReactionRepository albumCommentReactionRepository;
 
     @Override
+    @Transactional
     public void saveCommentReaction(AlbumCommentReactionRequest request, User user) {
         log.info("Attempting to create album comment reaction for commentId={} by user={}",
                 request.getCommentId(),

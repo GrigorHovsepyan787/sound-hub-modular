@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Clock;
@@ -55,6 +56,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    @Transactional
     public ArtistDto save(ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds) {
         Artist artist = artistMapper.toEntity(artistDto);
 
@@ -78,6 +80,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    @Transactional
     public ArtistDto update(Long id, ArtistDto artistDto, MultipartFile multipartFile, List<Long> bandIds) {
         Artist existingArtist = artistRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
@@ -102,6 +105,7 @@ public class ArtistServiceImpl implements ArtistService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         log.info("Deleting artist ID: {}", id);
         artistRepository.deleteById(id);
