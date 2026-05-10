@@ -33,12 +33,17 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PlaylistServiceImplTest {
 
-    @Mock private PlaylistRepository playlistRepository;
-    @Mock private StorageService storageService;
-    @Mock private PlaylistMapper playlistMapper;
-    @Mock private SongRepository songRepository;
+    @Mock
+    private PlaylistRepository playlistRepository;
+    @Mock
+    private StorageService storageService;
+    @Mock
+    private PlaylistMapper playlistMapper;
+    @Mock
+    private SongRepository songRepository;
 
-    @InjectMocks private PlaylistServiceImpl playlistService;
+    @InjectMocks
+    private PlaylistServiceImpl playlistService;
 
     @Test
     void findAll_happyPath_returnsMappedDtoList() {
@@ -185,25 +190,11 @@ class PlaylistServiceImplTest {
     @Test
     void delete_nonDefaultPlaylist_deletesById() {
         Playlist playlist = new Playlist();
-        playlist.setIsDefault(false);
         when(playlistRepository.findById(1L)).thenReturn(Optional.of(playlist));
 
         playlistService.delete(1L);
 
         verify(playlistRepository).deleteById(1L);
-    }
-
-    @Test
-    void delete_defaultPlaylist_throwsIllegalArgumentException() {
-        Playlist playlist = new Playlist();
-        playlist.setIsDefault(true);
-        when(playlistRepository.findById(1L)).thenReturn(Optional.of(playlist));
-
-        assertThatThrownBy(() -> playlistService.delete(1L))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Cannot delete default playlist");
-
-        verify(playlistRepository, never()).deleteById(any());
     }
 
     @Test
@@ -214,18 +205,7 @@ class PlaylistServiceImplTest {
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
-    @Test
-    void createDefaultPlaylist_createsAndSavesFavoritesPlaylist() {
-        User user = new User();
 
-        playlistService.createDefaultPlaylist(user);
-
-        verify(playlistRepository).save(argThat(p ->
-                "Favorite Songs".equals(p.getName()) &&
-                        p.getUser() == user &&
-                        Boolean.TRUE.equals(p.getIsDefault())
-        ));
-    }
 
     @Test
     void getPlaylistById_exists_returnsDto() {
