@@ -18,8 +18,6 @@ public interface PlaylistService {
 
     void delete(Long id);
 
-    void createDefaultPlaylist(User user);
-
     PlaylistDto getPlaylistById(Long id);
 
     void setVisibility(Long id, boolean isPublic);

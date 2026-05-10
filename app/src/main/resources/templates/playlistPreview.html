@@ -4,14 +4,18 @@
 <head>
     <title>SoundHub - Playlist View</title>
 </head>
+
 <body>
 <section
         class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet"/>
 
     <script id="tailwind-config">
         tailwind.config = {
@@ -23,8 +27,15 @@
                         "background-light": "#f6f7f8",
                         "background-dark": "#111821",
                     },
-                    fontFamily: {"display": ["Inter", "sans-serif"]},
-                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
                 },
             },
         }
@@ -32,29 +43,50 @@
 
     <main class="pt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="flex flex-col md:flex-row gap-8 mb-12" data-purpose="playlist-header">
+        <div class="flex flex-col md:flex-row gap-8 mb-12"
+             data-purpose="playlist-header">
+
             <div class="flex-shrink-0">
+
                 <img alt="Playlist Cover"
                      class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-xl shadow-2xl"
                      th:src="${playlist.pictureUrl}"/>
+
             </div>
+
             <div class="flex flex-col justify-end pb-4">
+
                 <p class="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-2"
-                   th:text="#{playlistPreview.playlist}">Playlist</p>
+                   th:text="#{playlistPreview.playlist}">
+                    Playlist
+                </p>
+
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter mb-4"
-                    th:text="${playlist.name}"></h1>
+                    th:text="${playlist.name}">
+                </h1>
 
                 <div class="flex items-center gap-2 text-sm md:text-base text-gray-300 mb-6 font-medium flex-wrap">
-                    <img alt="User Avatar" class="w-8 h-8 rounded-full object-cover"
+
+                    <img alt="User Avatar"
+                         class="w-8 h-8 rounded-full object-cover"
                          th:src="${playlist.user?.pictureUrl ?: '/images/default-avatar.png'}"/>
+
                     <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
+
                     <span th:text="${playlist.createdDate != null ? playlist.createdDate.year : ''}"></span>
+
                     <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
+
                     <span th:text="${playlist.songCount}"></span>
-                    <span th:text="#{playlistPreview.songs}"> songs</span>
+
+                    <span th:text="#{playlistPreview.songs}">
+                        songs
+                    </span>
+
                     <span class="w-1.5 h-1.5 bg-gray-500 rounded-full mx-1"></span>
 
                     <div class="relative inline-block">
+
                         <div class="flex items-center gap-2 font-semibold"
                              th:classappend="${playlist.publicFlag} ? 'text-green-400' : 'text-slate-400'">
 
@@ -64,19 +96,30 @@
                             <span th:text="${playlist.publicFlag} ? #{playlistPreview.public} : #{playlistPreview.private}">
                                 Private
                             </span>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <button type="button"
                         onclick="openAddSongModal()"
                         class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500
-                               text-white font-bold text-sm transition-all hover:shadow-[0_0_20px_rgba(139,92,246,0.4)]
+                               text-white font-bold text-sm transition-all
+                               hover:shadow-[0_0_20px_rgba(139,92,246,0.4)]
                                active:scale-95 w-fit">
+
                     <i class="fa-solid fa-plus"></i>
-                    Add Song
+
+                    <span th:text="#{playlistPreview.addSong}">
+                        Add Song
+                    </span>
+
                 </button>
+
             </div>
+
         </div>
 
         <hr class="border-slate-800 mb-12"/>
@@ -84,36 +127,58 @@
         <div class="w-full">
 
             <div th:if="${playlist.songs == null or playlist.songs.isEmpty()}"
-                 class="text-center text-gray-400 py-10">
+                 class="text-center text-gray-400 py-10"
+                 th:text="#{playlistPreview.empty}">
                 No songs in this playlist yet. Add some!
             </div>
 
             <div th:if="${playlist.songs != null and !playlist.songs.isEmpty()}"
                  class="w-full max-w-5xl bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden mb-12 shadow-xl mx-auto">
+
                 <div class="overflow-x-auto">
+
                     <table class="w-full text-left border-collapse">
+
                         <thead>
+
                         <tr class="border-b border-slate-800 bg-slate-800/40">
+
                             <th class="py-4 px-4 w-16"></th>
-                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400">Title
+
+                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400"
+                                th:text="#{playlistPreview.title}">
+                                Title
                             </th>
-                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 hidden md:table-cell">
+
+                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 hidden md:table-cell"
+                                th:text="#{playlistPreview.performer}">
                                 Performer
                             </th>
-                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 hidden lg:table-cell">
+
+                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 hidden lg:table-cell"
+                                th:text="#{playlistPreview.genre}">
                                 Genre
                             </th>
-                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 text-right">
+
+                            <th class="py-4 px-6 text-[11px] font-bold uppercase tracking-widest text-slate-400 text-right"
+                                th:text="#{playlistPreview.duration}">
                                 Duration
                             </th>
-                            <th class="py-4 px-4 w-12"></th><!-- Remove column -->
+
+                            <th class="py-4 px-4 w-12"></th>
+
                         </tr>
+
                         </thead>
-                        <tbody id="songsTableBody" class="divide-y divide-slate-800/50">
+
+                        <tbody id="songsTableBody"
+                               class="divide-y divide-slate-800/50">
+
                         <tr th:each="song, iterStat : ${playlist.songs}"
                             class="group hover:bg-white/5 transition-colors">
 
                             <td class="py-4 px-4">
+
                                 <button type="button"
                                         th:data-id="${song.id}"
                                         th:data-title="${song.title}"
@@ -122,109 +187,180 @@
                                         data-play-btn
                                         class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500
                                                group-hover:text-white group-hover:bg-primary transition-all">
+
                                     <i class="fa-solid fa-play text-xs ml-0.5"></i>
+
                                 </button>
+
                             </td>
 
                             <td class="py-4 px-6">
-                                <span class="block font-medium text-white" th:text="${song.title}"></span>
+
+                                <span class="block font-medium text-white"
+                                      th:text="${song.title}">
+                                </span>
+
                             </td>
 
                             <td class="py-4 px-6 hidden md:table-cell">
+
                                 <div th:if="${song.bandId != null}">
+
                                     <a th:href="@{/bands/preview(id=${song.bandId})}"
                                        class="inline-flex items-center gap-3 p-2 px-3 rounded-xl hover:bg-slate-700/50 transition-colors">
+
                                         <span class="text-sm font-semibold text-white"
-                                              th:text="${song.performer}"></span>
+                                              th:text="${song.performer}">
+                                        </span>
+
                                     </a>
+
                                 </div>
+
                                 <div th:if="${song.bandId == null && song.artistId != null}">
+
                                     <a th:href="@{/artists/preview(id=${song.artistId})}"
                                        class="inline-flex items-center gap-3 p-2 px-3 rounded-xl hover:bg-slate-700/50 transition-colors">
+
                                         <span class="text-sm font-semibold text-white"
-                                              th:text="${#strings.isEmpty(song.artistNickname) ? song.artistFullName : song.artistNickname}"></span>
+                                              th:text="${#strings.isEmpty(song.artistNickname) ? song.artistFullName : song.artistNickname}">
+                                        </span>
+
                                     </a>
+
                                 </div>
+
                                 <div th:if="${song.bandId == null && song.artistId == null}">
+
                                     <span class="text-sm font-semibold text-slate-400 px-3"
-                                          th:text="${song.performer}"></span>
+                                          th:text="${song.performer}">
+                                    </span>
+
                                 </div>
+
                             </td>
 
                             <td class="py-4 px-6 hidden lg:table-cell">
+
                                 <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-white/10 text-slate-300 rounded"
-                                      th:text="${song.genre}"></span>
+                                      th:text="${song.genre}">
+                                </span>
+
                             </td>
 
                             <td class="py-4 px-6 text-right font-mono text-sm text-slate-500"
-                                th:text="${song.durationFormatted}"></td>
+                                th:text="${song.durationFormatted}">
+                            </td>
 
                             <td class="py-4 px-4">
+
                                 <button type="button"
-                                        th:onclick="removeSongFromPlaylist([[${playlist.id}]], [[${song.id}]], this)"
-                                        title="Remove from playlist"
+                                        th:onclick="'removeSongFromPlaylist(' + ${playlist.id} + ',' + ${song.id} + ', this)'"                                        title="Remove from playlist"
                                         class="w-8 h-8 flex items-center justify-center rounded-full text-slate-600
-                   hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0
-                   group-hover:opacity-100">
+                                               hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0
+                                               group-hover:opacity-100">
+
                                     <i class="fa-solid fa-xmark text-sm"></i>
+
                                 </button>
+
                             </td>
+
                         </tr>
+
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
     <div id="addSongModal"
          class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
 
-        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeAddSongModal()"></div>
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+             onclick="closeAddSongModal()"></div>
 
         <div class="relative z-10 w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl flex flex-col max-h-[85vh]">
 
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
-                <h2 class="text-lg font-bold text-white">Add a Song</h2>
+
+                <h2 class="text-lg font-bold text-white"
+                    th:text="#{playlistPreview.addSong}">
+                    Add a Song
+                </h2>
+
                 <button onclick="closeAddSongModal()"
                         class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-slate-700 transition-all">
+
                     <i class="fa-solid fa-xmark"></i>
+
                 </button>
+
             </div>
 
             <div class="px-6 py-4 border-b border-slate-800">
+
                 <div class="flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2">
+
                     <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+
                     <input id="modalSongSearch"
                            type="text"
-                           placeholder="Search songs by title…"
+                           th:placeholder="#{addPlaylist.searchSongs}"
                            oninput="handleModalSearch(this.value)"
                            class="flex-1 bg-transparent border-none outline-none text-white placeholder-slate-500 text-sm"/>
+
                 </div>
+
             </div>
 
-            <div id="modalSongList" class="flex-1 overflow-y-auto px-3 py-2">
-                <p class="text-center text-slate-400 text-sm py-6">Loading songs…</p>
+            <div id="modalSongList"
+                 class="flex-1 overflow-y-auto px-3 py-2">
+
+                <p class="text-center text-slate-400 text-sm py-6">
+                    Loading songs…
+                </p>
+
             </div>
 
             <div class="px-6 py-4 border-t border-slate-800 text-right">
+
                 <button onclick="closeAddSongModal()"
+                        th:text="#{playlist.cancel}"
                         class="px-5 py-2 rounded-xl text-slate-400 font-semibold text-sm hover:text-white hover:bg-white/5 transition-all">
+
                     Cancel
+
                 </button>
+
             </div>
+
         </div>
+
     </div>
 
     <script th:inline="javascript">
+
         const PLAYLIST_ID = /*[[${playlist.id}]]*/ 0;
-        const DEFAULT_IMG = 'https://soundhub7.s3.eu-north-1.amazonaws.com/assets/PlaylistDefault.png';
+
+        const DEFAULT_IMG =
+            'https://soundhub7.s3.eu-north-1.amazonaws.com/assets/PlaylistDefault.png';
 
         document.addEventListener('click', (e) => {
+
             const btn = e.target.closest('[data-play-btn]');
+
             if (!btn) return;
 
-            const allButtons = Array.from(document.querySelectorAll('[data-play-btn]'));
+            const allButtons =
+                Array.from(document.querySelectorAll('[data-play-btn]'));
+
             const songs = allButtons.map(b => ({
                 id: b.dataset.id,
                 title: b.dataset.title,
@@ -244,142 +380,248 @@
         });
 
         function refreshSoundHubRegistry() {
-            const buttons = Array.from(document.querySelectorAll('[data-play-btn]'));
+
+            const buttons =
+                Array.from(document.querySelectorAll('[data-play-btn]'));
+
             const songs = buttons.map(btn => ({
                 id: btn.dataset.id,
                 title: btn.dataset.title,
                 performer: btn.dataset.performer,
                 url: btn.dataset.url,
             }));
-            document.dispatchEvent(new CustomEvent('soundhub:register', {detail: {songs}}));
+
+            document.dispatchEvent(
+                new CustomEvent('soundhub:register', {
+                    detail: {songs}
+                })
+            );
         }
 
         refreshSoundHubRegistry();
 
         function removeSongFromPlaylist(playlistId, songId, btn) {
+
             if (!confirm('Remove this song from the playlist?')) return;
 
             const row = btn.closest('tr');
+
             row.style.opacity = '0.5';
             row.style.pointerEvents = 'none';
 
             const form = new FormData();
+
             form.append('playlistId', playlistId);
             form.append('songId', songId);
 
-            fetch('/playlists/remove-song', {method: 'POST', body: form})
+            fetch('/playlists/remove-song', {
+                method: 'POST',
+                body: form
+            })
                 .then(res => {
+
                     if (res.ok || res.redirected) {
+
                         row.style.transition = 'all 0.3s ease';
                         row.style.transform = 'translateX(20px)';
                         row.style.opacity = '0';
 
                         setTimeout(() => {
+
                             row.remove();
-                            const tbody = document.getElementById('songsTableBody');
-                            if (tbody && tbody.children.length === 0) location.reload();
+
+                            const tbody =
+                                document.getElementById('songsTableBody');
+
+                            if (tbody && tbody.children.length === 0) {
+                                location.reload();
+                            }
+
                             refreshSoundHubRegistry();
+
                         }, 300);
+
                     } else {
+
                         row.style.opacity = '1';
                         row.style.pointerEvents = 'auto';
                     }
                 })
                 .catch(() => {
+
                     row.style.opacity = '1';
                     row.style.pointerEvents = 'auto';
                 });
         }
 
         function openAddSongModal() {
-            document.getElementById('addSongModal').classList.remove('hidden');
+
+            document.getElementById('addSongModal')
+                .classList.remove('hidden');
+
             document.getElementById('modalSongSearch').value = '';
+
             fetchModalSongs('');
-            setTimeout(() => document.getElementById('modalSongSearch').focus(), 50);
+
+            setTimeout(() => {
+                document.getElementById('modalSongSearch').focus();
+            }, 50);
         }
 
         function closeAddSongModal() {
-            document.getElementById('addSongModal').classList.add('hidden');
+
+            document.getElementById('addSongModal')
+                .classList.add('hidden');
         }
 
         function getExistingSongIds() {
-            return Array.from(document.querySelectorAll('#songsTableBody [data-play-btn]'))
-                .map(btn => String(btn.dataset.id));
+
+            return Array.from(
+                document.querySelectorAll('#songsTableBody [data-play-btn]')
+            ).map(btn => String(btn.dataset.id));
         }
 
         let modalDebounce;
+
         function handleModalSearch(q) {
+
             clearTimeout(modalDebounce);
-            modalDebounce = setTimeout(() => fetchModalSongs(q.trim()), 280);
+
+            modalDebounce = setTimeout(() => {
+                fetchModalSongs(q.trim());
+            }, 280);
         }
 
         function fetchModalSongs(q) {
-            const url = `/songs/search?q=${encodeURIComponent(q)}&limit=20`;
-            const list = document.getElementById('modalSongList');
-            list.innerHTML = '<p class="text-center text-slate-400 text-sm py-6">Loading…</p>';
+
+            const url =
+                `/songs/search?q=${encodeURIComponent(q)}&limit=20`;
+
+            const list =
+                document.getElementById('modalSongList');
+
+            list.innerHTML =
+                '<p class="text-center text-slate-400 text-sm py-6">Loading…</p>';
 
             fetch(url)
                 .then(r => r.ok ? r.json() : Promise.reject())
                 .then(songs => renderModalSongs(songs))
                 .catch(() => {
-                    list.innerHTML = '<p class="text-center text-red-400 text-sm py-6">Could not load songs.</p>';
+
+                    list.innerHTML =
+                        '<p class="text-center text-red-400 text-sm py-6">Could not load songs.</p>';
                 });
         }
 
         function renderModalSongs(songs) {
-            const list = document.getElementById('modalSongList');
+
+            const list =
+                document.getElementById('modalSongList');
+
             const existingIds = getExistingSongIds();
-            const filteredSongs = songs.filter(song => !existingIds.includes(String(song.id)));
+
+            const filteredSongs = songs.filter(song =>
+                !existingIds.includes(String(song.id))
+            );
 
             if (filteredSongs.length === 0) {
-                list.innerHTML = '<p class="text-center text-slate-400 text-sm py-6">No new songs found.</p>';
+
+                list.innerHTML =
+                    '<p class="text-center text-slate-400 text-sm py-6">No new songs found.</p>';
+
                 return;
             }
 
             list.innerHTML = '';
+
             filteredSongs.forEach(song => {
-                const performer = song.performer || song.bandName || song.artistNickname || song.artistFullName || '';
+
+                const performer =
+                    song.performer ||
+                    song.bandName ||
+                    song.artistNickname ||
+                    song.artistFullName ||
+                    '';
+
                 const div = document.createElement('div');
-                div.className = 'flex items-center gap-3 px-3 py-2.5 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer group';
+
+                div.className =
+                    'flex items-center gap-3 px-3 py-2.5 hover:bg-slate-800 rounded-xl transition-colors cursor-pointer group';
 
                 div.dataset.songUrl = song.songUrl;
                 div.dataset.genre = song.genre || 'Music';
 
                 div.innerHTML = `
-                <div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-slate-700">
-                    <img src="${escHtml(song.pictureUrl || DEFAULT_IMG)}" class="w-full h-full object-cover" onerror="this.src='${DEFAULT_IMG}'"/>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-white truncate">${escHtml(song.title)}</p>
-                    <p class="text-xs text-slate-400 truncate">${escHtml(performer)}</p>
-                </div>
-                <span class="text-xs text-slate-500 flex-shrink-0 mr-2">${escHtml(song.durationFormatted)}</span>
-                <button type="button" class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-violet-600 hover:bg-violet-500 text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                </button>
-            `;
-                div.querySelector('button').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addSongToPlaylist(song.id, div);
-                });
+                    <div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-slate-700">
+                        <img src="${escHtml(song.pictureUrl || DEFAULT_IMG)}"
+                             class="w-full h-full object-cover"
+                             onerror="this.src='${DEFAULT_IMG}'"/>
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-white truncate">
+                            ${escHtml(song.title)}
+                        </p>
+
+                        <p class="text-xs text-slate-400 truncate">
+                            ${escHtml(performer)}
+                        </p>
+                    </div>
+
+                    <span class="text-xs text-slate-500 flex-shrink-0 mr-2">
+                        ${escHtml(song.durationFormatted)}
+                    </span>
+
+                    <button type="button"
+                            class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-violet-600 hover:bg-violet-500 text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90">
+
+                        <i class="fa-solid fa-plus text-xs"></i>
+
+                    </button>
+                `;
+
+                div.querySelector('button')
+                    .addEventListener('click', (e) => {
+
+                        e.stopPropagation();
+
+                        addSongToPlaylist(song.id, div);
+                    });
+
                 list.appendChild(div);
             });
         }
 
         function addSongToPlaylist(songId, rowEl) {
+
             const btn = rowEl.querySelector('button');
+
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
+
+            btn.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
 
             const form = new FormData();
+
             form.append('playlistId', PLAYLIST_ID);
             form.append('songId', songId);
 
-            fetch('/playlists/add-song', {method: 'POST', body: form})
+            fetch('/playlists/add-song', {
+                method: 'POST',
+                body: form
+            })
                 .then(res => {
+
                     if (res.ok) {
-                        btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i>';
-                        btn.classList.replace('bg-violet-600', 'bg-green-600');
+
+                        btn.innerHTML =
+                            '<i class="fa-solid fa-check text-xs"></i>';
+
+                        btn.classList.replace(
+                            'bg-violet-600',
+                            'bg-green-600'
+                        );
+
                         const songData = {
                             id: songId,
                             title: rowEl.querySelector('.font-semibold').textContent,
@@ -388,9 +630,13 @@
                             url: rowEl.dataset.songUrl,
                             genre: rowEl.dataset.genre
                         };
+
                         appendToMainTable(songData);
+
                         setTimeout(closeAddSongModal, 600);
+
                     } else {
+
                         resetBtn(btn);
                     }
                 })
@@ -398,54 +644,99 @@
         }
 
         function appendToMainTable(song) {
-            const tbody = document.getElementById('songsTableBody');
-            const placeholder = document.querySelector('.text-center.text-gray-400.py-10');
+
+            const tbody =
+                document.getElementById('songsTableBody');
+
+            const placeholder =
+                document.querySelector('.text-center.text-gray-400.py-10');
+
             if (placeholder) placeholder.remove();
 
             const tr = document.createElement('tr');
-            tr.className = 'group hover:bg-white/5 transition-colors';
+
+            tr.className =
+                'group hover:bg-white/5 transition-colors';
+
             tr.innerHTML = `
-            <td class="py-4 px-4">
-                <button type="button" data-id="${song.id}" data-title="${escHtml(song.title)}"
-                        data-performer="${escHtml(song.performer)}" data-url="${song.url}" data-play-btn
-                        class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500 group-hover:text-white group-hover:bg-primary transition-all">
-                    <i class="fa-solid fa-play text-xs ml-0.5"></i>
-                </button>
-            </td>
-            <td class="py-4 px-6">
-                <span class="block font-medium text-white">${escHtml(song.title)}</span>
-            </td>
-            <td class="py-4 px-6 hidden md:table-cell">
-                <span class="text-sm font-semibold text-slate-400 px-3">${escHtml(song.performer)}</span>
-            </td>
-            <td class="py-4 px-6 hidden lg:table-cell">
-                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-white/10 text-slate-300 rounded">${escHtml(song.genre)}</span>
-            </td>
-            <td class="py-4 px-6 text-right font-mono text-sm text-slate-500">${escHtml(song.duration)}</td>
-            <td class="py-4 px-4">
-                <button type="button" onclick="removeSongFromPlaylist(${PLAYLIST_ID}, ${song.id}, this)"
-                        class="w-8 h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </td>
-        `;
+                <td class="py-4 px-4">
+                    <button type="button"
+                            data-id="${song.id}"
+                            data-title="${escHtml(song.title)}"
+                            data-performer="${escHtml(song.performer)}"
+                            data-url="${song.url}"
+                            data-play-btn
+                            class="w-8 h-8 flex items-center justify-center rounded-full text-slate-500 group-hover:text-white group-hover:bg-primary transition-all">
+
+                        <i class="fa-solid fa-play text-xs ml-0.5"></i>
+
+                    </button>
+                </td>
+
+                <td class="py-4 px-6">
+                    <span class="block font-medium text-white">
+                        ${escHtml(song.title)}
+                    </span>
+                </td>
+
+                <td class="py-4 px-6 hidden md:table-cell">
+                    <span class="text-sm font-semibold text-slate-400 px-3">
+                        ${escHtml(song.performer)}
+                    </span>
+                </td>
+
+                <td class="py-4 px-6 hidden lg:table-cell">
+                    <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-white/10 text-slate-300 rounded">
+                        ${escHtml(song.genre)}
+                    </span>
+                </td>
+
+                <td class="py-4 px-6 text-right font-mono text-sm text-slate-500">
+                    ${escHtml(song.duration)}
+                </td>
+
+                <td class="py-4 px-4">
+                    <button type="button"
+                            onclick="removeSongFromPlaylist(${PLAYLIST_ID}, ${song.id}, this)"
+                            class="w-8 h-8 flex items-center justify-center rounded-full text-slate-600 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100">
+
+                        <i class="fa-solid fa-xmark text-sm"></i>
+
+                    </button>
+                </td>
+            `;
+
             tbody.appendChild(tr);
+
             refreshSoundHubRegistry();
         }
 
         function resetBtn(btn) {
+
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-plus text-xs"></i>';
+
+            btn.innerHTML =
+                '<i class="fa-solid fa-plus text-xs"></i>';
         }
 
         function escHtml(str) {
-            return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') closeAddSongModal();
+
+            if (e.key === 'Escape') {
+                closeAddSongModal();
+            }
         });
+
     </script>
+
 </section>
 </body>
 </html>

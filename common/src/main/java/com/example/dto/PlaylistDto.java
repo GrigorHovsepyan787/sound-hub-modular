@@ -24,8 +24,6 @@ public class PlaylistDto {
 
     private boolean publicFlag;
 
-    private Boolean isDefault;
-
     private String pictureUrl;
 
     private LocalDate createdDate;

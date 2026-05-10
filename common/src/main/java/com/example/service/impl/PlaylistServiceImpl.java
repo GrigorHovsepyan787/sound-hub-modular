@@ -41,6 +41,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    @Transactional
     public PlaylistDto create(PlaylistDto playlistDto, MultipartFile multipartFile, List<Long> songIds, User user) {
         Playlist playlist = playlistMapper.toEntity(playlistDto);
         playlist.setUser(user);
@@ -62,6 +63,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    @Transactional
     public PlaylistDto update(Long id, PlaylistDto playlistDto, MultipartFile multipartFile) {
         Playlist existingPlaylist = playlistRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
@@ -78,26 +80,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Playlist playlist = playlistRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
-        if (playlist.getIsDefault()) {
-            throw new IllegalArgumentException("Cannot delete default playlist");
-        }
         log.info("Deleting playlist ID: {}", id);
         playlistRepository.deleteById(id);
-    }
-
-    @Override
-    public void createDefaultPlaylist(User user) {
-        Playlist favorites = new Playlist();
-        favorites.setName("Favorite Songs");
-        favorites.setUser(user);
-        favorites.setIsDefault(true);
-        favorites.setPictureUrl(defaultImageUrl);
-
-        playlistRepository.save(favorites);
-        log.info("Created default playlist for user '{}'", user.getUsername());
     }
 
     @Override
