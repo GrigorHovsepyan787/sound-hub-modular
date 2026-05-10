@@ -54,15 +54,20 @@ class ArtistControllerTest {
         ModelMap modelMap = new ModelMap();
 
         when(artistService.findAll(pageable)).thenReturn(artistPage);
+        when(artistService.getPageNumbers(artistPage)).thenReturn(List.of(1, 2));
 
         String view = artistController.artists(modelMap, pageable);
 
         assertEquals("artists", view);
         assertEquals(artistPage, modelMap.get("artists"));
+
         @SuppressWarnings("unchecked")
         List<Integer> pageNumbers = (List<Integer>) modelMap.get("pageNumbers");
+
         assertEquals(List.of(1, 2), pageNumbers);
+
         verify(artistService).findAll(pageable);
+        verify(artistService).getPageNumbers(artistPage);
     }
 
     @Test
@@ -72,12 +77,16 @@ class ArtistControllerTest {
         ModelMap modelMap = new ModelMap();
 
         when(artistService.findAll(pageable)).thenReturn(artistPage);
+        when(artistService.getPageNumbers(artistPage)).thenReturn(List.of(1));
 
         artistController.artists(modelMap, pageable);
 
         @SuppressWarnings("unchecked")
         List<Integer> pageNumbers = (List<Integer>) modelMap.get("pageNumbers");
+
         assertEquals(List.of(1), pageNumbers);
+
+        verify(artistService).getPageNumbers(artistPage);
     }
 
     @Test
