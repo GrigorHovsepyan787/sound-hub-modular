@@ -22,6 +22,5 @@ public interface PlaylistMapper {
     @Mapping(target = "songs", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "songCount", ignore = true)
-    @Mapping(target = "isDefault", ignore = true)
     void updateEntityFromDto(PlaylistDto dto, @MappingTarget Playlist playlist);
 }

@@ -42,8 +42,6 @@ public class Playlist {
 
     private boolean publicFlag;
 
-    private Boolean isDefault = false;
-
     private String pictureUrl;
 
     @Formula("(SELECT COUNT(*) FROM playlist_song ps WHERE ps.playlist_id = id)")

@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.dto.PlaylistDto;
-import com.example.model.Playlist;
 import com.example.model.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,8 +16,6 @@ public interface PlaylistService {
     PlaylistDto update(Long id, PlaylistDto playlistDto, MultipartFile multipartFile);
 
     void delete(Long id);
-
-    void createDefaultPlaylist(User user);
 
     PlaylistDto getPlaylistById(Long id);
 

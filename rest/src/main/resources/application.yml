@@ -1,6 +1,8 @@
 spring:
   application:
     name: rest
+    liquibase:
+      enable: false
   datasource:
     url: jdbc:mysql://localhost:3306/sound-hub
     username: ${DB_USERNAME:root}

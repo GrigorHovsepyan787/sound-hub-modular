@@ -46,15 +46,20 @@ class BandControllerTest {
         ModelMap modelMap = new ModelMap();
 
         when(bandService.findAll(pageable)).thenReturn(bandPage);
-        
+        when(bandService.getPageNumbers(bandPage)).thenReturn(List.of(1, 2));
+
         String view = bandController.bands(modelMap, pageable);
-        
+
         assertEquals("bands", view);
         assertEquals(bandPage, modelMap.get("bands"));
+
         @SuppressWarnings("unchecked")
         List<Integer> pageNumbers = (List<Integer>) modelMap.get("pageNumbers");
+
         assertEquals(List.of(1, 2), pageNumbers);
+
         verify(bandService).findAll(pageable);
+        verify(bandService).getPageNumbers(bandPage);
     }
 
     @Test
@@ -64,12 +69,16 @@ class BandControllerTest {
         ModelMap modelMap = new ModelMap();
 
         when(bandService.findAll(pageable)).thenReturn(bandPage);
-        
+        when(bandService.getPageNumbers(bandPage)).thenReturn(List.of(1));
+
         bandController.bands(modelMap, pageable);
-        
+
         @SuppressWarnings("unchecked")
         List<Integer> pageNumbers = (List<Integer>) modelMap.get("pageNumbers");
+
         assertEquals(List.of(1), pageNumbers);
+
+        verify(bandService).getPageNumbers(bandPage);
     }
 
     @Test

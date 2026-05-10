@@ -3,6 +3,7 @@
       th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
 <head>
     <title>SoundHub - My Playlist</title>
+
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 </head>
@@ -12,19 +13,28 @@
     <main class="flex-1 max-w-4xl mx-auto w-full px-4 py-8 md:py-12">
 
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-10">
+
             <div>
-                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-2">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-2"
+                    th:text="#{playlist.title}">
                     My Playlists
                 </h1>
-                <p class="text-slate-500 dark:text-slate-400">
+
+                <p class="text-slate-500 dark:text-slate-400"
+                   th:text="#{playlist.subtitle}">
                     Your custom collections and saved libraries.
                 </p>
             </div>
 
             <a th:href="@{/playlists/add}"
                class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-full font-bold hover:bg-blue-600 transition">
-                <span>Create New Playlist</span>
+
+                <span th:text="#{playlist.createNew}">
+                    Create New Playlist
+                </span>
+
             </a>
+
         </div>
 
         <div class="flex flex-col gap-4">
@@ -44,51 +54,67 @@
                     </div>
 
                     <div class="flex-1 min-w-0">
+
                         <h3 class="text-lg font-bold text-white truncate"
-                            th:text="${playlist.name}">Playlist</h3>
+                            th:text="${playlist.name}">
+                            Playlist
+                        </h3>
 
                         <p class="text-sm text-slate-400"
-                           th:text="${playlist.songCount + ' songs'}">0 songs</p>
+                           th:text="${playlist.songCount + ' ' + #messages.msg('playlist.songs')}">
+                            0 songs
+                        </p>
+
                     </div>
 
                 </a>
 
-                <div th:unless="${playlist.isDefault}"
-                     class="flex items-center gap-3 relative">
+                <button type="button"
+                        onclick="toggleMenu(this, event)"
+                        class="size-10 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center">
 
-                    <button type="button"
-                            onclick="toggleMenu(this, event)"
-                            class="size-10 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 flex items-center justify-center">
-                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="1"/>
-                            <circle cx="12" cy="5" r="1"/>
-                            <circle cx="12" cy="19" r="1"/>
-                        </svg>
-                    </button>
+                    <svg class="w-6 h-6"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2">
 
-                    <div th:id="'menu-' + ${playlist.id}"
-                         class="hidden absolute right-0 top-full mt-2 w-40 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden">
+                        <circle cx="12" cy="12" r="1"/>
+                        <circle cx="12" cy="5" r="1"/>
+                        <circle cx="12" cy="19" r="1"/>
 
-                        <a th:href="@{/playlists/preview(id=${playlist.id})}"
-                           class="block px-4 py-3 text-sm text-white hover:bg-slate-700">
-                            Open
-                        </a>
+                    </svg>
 
-                        <a th:href="@{/playlists/edit(id=${playlist.id})}"
-                           class="block px-4 py-3 text-sm text-white hover:bg-slate-700 border-t border-slate-700">
-                            Edit
-                        </a>
+                </button>
 
-                        <form th:action="@{/playlists/delete}" method="post"
-                              class="border-t border-slate-700">
-                            <input type="hidden" name="id" th:value="${playlist.id}"/>
-                            <button type="submit"
-                                    class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-500/10">
-                                Delete
-                            </button>
-                        </form>
+                <div th:id="'menu-' + ${playlist.id}"
+                     class="hidden absolute right-0 top-full mt-2 w-40 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden">
 
-                    </div>
+                    <a th:href="@{/playlists/preview(id=${playlist.id})}"
+                       class="block px-4 py-3 text-sm text-white hover:bg-slate-700">
+                        Open
+                    </a>
+
+                    <a th:href="@{/playlists/edit(id=${playlist.id})}"
+                       class="block px-4 py-3 text-sm text-white hover:bg-slate-700 border-t border-slate-700">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/playlists/delete}"
+                          method="post"
+                          class="border-t border-slate-700">
+
+                        <input type="hidden"
+                               name="id"
+                               th:value="${playlist.id}"/>
+
+                        <button type="submit"
+                                class="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-500/10">
+                            Delete
+                        </button>
+
+                    </form>
+
                 </div>
 
             </div>
@@ -100,20 +126,29 @@
     <script>
         function toggleMenu(btn, event) {
             event.stopPropagation();
+
             const menu = btn.parentElement.querySelector('[id^="menu-"]');
+
             document.querySelectorAll('[id^="menu-"]').forEach(m => {
-                if (m !== menu) m.classList.add('hidden');
+                if (m !== menu) {
+                    m.classList.add('hidden');
+                }
             });
+
             menu.classList.toggle('hidden');
         }
 
         if (!window._playlistMenuListenerAdded) {
             window._playlistMenuListenerAdded = true;
+
             document.addEventListener('click', function () {
-                document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+                document.querySelectorAll('[id^="menu-"]').forEach(m => {
+                    m.classList.add('hidden');
+                });
             });
         }
     </script>
+
 </section>
 </body>
 </html>

@@ -252,9 +252,13 @@ class AlbumServiceImplTest {
     }
 
     @Test
-    void delete_happyPath_deletesById() {
+    void delete_happyPath_deletesAlbumEntity() {
+        Album album = new Album();
+
+        when(albumRepository.findById(1L)).thenReturn(Optional.of(album));
+
         albumService.delete(1L);
 
-        verify(albumRepository).deleteById(1L);
+        verify(albumRepository).delete(album);
     }
 }

@@ -1,6 +1,12 @@
 package com.example.app.controller;
 
+import com.example.app.service.security.SpringUser;
+import com.example.dto.AlbumCommentReactionRequest;
+import com.example.dto.AlbumCommentRequest;
 import com.example.model.Album;
+import com.example.model.User;
+import com.example.service.AlbumCommentReactionService;
+import com.example.service.AlbumCommentService;
 import com.example.service.AlbumService;
 import com.example.service.ArtistService;
 import com.example.service.BandService;
@@ -16,7 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -46,6 +54,12 @@ class AlbumControllerTest {
 
     @Mock
     private ArtistService artistService;
+
+    @Mock
+    private AlbumCommentService albumCommentService;
+
+    @Mock
+    private AlbumCommentReactionService albumCommentReactionService;
 
     @InjectMocks
     private AlbumController albumController;
@@ -85,17 +99,21 @@ class AlbumControllerTest {
         Album album = new Album();
         List<Object> songs = List.of(new Object(), new Object());
         ModelMap modelMap = new ModelMap();
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "rating"));
+        Page<Object> comments = new PageImpl<>(Collections.emptyList());
 
         when(albumService.findAlbumById(id)).thenReturn(album);
         doReturn(songs).when(songService).getSongsByAlbumId(id);
+        doReturn(comments).when(albumCommentService).findAll(pageable, id);
 
-        String view = albumController.preview(modelMap, id);
+        String view = albumController.preview(modelMap, id, pageable);
 
         assertEquals("albumPreview", view);
         assertEquals(album, modelMap.get("album"));
         assertEquals(songs, modelMap.get("songs"));
         verify(albumService).findAlbumById(id);
         verify(songService).getSongsByAlbumId(id);
+        verify(albumCommentService).findAll(pageable, id);
     }
 
     @Test
@@ -103,11 +121,13 @@ class AlbumControllerTest {
         Long id = 2L;
         Album album = new Album();
         ModelMap modelMap = new ModelMap();
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "rating"));
 
         when(albumService.findAlbumById(id)).thenReturn(album);
         doReturn(Collections.emptyList()).when(songService).getSongsByAlbumId(id);
+        doReturn(new PageImpl<>(Collections.emptyList())).when(albumCommentService).findAll(pageable, id);
 
-        String view = albumController.preview(modelMap, id);
+        String view = albumController.preview(modelMap, id, pageable);
 
         assertEquals("albumPreview", view);
         assertEquals(Collections.emptyList(), modelMap.get("songs"));
@@ -117,11 +137,13 @@ class AlbumControllerTest {
     void preview_bothServicesCalledWithSameId() {
         Long id = 7L;
         ModelMap modelMap = new ModelMap();
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "rating"));
 
         when(albumService.findAlbumById(id)).thenReturn(new Album());
         doReturn(Collections.emptyList()).when(songService).getSongsByAlbumId(id);
+        doReturn(new PageImpl<>(Collections.emptyList())).when(albumCommentService).findAll(pageable, id);
 
-        albumController.preview(modelMap, id);
+        albumController.preview(modelMap, id, pageable);
 
         verify(albumService).findAlbumById(eq(7L));
         verify(songService).getSongsByAlbumId(eq(7L));
@@ -372,5 +394,81 @@ class AlbumControllerTest {
 
         assertEquals("redirect:/albums", view);
         verify(albumService).update(eq(album), eq(multipartFile), isNull(), eq(8L));
+    }
+
+    @Test
+    void deleteComment_redirectsToAlbumPreview() {
+        Long commentId = 10L;
+        Long albumId = 1L;
+
+        String view = albumController.deleteComment(commentId, albumId);
+
+        assertEquals("redirect:/albums/preview?id=" + albumId, view);
+        verify(albumCommentService).permanentDelete(commentId);
+    }
+
+    @Test
+    void softDeleteComment_redirectsToAlbumPreview() {
+        Long commentId = 11L;
+        Long albumId = 2L;
+
+        String view = albumController.softDeleteComment(commentId, albumId);
+
+        assertEquals("redirect:/albums/preview?id=" + albumId, view);
+        verify(albumCommentService).setDeleted(commentId, true);
+    }
+
+    @Test
+    void restoreComment_redirectsToAlbumPreview() {
+        Long commentId = 12L;
+        Long albumId = 3L;
+
+        String view = albumController.restoreComment(commentId, albumId);
+
+        assertEquals("redirect:/albums/preview?id=" + albumId, view);
+        verify(albumCommentService).setDeleted(commentId, false);
+    }
+
+    @Test
+    void addComment_validRequest_delegatesToCommentService() {
+        AlbumCommentRequest request = mock(AlbumCommentRequest.class);
+        BindingResult bindingResult = mock(BindingResult.class);
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+        User user = new User();
+        SpringUser springUser = mock(SpringUser.class);
+        when(springUser.getUser()).thenReturn(user);
+        when(albumCommentService.save(request, user, bindingResult, redirectAttributes))
+                .thenReturn("redirect:/albums/preview?id=1");
+
+        String view = albumController.addComment(request, bindingResult, springUser, redirectAttributes);
+
+        assertEquals("redirect:/albums/preview?id=1", view);
+        verify(albumCommentService).save(request, user, bindingResult, redirectAttributes);
+    }
+
+    @Test
+    void rateComment_validRequest_redirectsToAlbumPreview() {
+        AlbumCommentReactionRequest request = mock(AlbumCommentReactionRequest.class);
+        User user = new User();
+        SpringUser springUser = mock(SpringUser.class);
+        Long albumId = 5L;
+        when(springUser.getUser()).thenReturn(user);
+
+        String view = albumController.rateComment(request, springUser, albumId);
+
+        assertEquals("redirect:/albums/preview?id=" + albumId, view);
+        verify(albumCommentReactionService).saveCommentReaction(request, user);
+    }
+
+    @Test
+    void rateComment_serviceCalledWithCorrectArguments() {
+        AlbumCommentReactionRequest request = mock(AlbumCommentReactionRequest.class);
+        User user = new User();
+        SpringUser springUser = mock(SpringUser.class);
+        when(springUser.getUser()).thenReturn(user);
+
+        albumController.rateComment(request, springUser, 99L);
+
+        verify(albumCommentReactionService).saveCommentReaction(eq(request), eq(user));
     }
 }

@@ -9,8 +9,12 @@
 <section class="font-display antialiased bg-background-light dark:bg-background-dark text-gray-900 dark:text-white pb-24">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"/>
 
     <script id="tailwind-config">
         tailwind.config = {
@@ -22,28 +26,58 @@
                         "background-light": "#f6f7f8",
                         "background-dark": "#111821",
                     },
-                    fontFamily: {"display": ["Inter", "sans-serif"]},
-                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
                 },
             },
         }
     </script>
 
     <main class="pt-32 min-h-screen flex items-start justify-center px-6 md:px-12">
+
         <div class="w-full max-w-4xl bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 md:p-12 shadow-2xl">
 
             <header class="mb-10">
-                <h1 class="text-3xl font-black text-white mb-2">Edit Playlist</h1>
-                <p class="text-gray-400">Update your collection details and privacy settings</p>
+
+                <h1 class="text-3xl font-black text-white mb-2"
+                    th:text="#{editPlaylist.title}">
+                    Edit Playlist
+                </h1>
+
+                <p class="text-gray-400"
+                   th:text="#{editPlaylist.subtitle}">
+                    Update your collection details and privacy settings
+                </p>
+
             </header>
 
-            <form th:action="@{/playlists/edit}" method="post" enctype="multipart/form-data" class="space-y-8" novalidate onsubmit="return validateForm(event)">
-                <input type="hidden" name="id" th:value="${playlist.id}"/>
+            <form th:action="@{/playlists/edit}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="space-y-8"
+                  novalidate
+                  onsubmit="return validateForm(event)">
+
+                <input type="hidden"
+                       name="id"
+                       th:value="${playlist.id}"/>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
 
                     <div class="md:col-span-5 space-y-3">
-                        <label class="text-sm font-bold text-gray-300 uppercase tracking-wider">Playlist Cover</label>
+
+                        <label class="text-sm font-bold text-gray-300 uppercase tracking-wider"
+                               th:text="#{addPlaylist.cover}">
+                            Playlist Cover
+                        </label>
+
                         <div id="uploadBox"
                              class="relative group aspect-square bg-slate-800 rounded-2xl border-2 border-dashed border-slate-700 hover:border-primary transition-all cursor-pointer overflow-hidden flex items-center justify-center">
 
@@ -55,67 +89,141 @@
                             <div id="uploadInner"
                                  class="relative z-10 flex flex-col items-center gap-2 transition-opacity"
                                  th:classappend="${playlist.pictureUrl != null} ? 'opacity-0 group-hover:opacity-100 bg-black/40 w-full h-full justify-center' : ''">
+
                                 <div class="p-4 bg-slate-700/50 rounded-full text-white backdrop-blur-md">
                                     <i class="fa-solid fa-camera text-xl"></i>
                                 </div>
-                                <p class="text-xs font-bold text-white uppercase tracking-tighter">Change Photo</p>
+
+                                <p class="text-xs font-bold text-white uppercase tracking-tighter"
+                                   th:text="#{editPlaylist.changePhoto}">
+                                    Change Photo
+                                </p>
+
                             </div>
 
-                            <input id="playlistImage" name="playlistImage" accept="image/*" type="file" class="hidden"/>
+                            <input id="playlistImage"
+                                   name="playlistImage"
+                                   accept="image/*"
+                                   type="file"
+                                   class="hidden"/>
+
                         </div>
+
                     </div>
 
                     <div class="md:col-span-7 space-y-8">
+
                         <div class="space-y-2">
-                            <label for="playlist-name" class="text-sm font-bold text-gray-300 uppercase tracking-wider">Playlist Name</label>
-                            <input id="playlist-name" name="name" type="text" th:value="${playlist.name}"
+
+                            <label for="playlist-name"
+                                   class="text-sm font-bold text-gray-300 uppercase tracking-wider"
+                                   th:text="#{addPlaylist.name}">
+                                Playlist Name
+                            </label>
+
+                            <input id="playlist-name"
+                                   name="name"
+                                   type="text"
+                                   th:value="${playlist.name}"
                                    class="w-full bg-slate-800/50 border-slate-700 rounded-xl px-5 py-4 text-white focus:ring-2 focus:ring-primary outline-none border transition-all text-lg font-medium"/>
-                            <p id="nameError" class="hidden text-red-400 text-sm mt-1">Playlist name is required.</p>
+
+                            <p id="nameError"
+                               class="hidden text-red-400 text-sm mt-1">
+                                Playlist name is required.
+                            </p>
+
                         </div>
 
                         <div class="space-y-3">
-                            <label class="text-sm font-bold text-gray-300 uppercase tracking-wider">Visibility</label>
+
+                            <label class="text-sm font-bold text-gray-300 uppercase tracking-wider"
+                                   th:text="#{addPlaylist.visibility}">
+                                Visibility
+                            </label>
+
                             <div class="flex gap-4">
-                                <button type="button" id="btnPublic" onclick="handleVisibilityChange(true)"
+
+                                <button type="button"
+                                        id="btnPublic"
+                                        onclick="handleVisibilityChange(true)"
                                         class="vis-btn flex-1 flex items-center justify-center gap-3 py-4 rounded-xl border-2 transition-all font-bold">
-                                    <i class="fa-solid fa-globe"></i> Public
+
+                                    <i class="fa-solid fa-globe"></i>
+
+                                    <span th:text="#{addPlaylist.public}">
+                                        Public
+                                    </span>
+
                                 </button>
-                                <button type="button" id="btnPrivate" onclick="handleVisibilityChange(false)"
+
+                                <button type="button"
+                                        id="btnPrivate"
+                                        onclick="handleVisibilityChange(false)"
                                         class="vis-btn flex-1 flex items-center justify-center gap-3 py-4 rounded-xl border-2 transition-all font-bold">
-                                    <i class="fa-solid fa-lock"></i> Private
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                    <span th:text="#{addPlaylist.private}">
+                                        Private
+                                    </span>
+
                                 </button>
+
                             </div>
-                            <input type="hidden" id="publicFlagInput" name="publicFlag" th:value="${playlist.publicFlag}"/>
+
+                            <input type="hidden"
+                                   id="publicFlagInput"
+                                   name="publicFlag"
+                                   th:value="${playlist.publicFlag}"/>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="flex items-center justify-end gap-6 pt-8 border-t border-slate-800">
-                    <a th:href="@{/playlists/preview(id=${playlist.id})}" class="text-slate-400 font-bold hover:text-white transition-colors">
+
+                    <a th:href="@{/playlists/preview(id=${playlist.id})}"
+                       th:text="#{playlist.cancel}"
+                       class="text-slate-400 font-bold hover:text-white transition-colors">
                         Cancel
                     </a>
+
                     <button type="submit"
                             class="px-10 py-4 bg-violet-600 hover:bg-violet-500 text-white font-black rounded-xl transition-all hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] active:scale-95 flex items-center gap-2">
-                        <span>SAVE CHANGES</span>
+
+                        <span th:text="#{editPlaylist.save}">
+                            SAVE CHANGES
+                        </span>
+
                         <i class="fa-solid fa-check"></i>
+
                     </button>
+
                 </div>
+
             </form>
+
         </div>
+
     </main>
 
     <div th:replace="~{fragments/player :: player}"></div>
 
     <script th:inline="javascript">
+
         const btnPublic = document.getElementById('btnPublic');
         const btnPrivate = document.getElementById('btnPrivate');
         const publicFlagInput = document.getElementById('publicFlagInput');
+
         const uploadBox = document.getElementById('uploadBox');
         const fileInput = document.getElementById('playlistImage');
         const previewImage = document.getElementById('previewImage');
         const uploadInner = document.getElementById('uploadInner');
 
         const isPublic = String(publicFlagInput.value) === 'true';
+
         updateVisibilityUI(isPublic);
 
         function handleVisibilityChange(isPublic) {
@@ -124,52 +232,99 @@
         }
 
         function updateVisibilityUI(isPublic) {
-            const baseClass = "vis-btn flex-1 flex items-center justify-center gap-3 py-4 rounded-xl border-2 transition-all font-bold ";
+
+            const baseClass =
+                "vis-btn flex-1 flex items-center justify-center gap-3 py-4 rounded-xl border-2 transition-all font-bold ";
+
             if (isPublic) {
-                btnPublic.className = baseClass + "border-green-500 bg-green-500/10 text-green-400";
-                btnPrivate.className = baseClass + "border-slate-700 bg-transparent text-slate-500 hover:border-slate-500";
+
+                btnPublic.className =
+                    baseClass + "border-green-500 bg-green-500/10 text-green-400";
+
+                btnPrivate.className =
+                    baseClass + "border-slate-700 bg-transparent text-slate-500 hover:border-slate-500";
+
             } else {
-                btnPrivate.className = baseClass + "border-red-500 bg-red-500/10 text-red-400";
-                btnPublic.className = baseClass + "border-slate-700 bg-transparent text-slate-500 hover:border-slate-500";
+
+                btnPrivate.className =
+                    baseClass + "border-red-500 bg-red-500/10 text-red-400";
+
+                btnPublic.className =
+                    baseClass + "border-slate-700 bg-transparent text-slate-500 hover:border-slate-500";
             }
         }
 
         function validateForm(e) {
+
             const nameInput = document.getElementById('playlist-name');
             const nameError = document.getElementById('nameError');
+
             if (!nameInput.value.trim()) {
+
                 e.preventDefault();
+
                 nameError.classList.remove('hidden');
+
                 nameInput.focus();
+
                 nameInput.classList.add('border-red-500');
+
                 return false;
             }
+
             nameError.classList.add('hidden');
+
             nameInput.classList.remove('border-red-500');
+
             return true;
         }
 
-        document.getElementById('playlist-name').addEventListener('input', () => {
-            document.getElementById('nameError').classList.add('hidden');
-            document.getElementById('playlist-name').classList.remove('border-red-500');
-        });
+        document.getElementById('playlist-name')
+            .addEventListener('input', () => {
+
+                document.getElementById('nameError')
+                    .classList.add('hidden');
+
+                document.getElementById('playlist-name')
+                    .classList.remove('border-red-500');
+            });
 
         uploadBox.addEventListener('click', (e) => {
+
             if (e.target === fileInput) return;
+
             fileInput.click();
         });
+
         fileInput.addEventListener('change', () => {
+
             const file = fileInput.files[0];
+
             if (!file) return;
+
             const reader = new FileReader();
+
             reader.onload = e => {
+
                 previewImage.src = e.target.result;
+
                 previewImage.classList.remove('hidden');
-                uploadInner.classList.add('opacity-0', 'group-hover:opacity-100', 'bg-black/40', 'w-full', 'h-full', 'justify-center');
+
+                uploadInner.classList.add(
+                    'opacity-0',
+                    'group-hover:opacity-100',
+                    'bg-black/40',
+                    'w-full',
+                    'h-full',
+                    'justify-center'
+                );
             };
+
             reader.readAsDataURL(file);
         });
+
     </script>
+
 </section>
 </body>
 </html>
