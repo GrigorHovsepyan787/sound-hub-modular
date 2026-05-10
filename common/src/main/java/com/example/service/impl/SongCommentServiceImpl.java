@@ -22,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
-@Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class SongCommentServiceImpl implements SongCommentService {
@@ -42,6 +41,7 @@ public class SongCommentServiceImpl implements SongCommentService {
     }
 
     @Override
+    @Transactional
     public SongCommentDto createSongComment(SongCommentRequest request, User user) {
         log.info("Attempting to create song comment for songId={} by user={}",
                 request.getSongId(),
@@ -86,6 +86,7 @@ public class SongCommentServiceImpl implements SongCommentService {
     }
 
     @Override
+    @Transactional
     public void setDeleted(Long id, boolean deleted) {
         SongComment songComment = songCommentRepository.findById(id).orElseThrow(() -> {
             log.warn("Song comment not found. id={}", id);
@@ -109,6 +110,7 @@ public class SongCommentServiceImpl implements SongCommentService {
     }
 
     @Override
+    @Transactional
     public void permanentDelete(Long id) {
         log.info("Attempting to permanently delete song comment. commentId={}", id);
 

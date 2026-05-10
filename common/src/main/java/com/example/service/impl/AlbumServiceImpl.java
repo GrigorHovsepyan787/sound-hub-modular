@@ -82,16 +82,7 @@ public class AlbumServiceImpl implements AlbumService {
         if (bandId == null && artistId == null) {
             throw new IllegalArgumentException("Parameter 'bandId' or 'artistId' must not be null");
         }
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            String imageUrl = storageService.upload(multipartFile, "album-images");
-
-            if (imageUrl != null) {
-                album.setPictureUrl(imageUrl);
-                log.info("Image uploaded for album: {}", album.getTitle());
-            }
-        } else {
-            album.setPictureUrl(defaultImageUrl);
-        }
+        album.setPictureUrl(manageImage(multipartFile, album.getTitle(), defaultImageUrl));
         if (bandId != null) {
             album.setBand(bandRepository.findById(bandId).orElseThrow(EntityNotFoundException::new));
         }
@@ -103,10 +94,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     @Transactional
-    public AlbumDto saveDto(SaveAlbumDto dto) {
+    public AlbumDto saveDto(SaveAlbumDto dto, MultipartFile multipartFile) {
         Artist artist = null;
         Band band = null;
-
         if (dto.getArtistId() != null) {
             artist = artistRepository.findById(dto.getArtistId())
                     .orElseThrow(() -> new EntityNotFoundException("Artist not found"));
@@ -121,6 +111,7 @@ public class AlbumServiceImpl implements AlbumService {
 
         album.setArtist(artist);
         album.setBand(band);
+        album.setPictureUrl(manageImage(multipartFile, album.getTitle(), defaultImageUrl));
         Album saved = albumRepository.save(album);
         log.info("Saved album: {}", dto.getTitle());
         return albumMapper.toDto(saved);
@@ -158,9 +149,8 @@ public class AlbumServiceImpl implements AlbumService {
         }
 
         existingAlbum.setReleaseDate(album.getReleaseDate());
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            String imageUrl = storageService.upload(multipartFile, "album-images");
-            existingAlbum.setPictureUrl(imageUrl);
+        if (multipartFile != null) {
+            existingAlbum.setPictureUrl(manageImage(multipartFile, album.getTitle(),  existingAlbum.getPictureUrl()));
         }
         albumRepository.save(existingAlbum);
     }
@@ -194,15 +184,27 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public AlbumDto updateAlbumDto(SaveAlbumDto dto, Long id) {
+    @Transactional
+    public AlbumDto updateAlbumDto(SaveAlbumDto dto, Long id, MultipartFile multipartFile) {
         Album existing = albumRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
         saveAlbumMapper.updateEntity(existing, dto);
-
+        existing.setPictureUrl(manageImage(multipartFile, dto.getTitle(), existing.getPictureUrl()));
         Album saved = albumRepository.save(existing);
 
         return albumMapper.toDto(saved);
+    }
+
+    private String manageImage(MultipartFile multipartFile, String title, String existingUrl) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String imageUrl = storageService.upload(multipartFile, "album-images");
+            if (imageUrl != null) {
+                log.info("Image uploaded for album: {}", title);
+                return imageUrl;
+            }
+        }
+        return existingUrl;
     }
 }
 

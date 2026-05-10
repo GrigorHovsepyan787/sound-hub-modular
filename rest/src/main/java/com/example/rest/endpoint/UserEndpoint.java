@@ -7,6 +7,8 @@ import com.example.mapper.RegisterRequestMapper;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import com.example.rest.util.JwtTokenUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Tag(name = "Auth", description = "Auth management endpoints")
 public class UserEndpoint {
     private final UserRepository userRepository;
 
@@ -31,6 +34,9 @@ public class UserEndpoint {
 
     private final RegisterRequestMapper userMapper;
 
+    @Operation(
+            summary = "Login"
+    )
     @PostMapping("/auth")
     public ResponseEntity<TokenRegisterRequest> login(@RequestBody LoginRequest request) {
 
@@ -58,6 +64,9 @@ public class UserEndpoint {
                 .build();
     }
 
+    @Operation(
+            summary = "Registration"
+    )
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {

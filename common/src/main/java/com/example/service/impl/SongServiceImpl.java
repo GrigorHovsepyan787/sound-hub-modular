@@ -22,13 +22,13 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -60,6 +60,7 @@ public class SongServiceImpl implements SongService {
     }
 
     @Override
+    @Transactional
     public SongDto save(SongDto songDto, MultipartFile multipartFile) {
         Song song = songMapper.toEntity(songDto);
         song.setSongUrl(storageService.upload(multipartFile, "songs"));
@@ -161,6 +162,7 @@ public class SongServiceImpl implements SongService {
         songRepository.incrementPlayCount(songId);
     }
 
+    @Override
     public Page<SongPopularityDto> getTopSongPopularityLastMonth(Pageable pageable) {
         DateRange month = DateRangeUtils.monthlyRange(clock);
         return songPlayRepository.findTopSongsForPeriod(

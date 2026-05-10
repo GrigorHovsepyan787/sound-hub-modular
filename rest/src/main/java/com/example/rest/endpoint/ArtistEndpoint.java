@@ -4,7 +4,10 @@ import com.example.dto.ArtistDto;
 import com.example.dto.SongDto;
 import com.example.service.ArtistService;
 import com.example.service.SongService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,23 +29,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/artists")
 @RequiredArgsConstructor
+@Tag(name = "Artists", description = "Artists management endpoints")
 public class ArtistEndpoint {
 
     private final ArtistService artistService;
     private final SongService songService;
 
+    @Operation(
+            summary = "Get all artists",
+            description = "Returns paginated list of artists"
+    )
     @GetMapping
     public ResponseEntity<Page<ArtistDto>> getArtists(
-            @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC)
+            @ParameterObject @PageableDefault(size = 6, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable) {
         return ResponseEntity.ok(artistService.findAll(pageable));
     }
 
+    @Operation(
+            summary = "Get artist by id",
+            description = "Returns artist details by id"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<ArtistDto> getArtist(@PathVariable Long id) {
         return ResponseEntity.ok(artistService.getArtistById(id));
     }
 
+    @Operation(
+            summary = "Preview artist by id",
+            description = "Returns artist details and songs by id"
+    )
     @GetMapping("/{id}/preview")
     public ResponseEntity<ArtistPreviewResponse> getArtistPreview(@PathVariable Long id) {
         ArtistDto artist = artistService.getArtistById(id);
@@ -50,6 +66,10 @@ public class ArtistEndpoint {
         return ResponseEntity.ok(new ArtistPreviewResponse(artist, songs));
     }
 
+    @Operation(
+            summary = "Create artist",
+            description = "Create artist object"
+    )
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<ArtistDto> createArtist(
             @RequestPart("artist") ArtistDto artistDto,
@@ -58,6 +78,10 @@ public class ArtistEndpoint {
         return ResponseEntity.status(201).body(artistService.save(artistDto, artistImage, bandIds));
     }
 
+    @Operation(
+            summary = "Update artist",
+            description = "Update artist object"
+    )
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<ArtistDto> updateArtist(
             @PathVariable Long id,
@@ -67,6 +91,10 @@ public class ArtistEndpoint {
         return ResponseEntity.ok(artistService.update(id, artistDto, artistImage, bandIds));
     }
 
+    @Operation(
+            summary = "Delete artist",
+            description = "Delete artist by id"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArtist(@PathVariable Long id) {
         artistService.delete(id);
